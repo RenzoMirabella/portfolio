@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Expediente</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--celeste:#8fc1de;--papel:#f6f6f2;--tinta:#17171a;--sello:#4a2f91;--pauta:28px}
+*{box-sizing:border-box;margin:0}
+body{width:1440px;height:900px;overflow:hidden;background:var(--celeste);font-family:Archivo,sans-serif;color:var(--tinta);position:relative}
+nav{display:flex;justify-content:space-between;padding:24px 72px;font-weight:700;font-size:15px;letter-spacing:.06em;text-transform:uppercase;border-bottom:2px solid var(--tinta)}
+nav a{margin-left:32px;color:var(--tinta);text-decoration:none}
+.caratula{position:absolute;left:72px;top:96px;width:840px}
+.fila{display:grid;grid-template-columns:150px 1fr;border-bottom:1.5px solid var(--tinta);padding:10px 0;align-items:baseline}
+.fila b{font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+.fila span{font-family:"Courier Prime",monospace;font-size:22px}
+.asunto{font-family:Archivo;font-stretch:72%;font-weight:850;font-size:92px;line-height:.92;letter-spacing:-.01em;margin:36px 0 28px;text-transform:uppercase}
+.btn{display:inline-block;background:var(--tinta);color:var(--celeste);padding:18px 30px;font-weight:800;font-size:22px;letter-spacing:.05em;text-transform:uppercase}
+.sello{position:absolute;left:640px;top:520px;transform:rotate(-8deg);border:4px solid var(--sello);color:var(--sello);padding:10px 22px;font-weight:900;font-size:30px;letter-spacing:.08em;text-transform:uppercase;border-radius:6px;opacity:.9}
+.fojas{position:absolute;right:72px;top:96px;width:400px}
+.foja{background:var(--papel);height:220px;margin-bottom:-120px;border:1.5px solid var(--tinta);position:relative;padding:18px 22px 0 54px;background-image:repeating-linear-gradient(var(--papel) 0 27px,#b7cfdc 27px 28px);box-shadow:0 1px 0 var(--tinta)}
+.foja:nth-child(2){transform:translateX(-18px)}.foja:nth-child(3){transform:translateX(-36px)}
+.foja .n{position:absolute;left:12px;top:16px;font-family:"Courier Prime";font-weight:700;font-size:24px;color:var(--sello)}
+.foja h3{font-stretch:80%;font-weight:800;font-size:30px;line-height:1;text-transform:uppercase}
+.foja p{font-family:"Courier Prime";font-size:22px;margin-top:8px}
+.agujeros{position:absolute;left:28px;bottom:40px;display:flex;gap:60px}
+.agujeros i{width:22px;height:22px;border-radius:50%;background:#5e8eaa;display:block}
+</style></head><body>
+<nav><span>Renzo Mirabella</span><span><a>Expedientes</a><a>Sobre mí</a><a>Contacto</a></span></nav>
+<div class="caratula">
+  <div class="fila"><b>Expte. N.º</b><span>2026 — RM — 002</span></div>
+  <div class="fila"><b>Iniciador</b><span>Renzo Mirabella · Sociología UNMdP · Datos UTN</span></div>
+  <div class="asunto">Datos relevados a mano para entender el territorio</div>
+  <a class="btn">Abrir expedientes →</a>
+</div>
+<div class="sello">Relevamiento propio</div>
+<div class="fojas">
+  <div class="foja"><span class="n">Fs. 1</span><h3>Locales gastronómicos MdP</h3><p>n = 1.261 · 124 barrios</p></div>
+  <div class="foja"><span class="n">Fs. 2</span><h3>Comentarios en Instagram</h3><p>n = 32.482 · validado a mano</p></div>
+  <div class="foja"><span class="n">Fs. 3</span><h3>Próximo expediente</h3><p>en curso</p></div>
+</div>
+<div class="agujeros"><i></i><i></i></div>
+</body></html>

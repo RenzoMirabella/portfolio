@@ -1,0 +1,47 @@
+---
+title: "Sobre mí"
+toc: false
+---
+
+Estudio Sociología en la Universidad Nacional de Mar del Plata y defiendo la tesis en
+las mesas de marzo. Hice la Diplomatura en Ciencia de Datos y Análisis Avanzado (UTN)
+y formo parte de un equipo de investigación de la universidad que hace trabajo de
+campo con referentes barriales.
+
+Me interesa el análisis de datos aplicado a problemas sociales y urbanos: cómo se
+distribuye la inversión pública, quién accede a qué servicios, qué muestran las
+encuestas cuando se las cruza con el territorio.
+
+## Formación
+
+- **Lic. en Sociología** — Universidad Nacional de Mar del Plata (en curso, tesis en 2027)
+- **Diplomatura en Ciencia de Datos y Análisis Avanzado** — UTN
+- **Curso de Recursos Humanos**
+
+## Experiencia
+
+**Cajero administrativo** · sep. 2025 – oct. 2026\
+Manejo de caja, seguimiento de clientes y planillas de Excel automatizadas para
+control y reportes.
+
+**Equipo de investigación** · Universidad Nacional de Mar del Plata\
+Trabajo de campo con referentes barriales.
+
+## Herramientas
+
+SQL · Python (pandas, plotly, folium) · Power BI · Excel · Google Sheets · Quarto
+
+## Idiomas
+
+Español nativo · Inglés avanzado
+
+## Contacto
+
+Estoy en Mar del Plata y abierto a trabajar en Buenos Aires o en remoto.
+Escribime a [renzomirabella@gmail.com](mailto:renzomirabella@gmail.com), o encontrame en
+[LinkedIn](https://www.linkedin.com/in/renzomirabella/) y [GitHub](https://github.com/RenzoMirabella).
+
+<!-- Si querés sumar un CV descargable, poné el PDF en la carpeta del sitio
+     (por ejemplo cv.pdf) y agregá esta línea:
+[Descargar CV (PDF)](cv.pdf){.btn .btn-primary}
+-->

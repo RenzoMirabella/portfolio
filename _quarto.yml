@@ -1,0 +1,64 @@
+project:
+  type: website
+  output-dir: _site
+  # Solo las páginas .qmd (deja afuera PRODUCT.md, DESIGN.md y README.md)
+  render:
+    - "**/*.qmd"
+    # Los notebooks de cada proyecto: se muestran con las salidas guardadas, sin volver a ejecutarse
+    - "proyectos/*/*.ipynb"
+
+lang: es
+
+execute:
+  # Guarda los resultados de cada página en _freeze/ y solo vuelve a
+  # ejecutar el código Python cuando cambia ese archivo .qmd.
+  freeze: auto
+  echo: false
+  warning: false
+
+website:
+  title: "Renzo Mirabella"
+  description: "Portfolio de análisis de datos: proyectos con datos abiertos, mapas y visualizaciones interactivas."
+  site-url: "https://renzomirabella.github.io/portfolio"
+  page-navigation: true
+  navbar:
+    left:
+      - href: proyectos.qmd
+        text: Proyectos
+      - href: sobre-mi.qmd
+        text: Sobre mí
+    right:
+      - icon: github
+        href: https://github.com/RenzoMirabella
+        aria-label: GitHub
+      - icon: linkedin
+        href: https://www.linkedin.com/in/renzomirabella/
+        aria-label: LinkedIn
+      - icon: envelope
+        href: mailto:renzomirabella@gmail.com
+        aria-label: Email
+  page-footer:
+    left: "© 2026 Renzo Mirabella · Mar del Plata"
+    right: "Hecho con [Quarto](https://quarto.org)"
+
+format:
+  html:
+    theme:
+      # El oscuro reutiliza todas las reglas de styles.scss y solo cambia los colores
+      light: styles.scss
+      dark: [styles.scss, styles-dark.scss]
+    respect-user-color-scheme: true   # usa el modo oscuro si el visitante lo tiene activado
+    # La carátula celeste de cada página (ver _parciales/title-block.html)
+    title-block-banner: true
+    template-partials:
+      - _parciales/title-block.html
+    # Inserta las figuras de _figuras/ (ver _parciales/incluir-html.lua)
+    filters:
+      - _parciales/incluir-html.lua
+    toc: true
+    toc-title: "Fojas"
+    code-fold: true
+    code-summary: "Ver código"
+    code-tools: false
+    smooth-scroll: true
+    link-external-newwindow: true

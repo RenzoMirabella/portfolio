@@ -1,0 +1,299 @@
+---
+title: "Dónde poner la lupa"
+description: "Un modelo de riesgo sobre la EPH para decidir en qué sectores concentrar las inspecciones e incentivos de la nueva ley de formalización laboral, y qué parte de la informalidad queda fuera de su alcance."
+date: 2026-10-26
+categories: [Python, Machine learning, EPH-INDEC, Políticas públicas]
+image: miniatura.png
+expediente: "RM-2026-003"
+medida: "19.560 ocupados · EPH 1T 2026"
+jupyter: python3
+---
+
+::: {.ficha}
+<div><strong>Pregunta</strong>¿En qué segmentos de rama, tamaño y región conviene concentrar la implementación de la Ley 27.802, y dónde hacen falta otras medidas?</div>
+<div><strong>Fuentes</strong>INDEC, Encuesta Permanente de Hogares, 1.er trimestre 2026 (base individual) · Ley 27.802, decretos 315/2026 y 409/2026, RG ARCA 5862/2026</div>
+<div><strong>Herramientas</strong>Python · pandas · scikit-learn · XGBoost · matplotlib</div>
+<div><strong>Código</strong>[Notebook completo](notebook.ipynb) · [Repositorio en GitHub](https://github.com/RenzoMirabella/integrador)</div>
+:::
+
+```{python}
+#| label: setup
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+
+# Paleta del sitio: violeta de sello, celeste de cartulina y grafito
+VIOLETA = "#7457d0"
+VIOLETA_CLARO = "#b3a3e8"
+CELESTE = "#4f9cc9"
+GRIS = "#7a7972"
+GRIS_CLARO = "#b9bab5"
+
+def estilo(fig, alto=420):
+    fig.update_layout(
+        height=alto,
+        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(family="Archivo, Helvetica Neue, Arial, sans-serif", size=13, color=GRIS),
+        margin=dict(l=10, r=10, t=30, b=10),
+        hoverlabel=dict(font_size=13),
+        separators=",.",  # coma decimal y punto de miles
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0, title_text=""),
+    )
+    fig.update_xaxes(showgrid=False, linecolor="rgba(128,128,128,0.4)")
+    fig.update_yaxes(gridcolor="rgba(128,128,128,0.18)", zeroline=False)
+    return fig
+
+def coma(x, dec=1):
+    return f"{x:.{dec}f}".replace(".", ",").replace("-", "−")
+
+alcance = pd.read_csv("datos/h3_alcance_instrumentos.csv")
+sectores = pd.read_csv("datos/sectores_bajo_la_lupa.csv")
+resultados = pd.read_csv("datos/test_resultados.csv")
+ventaja = pd.read_csv("datos/test_ventaja_sobre_regla.csv")
+escenarios = pd.read_csv("datos/impacto_escenarios_test.csv")
+auditoria = pd.read_csv("datos/auditoria_grupos_test.csv").rename(columns={"Unnamed: 0": "dimension", "Unnamed: 1": "grupo"})
+```
+
+## Resumen
+
+Trabajo final integrador del Diplomado en Ciencia de Datos y Análisis Avanzado (UTN BA).
+
+En el primer trimestre de 2026 la informalidad alcanzó al **44,2 % de los ocupados**:
+casi 6 de los 13,5 millones de trabajadores de los aglomerados urbanos. La Ley 27.802
+creó dos herramientas para revertirla, el PER (regularización con condonación de deudas,
+que vence el 28/11/2026) y el RIFL (rebaja de contribuciones para nuevas contrataciones).
+Las dos actúan a través de un empleador privado, y el Estado no puede inspeccionar a todos.
+
+Con los microdatos de la EPH construimos un modelo que estima el riesgo de informalidad
+y lo resume en **segmentos** de rama de actividad, tamaño del establecimiento y región:
+nunca personas ni empresas, porque la encuesta es anónima y los informales son justamente
+quienes no figuran en los registros.
+
+- **Focalizar funciona.** Sin focalizar, 43 de cada 100 trabajadores son informales; en el
+  20 % de mayor riesgo que elige la regla, 75, y con el modelo, 78.
+- **Una regla simple alcanza.** A nivel segmentos, el Random Forest supera a una regla por
+  rama y tamaño por solo 2,4 puntos, y la diferencia no es significativa.
+- **Lo que más cambia el resultado es la pregunta, no el algoritmo.** El 55 % de los
+  informales está fuera del alcance de la ley. Priorizar solo entre asalariados privados
+  alcanza, con el mismo esfuerzo, **3,2 veces más informales formalizables**.
+
+## Dónde está la informalidad
+
+La ley llega a quien tiene un empleador privado al que inspeccionar o incentivar. Los
+cuentapropistas, las casas particulares (fuera del RIFL) y el sector público quedan afuera,
+y en los microestablecimientos la inspección sola puede terminar en cierres o despidos.
+
+```{python}
+#| label: alcance
+a = alcance.copy()
+a["grupo"] = a["alcance"].str.split(":").str[0]
+a["herramienta"] = a["alcance"].str.split(": ").str[1]
+a["color"] = [VIOLETA, VIOLETA_CLARO, GRIS_CLARO, GRIS_CLARO, GRIS_CLARO, GRIS_CLARO]
+a = a.iloc[::-1]
+fig = go.Figure(go.Bar(
+    x=a["% de los informales"], y=a["grupo"], orientation="h",
+    marker_color=a["color"], text=[f"{coma(v)} %" for v in a["% de los informales"]],
+    textposition="outside", cliponaxis=False,
+    customdata=a[["herramienta", "tasa de informalidad (%)", "% de ocupados"]],
+    hovertemplate="<b>%{y}</b><br>%{x:.1f} % de los informales<br>"
+                  "Tasa de informalidad: %{customdata[1]:.1f} %<br>"
+                  "%{customdata[2]:.1f} % de los ocupados<br>%{customdata[0]}<extra></extra>",
+))
+fig.update_layout(title="¿Dónde están los informales? (violeta: al alcance de la ley)")
+fig.update_xaxes(title="% de los informales", range=[0, 42])
+fig.update_yaxes(showgrid=False)
+estilo(fig, alto=380).show()
+```
+
+Solo el **45,4 %** de los informales es asalariado de un empleador privado, y casi la mitad
+de ellos trabaja en establecimientos de hasta 5 personas. Cuentapropistas y casas
+particulares suman el 47 %: necesitan medidas propias.
+
+## Los segmentos
+
+Cada punto es un segmento de rama × tamaño entre los asalariados privados. Arriba a la
+derecha están los que combinan una tasa alta con muchos informales: ahí rinde la lupa.
+
+```{python}
+#| label: segmentos
+s = sectores.copy()
+s["rama_txt"] = s["rama"].str.split(" ", n=1).str[1]
+s["confiable"] = s["confiabilidad"].map({"normal": "", "baja": "<br><i>Pocos casos: estimación poco confiable</i>"})
+COLORES_TAMANO = {"Hasta 5": VIOLETA, "6 a 40": CELESTE, "Más de 40": GRIS, "Sin dato": GRIS_CLARO}
+fig = px.scatter(
+    s, x="informales (miles)", y="tasa de informalidad (%)", size="ocupados (miles)",
+    color="tamano_regla", color_discrete_map=COLORES_TAMANO,
+    category_orders={"tamano_regla": list(COLORES_TAMANO)},
+    custom_data=["rama_txt", "tamano_regla", "casos", "ocupados (miles)", "confiable"],
+    size_max=34,
+    labels={"informales (miles)": "Informales en el segmento (miles)",
+            "tasa de informalidad (%)": "Tasa de informalidad (%)"},
+)
+fig.update_traces(
+    marker=dict(line=dict(width=1, color="white"), opacity=0.85),
+    hovertemplate="<b>%{customdata[0]}</b> · %{customdata[1]} personas<br>"
+                  "Tasa: %{y:.1f} %<br>%{x:.1f} mil informales de %{customdata[3]:.1f} mil ocupados<br>"
+                  "%{customdata[2]} casos en la encuesta%{customdata[4]}<extra></extra>",
+)
+fig.add_hline(y=41.2, line_dash="dot", line_color=GRIS,
+              annotation_text="Promedio asal. privados (41 %)", annotation_position="bottom right")
+# Rótulos solo para los segmentos que se nombran en el texto, ubicados a mano para que no se pisen
+ROTULOS = [
+    ("G Comercio", "Hasta 5", "Comercio (hasta 5)", dict(xanchor="right", xshift=-22)),
+    ("F Construcción", "Hasta 5", "Construcción (hasta 5)", dict(xanchor="right", xshift=-16)),
+    ("I Alojamiento y gastronomía", "Hasta 5", "Gastronomía (hasta 5)", dict(showarrow=True, ax=-50, ay=-30)),
+    ("C Industria", "Hasta 5", "Industria (hasta 5)", dict(xanchor="left", xshift=12, yshift=-6)),
+    ("F Construcción", "6 a 40", "Construcción (6 a 40)", dict(showarrow=True, ax=45, ay=-38)),
+    ("I Alojamiento y gastronomía", "6 a 40", "Gastronomía (6 a 40)", dict(xanchor="left", xshift=14)),
+]
+for rama, tamano, texto, pos in ROTULOS:
+    f = s[(s["rama"] == rama) & (s["tamano_regla"] == tamano)].iloc[0]
+    fig.add_annotation(x=f["informales (miles)"], y=f["tasa de informalidad (%)"], text=texto,
+                       font=dict(size=11, color=GRIS), arrowcolor=GRIS, arrowwidth=1, arrowhead=0,
+                       **{"showarrow": False, **pos})
+fig.update_xaxes(zeroline=False)
+estilo(fig, alto=520).show()
+```
+
+Los seis segmentos de mayor tasa son de hasta 5 personas y reúnen el 40 % de los informales
+alcanzables. Comercio de hasta 5 es el más grande: más de 400 mil informales con una tasa
+del 71 %. Construcción y gastronomía de 6 a 40 personas quedan en un punto intermedio:
+tasas cercanas al 60 % y establecimientos con más capacidad de formalizar.
+
+## El modelo contra una regla simple
+
+Comparamos cuatro algoritmos contra una **regla por rama y tamaño**, que es lo que la
+autoridad podría hacer sin un modelo. Elegimos con validación cruzada agrupada por vivienda
+y evaluamos una sola vez sobre un 20 % reservado. La métrica es la precisión en el 20 % de
+mayor riesgo: de cada 100 trabajadores bajo la lupa, cuántos son informales.
+
+```{python}
+#| label: modelos
+r = resultados[resultados["población"] == "Todos"].copy()
+r["precision"] = r["precision@20"] * 100
+r["modelo"] = r["modelo"].replace({"Regla rama × tamaño": "Regla rama × tamaño"})
+orden = (r[r["nivel"] == "Segmentos"].sort_values("precision")["modelo"].tolist())
+fig = go.Figure()
+for nivel, color, simbolo in [("Personas", GRIS_CLARO, "circle-open"), ("Segmentos", VIOLETA, "circle")]:
+    d = r[r["nivel"] == nivel].set_index("modelo").loc[orden].reset_index()
+    fig.add_trace(go.Scatter(
+        x=d["precision"], y=d["modelo"], mode="markers", name=f"Ordenando {nivel.lower()}",
+        marker=dict(size=13, color=color, symbol=simbolo, line=dict(width=2, color=color)),
+        hovertemplate="<b>%{y}</b><br>" + nivel + ": %{x:.1f} informales cada 100<extra></extra>",
+    ))
+fig.add_vline(x=85, line_dash="dot", line_color=GRIS, annotation_text="Meta: 85",
+              annotation_position="top")
+fig.update_xaxes(title="Informales cada 100 bajo la lupa (test)", range=[35, 95],
+                 showgrid=True, gridcolor="rgba(128,128,128,0.18)")
+fig.update_yaxes(showgrid=False)
+estilo(fig, alto=400).show()
+```
+
+```{python}
+#| label: ventaja
+v = ventaja.set_index("vista")
+seg = v.loc["Todos | segmentos (criterio)"]
+per = v.loc["Todos | personas"]
+```
+
+Ordenando personas, el modelo cumple las metas de la pre-entrega: **`{python} coma(per["modelo"])`**
+informales cada 100 y **`{python} coma(per["ventaja (p.p.)"])` puntos** de ventaja sobre la regla.
+Pero el Estado no puede actuar sobre personas, sino sobre sectores. Ordenando segmentos, la precisión
+baja a **`{python} coma(seg["modelo"])`** y la ventaja a **`{python} coma(seg["ventaja (p.p.)"])` puntos**,
+con un intervalo bootstrap del 95 % que va de `{python} coma(seg["IC 2,5 %"])` a `{python} coma(seg["IC 97,5 %"])`.
+Por eso recomendamos la regla como herramienta operativa y el modelo como diagnóstico: mostró que
+a la regla le faltan la región y los tramos finos de tamaño.
+
+## Cambiar la pregunta
+
+Las metas originales contaban a todos los informales. Pero priorizar sobre todos los
+ocupados llena la lupa de cuentapropistas y casas particulares, a los que la ley no llega.
+El indicador que importa es otro: **cuántos informales con empleador privado** quedan bajo
+la lupa. En todos los escenarios la lupa cubre lo mismo, 2,7 millones de trabajadores.
+
+```{python}
+#| label: escenarios
+e = escenarios.copy()
+e["metodo"] = e["escenario"].str.split(",").str[0]
+e["poblacion"] = e["escenario"].str.split(", ").str[1].map(
+    {"todos los ocupados": "Priorizando entre todos los ocupados", "asal. privados": "Priorizando solo asalariados privados"})
+COLORES_METODO = {"Azar": GRIS_CLARO, "Regla": CELESTE, "Random Forest (segmentos)": VIOLETA}
+col = "informales con empleador privado bajo la lupa (miles)"
+fig = px.bar(e, x="poblacion", y=col, color="metodo", barmode="group",
+             color_discrete_map=COLORES_METODO, text=e[col].map(lambda x: coma(x / 1000, 2) + " M"),
+             custom_data=["trabajadores bajo la lupa por informal con empleador privado"],
+             labels={"poblacion": "", col: "Informales con empleador privado (miles)"})
+fig.update_traces(textposition="outside", cliponaxis=False,
+                  hovertemplate="%{y:,.0f} mil informales formalizables<br>"
+                                "%{customdata[0]:.1f} trabajadores bajo la lupa por cada uno<extra></extra>")
+estilo(fig, alto=420).show()
+```
+
+Con el mismo esfuerzo, priorizar entre los asalariados privados alcanza a **1,78 millones**
+de informales formalizables en lugar de 0,55: 3,2 veces más. Hay que cubrir 1,5 trabajadores
+para encontrar uno, contra 4,9 al priorizar sobre todos. Entre todos los ocupados, el
+Random Forest rinde incluso peor que el azar con este indicador: su lupa se llena de
+cuentapropistas.
+
+## Equidad
+
+La meta era que ningún grupo de sexo o región quedara más de 10 puntos por debajo del
+promedio de cobertura (recall). Se cumple: el más alejado es Cuyo, 6,3 puntos abajo.
+
+```{python}
+#| label: equidad
+q = auditoria.copy()
+q["dif"] = q["recall − promedio (p.p.)"]
+q = q.iloc[::-1]
+fig = go.Figure(go.Bar(
+    x=q["dif"], y=q["grupo"], orientation="h",
+    marker_color=[VIOLETA if d < 0 else CELESTE for d in q["dif"]],
+    customdata=q[["recall del grupo (%)", "tasa real (%)", "riesgo estimado: regla (%)"]],
+    hovertemplate="<b>%{y}</b><br>Recall %{customdata[0]:.1f} % (%{x:+.1f} p.p. del promedio)<br>"
+                  "Tasa real %{customdata[1]:.1f} % · la regla estima %{customdata[2]:.1f} %<extra></extra>",
+))
+fig.add_vline(x=-10, line_dash="dot", line_color=GRIS, annotation_text="Límite: −10",
+              annotation_position="top")
+fig.update_xaxes(title="Recall del grupo menos el promedio (puntos)", range=[-12, 14],
+                 zeroline=True, zerolinecolor="rgba(128,128,128,0.5)")
+fig.update_yaxes(showgrid=False)
+estilo(fig, alto=360).show()
+```
+
+La cobertura pareja no lo es todo: la regla subestima la informalidad real en NOA, NEA y
+Cuyo (en Cuyo estima 40,8 % contra 51 % real). Definir qué criterio de equidad se exige
+queda como próximo paso.
+
+## Recomendaciones
+
+1. Priorizar segmentos con la regla rama × tamaño, **solo entre asalariados de empleadores privados**.
+2. Antes del 28/11/2026, concentrar inspecciones y difusión del PER en los establecimientos de
+   6 a 40 personas de **construcción y gastronomía**.
+3. En los microestablecimientos, combinar la inspección con acompañamiento para obtener el
+   Certificado MiPyME, que da acceso a las mejores condiciones del PER.
+4. Diseñar medidas propias para **cuentapropistas y casas particulares**: el 47 % de los informales.
+5. Medir la gestión con un indicador nuevo: **informales con empleador privado cada 100
+   trabajadores bajo la lupa**.
+
+## Metodología
+
+- **Datos.** EPH del 1.er trimestre de 2026, base individual: 19.560 ocupados con dato de
+  formalidad, que representan a 13,5 millones de trabajadores de 32 aglomerados. Todas las
+  tasas y métricas se calculan con el factor de expansión (PONDERA); como control, la tasa
+  ponderada da 44,2 %, igual a la publicada por INDEC.
+- **Informalidad.** El target es la variable EMPLEO, que INDEC construye a partir de los
+  aportes y la registración declarados. Excluimos las variables que la delatan (fuga de
+  información) y usamos una lista cerrada de 9 predictores.
+- **Modelos.** Regresión logística, árbol de decisión, Random Forest y XGBoost, contra el azar
+  y la regla rama × tamaño. Validación cruzada de 5 particiones agrupadas por vivienda, para
+  que personas de una misma casa no queden de los dos lados.
+- **Evaluación.** Un único uso del 20 % reservado. La ventaja sobre la regla se estima con
+  500 réplicas bootstrap. Las ablaciones confirman que rama y tamaño son los predictores más
+  fuertes, y que edad y educación ayudan a ordenar personas pero casi no a elegir sectores.
+- **Limitaciones.** Los datos son previos a la ley, así que no se evalúa su impacto. Varios
+  segmentos tienen pocos casos y se marcan como poco confiables. La regla mejorada
+  (con región y tamaño detallado) hay que validarla con la EPH del próximo trimestre,
+  porque el test actual ya se usó.
+
+Todo el proceso, con el código y cada tabla intermedia, está en el
+[notebook completo](notebook.ipynb).

@@ -1,0 +1,7 @@
+escenario,trabajadores bajo la lupa (millones),informales cada 100,informales con empleador privado cada 100,trabajadores bajo la lupa por informal con empleador privado,informales con empleador privado bajo la lupa (miles)
+"Azar, todos los ocupados",2.7,42.8,20.1,5.0,541.6
+"Regla, todos los ocupados",2.7,75.3,20.5,4.9,551.4
+"Random Forest (segmentos), todos los ocupados",2.7,77.8,16.1,6.2,433.3
+"Azar, asal. privados",2.7,40.6,40.6,2.5,1091.7
+"Regla, asal. privados",2.7,66.2,66.2,1.5,1782.7
+"Random Forest (segmentos), asal. privados",2.7,67.5,67.5,1.5,1817.8

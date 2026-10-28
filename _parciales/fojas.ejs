@@ -1,0 +1,19 @@
+<%
+// Fojas apiladas de la portada: una por proyecto, la más reciente arriba.
+// Lee los campos expediente y medida del encabezado de cada proyecto.
+%>
+```{=html}
+<ol class="fojas list">
+<% items.forEach((item, i) => { %>
+  <li class="foja-item" <%= metadataAttrs(item) %>>
+    <a class="foja" href="<%- item.path %>">
+      <span class="foja-numero">Fs. <%= items.length - i %></span>
+      <% if (item.expediente) { %><span class="foja-expte"><%= item.expediente %></span><% } %>
+      <span class="foja-titulo listing-title"><%= item.title %></span>
+      <% if (item.description) { %><span class="foja-asunto"><%= item.description %></span><% } %>
+      <% if (item.medida) { %><span class="foja-medida"><%= item.medida %></span><% } %>
+    </a>
+  </li>
+<% }) %>
+</ol>
+```

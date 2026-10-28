@@ -1,0 +1,491 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-24T00:00:00Z",
+  "title": "Design System: Renzo Mirabella · Expediente",
+  "extensions": {
+    "colorMeta": {
+      "caratula": {
+        "role": "secondary",
+        "displayName": "Cartulina Celeste",
+        "canonical": "#8fc1de",
+        "tonalRamp": [
+          "#252f36",
+          "#3f5360",
+          "#5a788a",
+          "#749cb4",
+          "#abd0e6",
+          "#c7e0ee",
+          "#e3f0f7",
+          "#f6fafc"
+        ],
+        "cssVar": "--caratula",
+        "dark": "#173447"
+      },
+      "caratula-tinta": {
+        "role": "secondary",
+        "displayName": "Tinta de Cartulina",
+        "canonical": "#10283a",
+        "tonalRamp": [
+          "#0b1015",
+          "#0c161e",
+          "#0e1c28",
+          "#0f2231",
+          "#4c5e6b",
+          "#88949c",
+          "#c3c9ce",
+          "#eceeef"
+        ],
+        "cssVar": "--caratula-tinta",
+        "dark": "#c9deeb"
+      },
+      "caratula-borde": {
+        "role": "secondary",
+        "displayName": "Borde de Cartulina",
+        "canonical": "#5f97b8",
+        "tonalRamp": [
+          "#1b262e",
+          "#2c4251",
+          "#3d5f73",
+          "#4e7b96",
+          "#87b1ca",
+          "#afcbdc",
+          "#d7e5ed",
+          "#f2f7f9"
+        ],
+        "cssVar": "--caratula-borde",
+        "dark": "#0e2230"
+      },
+      "papel": {
+        "role": "neutral",
+        "displayName": "Papel de Lectura",
+        "canonical": "#f4f5f2",
+        "tonalRamp": [
+          "#39393a",
+          "#686868",
+          "#969796",
+          "#c5c6c4",
+          "#f7f8f5",
+          "#fafaf8",
+          "#fcfcfc",
+          "#fefefe"
+        ],
+        "cssVar": "--papel",
+        "dark": "#1e2023"
+      },
+      "foja": {
+        "role": "neutral",
+        "displayName": "Hoja Suelta",
+        "canonical": "#fbfbf9",
+        "tonalRamp": [
+          "#3a3a3b",
+          "#6a6a6b",
+          "#9b9b9a",
+          "#cbcbca",
+          "#fcfcfa",
+          "#fdfdfc",
+          "#fefefe",
+          "#ffffff"
+        ],
+        "cssVar": "--foja",
+        "dark": "#26292d"
+      },
+      "rayado": {
+        "role": "neutral",
+        "displayName": "Pauta de Oficio",
+        "canonical": "#cddde6",
+        "tonalRamp": [
+          "#313438",
+          "#585e63",
+          "#7f898f",
+          "#a6b3ba",
+          "#dae6ec",
+          "#e6eef2",
+          "#f2f6f9",
+          "#fbfcfd"
+        ],
+        "cssVar": "--rayado",
+        "dark": "#343a41"
+      },
+      "tinta": {
+        "role": "neutral",
+        "displayName": "Tinta",
+        "canonical": "#17171a",
+        "tonalRamp": [
+          "#0d0d0f",
+          "#0f0f12",
+          "#121214",
+          "#141417",
+          "#515153",
+          "#8b8b8c",
+          "#c5c5c6",
+          "#ececed"
+        ],
+        "cssVar": "--tinta",
+        "dark": "#ecebe6"
+      },
+      "tinta-suave": {
+        "role": "neutral",
+        "displayName": "Tinta Gastada",
+        "canonical": "#45484d",
+        "tonalRamp": [
+          "#161619",
+          "#222326",
+          "#2d2f33",
+          "#393c40",
+          "#74767a",
+          "#a2a4a6",
+          "#d0d1d2",
+          "#f0f0f1"
+        ],
+        "cssVar": "--tinta-suave",
+        "dark": "#b3b5b8"
+      },
+      "sello": {
+        "role": "primary",
+        "displayName": "Violeta de Mesa de Entradas",
+        "canonical": "#4a2f91",
+        "tonalRamp": [
+          "#171127",
+          "#241941",
+          "#30205c",
+          "#3d2876",
+          "#7763ac",
+          "#a497c8",
+          "#d2cbe4",
+          "#f1eef6"
+        ],
+        "cssVar": "--sello",
+        "dark": "#b9a5f3"
+      },
+      "sello-fondo": {
+        "role": "primary",
+        "displayName": "Violeta Lavado",
+        "canonical": "#e9e4f5",
+        "tonalRamp": [
+          "#37363b",
+          "#636169",
+          "#908d98",
+          "#bcb8c6",
+          "#eeebf8",
+          "#f4f2fa",
+          "#faf8fc",
+          "#fdfdfe"
+        ],
+        "cssVar": "--sello-fondo",
+        "dark": "#2a2340"
+      },
+      "chart-violeta": {
+        "role": "chart",
+        "displayName": "Violeta de Gráfico",
+        "canonical": "#7457d0",
+        "tonalRamp": [
+          "#1f1933",
+          "#34295a",
+          "#4a3882",
+          "#5f48a9",
+          "#9781dc",
+          "#baabe8",
+          "#dcd5f3",
+          "#f4f2fb"
+        ]
+      },
+      "chart-celeste": {
+        "role": "chart",
+        "displayName": "Celeste de Gráfico",
+        "canonical": "#4f9cc9",
+        "tonalRamp": [
+          "#182732",
+          "#264458",
+          "#33627d",
+          "#417fa3",
+          "#7bb5d6",
+          "#a7cee4",
+          "#d3e6f2",
+          "#f1f7fb"
+        ]
+      },
+      "chart-gris": {
+        "role": "chart",
+        "displayName": "Gris de Gráfico",
+        "canonical": "#8a8d92",
+        "tonalRamp": [
+          "#242427",
+          "#3d3e42",
+          "#57595c",
+          "#707377",
+          "#a7aaad",
+          "#c4c6c8",
+          "#e2e2e4",
+          "#f6f6f6"
+        ]
+      },
+      "chart-texto": {
+        "role": "chart",
+        "displayName": "Gris de Ejes",
+        "canonical": "#7a7972",
+        "tonalRamp": [
+          "#202020",
+          "#373635",
+          "#4d4d49",
+          "#64635e",
+          "#9b9a95",
+          "#bcbcb8",
+          "#dededc",
+          "#f4f4f4"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Asunto",
+        "purpose": "El Asunto de la portada, uno por página; mayúsculas."
+      },
+      "headline": {
+        "displayName": "Título de carátula",
+        "purpose": "Título de cada página sobre la cartulina; mayúsculas."
+      },
+      "title": {
+        "displayName": "Foja",
+        "purpose": "Cada h2 numerado «Fs. N» y los títulos de banda; mayúsculas."
+      },
+      "title-foja": {
+        "displayName": "Título de foja",
+        "purpose": "Títulos de proyecto en fojas y libro de entradas; mayúsculas."
+      },
+      "subtitle": {
+        "displayName": "Subtítulo",
+        "purpose": "h3 de lectura; mayúsculas."
+      },
+      "body": {
+        "displayName": "Cuerpo",
+        "purpose": "Lectura, máx. 70ch, cifras tabulares."
+      },
+      "lead": {
+        "displayName": "Bajada",
+        "purpose": "Bajada de portada y descripción de carátula, en caratula-tinta."
+      },
+      "label": {
+        "displayName": "Rótulo de campo",
+        "purpose": "Rótulos de formulario, encabezados de tabla, título del índice; mayúsculas."
+      },
+      "nav": {
+        "displayName": "Menú",
+        "purpose": "Enlaces del menú; mayúsculas."
+      },
+      "tipeado": {
+        "displayName": "Tipeado",
+        "purpose": "Valores de campo, ficha, rubros, pie."
+      },
+      "tipeado-sm": {
+        "displayName": "Tipeado en violeta",
+        "purpose": "«Fs. N», número de expediente y medida, en sello."
+      }
+    },
+    "shadows": [
+      {
+        "name": "hoja-en-pila",
+        "value": "0 2px 0 -1px var(--caratula), 0 8px 18px -10px rgba(0,0,0,0.4)",
+        "purpose": "Foja apilada en reposo."
+      },
+      {
+        "name": "hoja-levantada",
+        "value": "0 2px 0 -1px var(--caratula), 0 18px 30px -14px rgba(0,0,0,0.5)",
+        "purpose": "Foja en hover o foco, con translate(-0.5rem, -0.35rem)."
+      },
+      {
+        "name": "perforacion",
+        "value": "inset 0 1px 2px rgba(0,0,0,0.25)",
+        "purpose": "Agujeros del broche de la portada."
+      }
+    ],
+    "motion": [
+      {
+        "name": "salida",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Única curva del sitio (--salida)."
+      },
+      {
+        "name": "estampar",
+        "value": "0.55s var(--salida) 0.35s both; rotate(-14deg) scale(1.45) -> rotate(-6deg) scale(1)",
+        "purpose": "El sello se estampa una vez al cargar; solo sin reduced-motion."
+      },
+      {
+        "name": "hoja",
+        "value": "transform 0.35s var(--salida), box-shadow 0.35s var(--salida)",
+        "purpose": "Las fojas se separan al hover y al foco."
+      },
+      {
+        "name": "boton",
+        "value": "background-color 0.2s var(--salida); flecha transform 0.25s",
+        "purpose": "Paso a violeta del botón tinta."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "md",
+        "value": "991.98px"
+      },
+      {
+        "name": "sm",
+        "value": "575.98px"
+      }
+    ],
+    "borders": [
+      {
+        "name": "filete",
+        "value": "1.5px solid var(--tinta)",
+        "purpose": "Filas de campo, bordes de banda, foja, ficha, tabla y nota."
+      },
+      {
+        "name": "divisor",
+        "value": "1px solid var(--rayado)",
+        "purpose": "Divisores secundarios."
+      }
+    ],
+    "chartGradient": {
+      "name": "mapa-de-calor",
+      "stops": {
+        "0.2": "#d9d1f1",
+        "0.45": "#9f8ce0",
+        "0.7": "#7457d0",
+        "0.9": "#4a2f91",
+        "1": "#17171a"
+      }
+    }
+  },
+  "components": [
+    {
+      "name": "Botón tinta",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Acción principal: abrir los expedientes.",
+      "html": "<a class=\"ds-btn-expediente\" href=\"#\">Ver proyectos <svg width=\"18\" height=\"13\" viewBox=\"0 0 22 16\" aria-hidden=\"true\"><path d=\"M0 8h19M13 1.5 19.5 8 13 14.5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\"/></svg></a>",
+      "css": ".ds-btn-expediente{display:inline-flex;align-items:center;gap:.6rem;background:var(--tinta);color:var(--caratula);padding:.85rem 1.4rem;font-family:Archivo,'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;border:1.5px solid var(--tinta);border-radius:0;transition:background-color .2s cubic-bezier(.16,1,.3,1),color .2s cubic-bezier(.16,1,.3,1)}.ds-btn-expediente svg{transition:transform .25s cubic-bezier(.16,1,.3,1)}.ds-btn-expediente:hover{background:var(--sello);border-color:var(--sello);color:var(--papel)}.ds-btn-expediente:hover svg{transform:translateX(4px)}.ds-btn-expediente:focus-visible{outline:2px solid var(--sello);outline-offset:3px}"
+    },
+    {
+      "name": "Enlace de campo",
+      "kind": "button",
+      "refersTo": "enlace-campo",
+      "description": "Acción secundaria junto al botón tinta.",
+      "html": "<a class=\"ds-enlace-campo\" href=\"#\">Sobre mí</a>",
+      "css": ".ds-enlace-campo{font-family:Archivo,'Helvetica Neue',Arial,sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:.95rem;color:var(--tinta);text-decoration:underline;text-underline-offset:.18em;text-decoration-thickness:1px}.ds-enlace-campo:hover{text-decoration-thickness:2px}.ds-enlace-campo:focus-visible{outline:2px solid var(--sello);outline-offset:3px}"
+    },
+    {
+      "name": "Campos de formulario",
+      "kind": "input",
+      "refersTo": "campo",
+      "description": "Filas de datos de la carátula: rótulo impreso, valor tipeado.",
+      "html": "<dl class=\"ds-campos\"><div class=\"ds-campo\"><dt>Expte. N.º</dt><dd>RM-2026-001</dd></div><div class=\"ds-campo\"><dt>Iniciador</dt><dd>Renzo Mirabella</dd></div></dl>",
+      "css": ".ds-campos{margin:0;border-top:1.5px solid var(--tinta);background:var(--caratula);color:var(--tinta)}.ds-campo{display:grid;grid-template-columns:8.5rem 1fr;gap:1rem;align-items:baseline;border-bottom:1.5px solid var(--tinta);padding:.45rem 0}.ds-campo dt{font-family:Archivo,sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin:0}.ds-campo dd{font-family:'Courier Prime','Courier New',monospace;font-size:1.05rem;margin:0}"
+    },
+    {
+      "name": "Menú",
+      "kind": "nav",
+      "refersTo": "navbar",
+      "description": "Barra de cartulina con filete inferior.",
+      "html": "<nav class=\"ds-nav\"><span class=\"ds-nav-marca\">Renzo Mirabella</span><a class=\"ds-nav-link ds-activo\" href=\"#\">Proyectos</a><a class=\"ds-nav-link\" href=\"#\">Sobre mí</a></nav>",
+      "css": ".ds-nav{display:flex;align-items:center;gap:1.4rem;background:var(--caratula);border-bottom:1.5px solid var(--tinta);padding:.6rem 1.5rem;font-family:Archivo,sans-serif}.ds-nav-marca{font-weight:800;font-stretch:80%;text-transform:uppercase;letter-spacing:.04em;font-size:1.15rem;color:var(--tinta)}.ds-nav-link{font-weight:650;text-transform:uppercase;letter-spacing:.06em;font-size:.875rem;color:var(--tinta);text-decoration:none}.ds-nav-link:hover,.ds-nav-link.ds-activo{color:var(--sello);text-decoration:underline;text-underline-offset:.4em}.ds-nav-link:focus-visible{outline:2px solid var(--sello);outline-offset:3px}"
+    },
+    {
+      "name": "Rubros",
+      "kind": "chip",
+      "refersTo": "rubros",
+      "description": "Temas como casilleros tildados a mano.",
+      "html": "<ul class=\"ds-rubros\"><li>Python</li><li>Scraping</li><li>Mapas</li></ul>",
+      "css": ".ds-rubros{display:flex;flex-wrap:wrap;gap:.25rem 1.1rem;list-style:none;padding:0;margin:0;color:var(--tinta)}.ds-rubros li{font-family:'Courier Prime','Courier New',monospace;font-size:.9rem}.ds-rubros li::before{content:'';display:inline-block;width:.7em;height:.7em;border:1.5px solid currentColor;margin-right:.4em;vertical-align:-.05em;background:linear-gradient(45deg,transparent calc(50% - .75px),currentColor calc(50% - .75px),currentColor calc(50% + .75px),transparent calc(50% + .75px)),linear-gradient(-45deg,transparent calc(50% - .75px),currentColor calc(50% - .75px),currentColor calc(50% + .75px),transparent calc(50% + .75px))}"
+    },
+    {
+      "name": "Foja suelta",
+      "kind": "card",
+      "refersTo": "foja",
+      "description": "Un proyecto como hoja de papel oficio en la pila de la portada.",
+      "html": "<a class=\"ds-foja\" href=\"#\"><span class=\"ds-foja-num\">Fs. 1</span><span class=\"ds-foja-expte\">RM-2026-001</span><span class=\"ds-foja-titulo\">Locales gastronómicos de Mar del Plata</span><span class=\"ds-foja-asunto\">Relevamiento propio de 1.261 bares, cafés y restaurantes.</span><span class=\"ds-foja-medida\">1.261 locales · 124 barrios</span></a>",
+      "css": ".ds-foja{display:grid;grid-template-columns:4.25rem 1fr;grid-template-areas:'num expte' 'num titulo' 'num asunto' 'num medida';column-gap:.75rem;padding:1rem 1.5rem 1.2rem 0;min-height:10.5rem;max-width:30rem;background-color:var(--foja);background-image:linear-gradient(90deg,transparent 3.75rem,var(--sello) 3.75rem,var(--sello) calc(3.75rem + 1px),transparent calc(3.75rem + 1px)),repeating-linear-gradient(var(--foja) 0 calc(1.75rem - 1px),var(--rayado) calc(1.75rem - 1px) 1.75rem);border:1.5px solid var(--tinta);color:var(--tinta);text-decoration:none;transform:rotate(.6deg);box-shadow:0 2px 0 -1px var(--caratula),0 8px 18px -10px rgba(0,0,0,.4);transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s cubic-bezier(.16,1,.3,1)}.ds-foja:hover,.ds-foja:focus-visible{transform:translate(-.5rem,-.35rem);box-shadow:0 2px 0 -1px var(--caratula),0 18px 30px -14px rgba(0,0,0,.5)}.ds-foja:focus-visible{outline:2px solid var(--sello);outline-offset:3px}.ds-foja-num{grid-area:num;font-family:'Courier Prime',monospace;font-weight:700;font-size:.9rem;color:var(--sello);text-align:center}.ds-foja-expte{grid-area:expte;font-family:'Courier Prime',monospace;font-size:.85rem;color:var(--tinta-suave)}.ds-foja-titulo{grid-area:titulo;font-family:Archivo,sans-serif;font-weight:800;font-stretch:78%;font-size:1.45rem;line-height:1.08;text-transform:uppercase;margin:.2rem 0 .4rem}.ds-foja:hover .ds-foja-titulo{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:.15em}.ds-foja-asunto{grid-area:asunto;font-family:Archivo,sans-serif;font-size:.95rem;line-height:1.45;color:var(--tinta-suave);margin-bottom:.6rem}.ds-foja-medida{grid-area:medida;font-family:'Courier Prime',monospace;font-size:.95rem;font-weight:700;color:var(--sello)}"
+    },
+    {
+      "name": "Sello de goma",
+      "kind": "custom",
+      "refersTo": "sello",
+      "description": "Certifica cómo se validó un proyecto; se estampa una vez.",
+      "html": "<p class=\"ds-sello\">Relevamiento propio</p>",
+      "css": ".ds-sello{display:inline-block;margin:1.5rem;color:var(--sello);border:3px solid currentColor;border-radius:6px;padding:.3rem .9rem;font-family:Archivo,sans-serif;font-weight:850;font-stretch:75%;font-size:1.35rem;line-height:1.1;letter-spacing:.06em;text-transform:uppercase;transform:rotate(-6deg)}@media (prefers-reduced-motion:no-preference){.ds-sello{animation:ds-estampar .55s cubic-bezier(.16,1,.3,1) .35s both}}@keyframes ds-estampar{from{transform:rotate(-14deg) scale(1.45);opacity:.35}to{transform:rotate(-6deg) scale(1);opacity:1}}"
+    },
+    {
+      "name": "Ficha técnica",
+      "kind": "card",
+      "refersTo": "ficha",
+      "description": "Campos tipeados al inicio de cada proyecto.",
+      "html": "<div class=\"ds-ficha\"><div><strong>Pregunta</strong>¿Dónde se concentran los locales?</div><div><strong>Fuentes</strong>Google Maps, scraping propio</div></div>",
+      "css": ".ds-ficha{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1.5px solid var(--tinta);border-left:1.5px solid var(--tinta);background-color:var(--foja);color:var(--tinta)}.ds-ficha>div{border-right:1.5px solid var(--tinta);border-bottom:1.5px solid var(--tinta);padding:.5rem 1rem .75rem;font-family:'Courier Prime','Courier New',monospace;font-size:.98rem;line-height:1.5rem;background-image:repeating-linear-gradient(transparent 0 calc(1.5rem - 1px),var(--rayado) calc(1.5rem - 1px) 1.5rem);background-position:0 .25rem}.ds-ficha strong{display:block;font-family:Archivo,sans-serif;font-size:.72rem;font-weight:750;letter-spacing:.12em;text-transform:uppercase;line-height:1.5rem}"
+    },
+    {
+      "name": "Asiento del libro de entradas",
+      "kind": "custom",
+      "refersTo": "libro-fila",
+      "description": "Un proyecto como fila del registro.",
+      "html": "<table class=\"ds-libro\"><thead><tr><th>Expte.</th><th>Asunto</th><th>Medida</th></tr></thead><tbody><tr><td class=\"ds-libro-expte\">RM-2026-002</td><td><a class=\"ds-libro-titulo\" href=\"#\">Qué se comenta en Instagram</a></td><td class=\"ds-libro-medida\">32.482 comentarios</td></tr></tbody></table>",
+      "css": ".ds-libro{width:100%;border-collapse:collapse;border-top:1.5px solid var(--tinta);border-bottom:1.5px solid var(--tinta);color:var(--tinta);font-family:Archivo,sans-serif}.ds-libro th{text-align:left;padding:.5rem 1rem .5rem 0;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;font-weight:750;border-bottom:1.5px solid var(--tinta)}.ds-libro td{vertical-align:top;padding:1.75rem 1rem 1.75rem 0;border-top:1px solid var(--tinta)}.ds-libro-expte,.ds-libro-medida{font-family:'Courier Prime',monospace;font-size:.95rem}.ds-libro-expte{color:var(--sello);font-weight:700}.ds-libro-titulo{font-weight:850;font-stretch:78%;font-size:1.6rem;line-height:1.05;text-transform:uppercase;color:var(--tinta);text-decoration:none}.ds-libro-titulo:hover{color:var(--sello);text-decoration:underline}.ds-libro-titulo:focus-visible{outline:2px solid var(--sello);outline-offset:3px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "El Expediente",
+    "overview": "Cada página es una carpeta de la administración pública argentina: una carátula de cartulina celeste con campos de formulario, fojas de papel oficio rayado para la lectura, tinta casi negra y un único sello violeta que certifica cómo se validaron los datos. El sistema no decora con el expediente: lo usa como estructura. Las secciones se numeran como fojas («Fs. 1», «Fs. 2»), los metadatos son campos tipeados a máquina, los proyectos se registran en un libro de entradas y cada carátula declara su medida (el n del dato).\n\nLa densidad es la de un formulario: filetes de tinta de 1,5 px arman las filas, la pauta del papel oficio (1,75 rem) marca el ritmo vertical y las superficies son planas, con esquinas rectas. La voz tipográfica se reparte en dos oficios: la grotesca condensada Archivo en mayúsculas para lo impreso (Asuntos, títulos, rótulos) y Courier Prime para lo que alguien tipeó (números de expediente, fechas, n, fuentes, herramientas). El modo oscuro es la misma carpeta de noche: cartulina azul petróleo, papel grafito, sello lila; solo cambian los colores, nunca las reglas.\n\nHay un solo momento animado: el sello se estampa una vez al cargar. Las fojas apiladas se corren al hover y al foco. Todo lo demás está quieto.",
+    "keyCharacteristics": [
+      "Carátula celeste a ancho completo en cada página, con campos de formulario y Asunto en grotesca condensada enorme.",
+      "Papel oficio con rayado sólido (`rayado`) como trama de fondo en fojas, fichas y notas al margen.",
+      "Un solo acento cromático en la interfaz: el violeta del sello.",
+      "Dos voces tipográficas con roles fijos: impreso (Archivo) y tipeado (Courier Prime).",
+      "Esquinas rectas y filetes de tinta en lugar de tarjetas, sombras y radios.",
+      "Claro y oscuro desde las mismas variables `$exp-*`."
+    ],
+    "rules": [
+      {
+        "name": "The One Stamp Rule",
+        "body": "En la interfaz, el violeta del sello es el único color con intención: marca lo certificado, lo numerado y lo navegable. La cartulina celeste es suelo, nunca acento.",
+        "section": "colors"
+      },
+      {
+        "name": "The Solid Grays Rule",
+        "body": "Todo texto atenuado usa `tinta-suave` o `caratula-tinta`, y todo divisor tenue usa `rayado`. Ningún texto de la interfaz se atenúa con `opacity` ni con alfa.",
+        "section": "colors"
+      },
+      {
+        "name": "The Same Folder Rule",
+        "body": "El modo oscuro solo redefine las variables `$exp-*` en `styles-dark.scss`. Una regla nueva se escribe una vez en `styles.scss` con `var(--…)` y funciona en los dos temas.",
+        "section": "colors"
+      },
+      {
+        "name": "The Printed and Typed Rule",
+        "body": "Archivo es lo impreso del formulario (rótulos, Asuntos, títulos, botones); Courier Prime es lo que se completó (expedientes, fechas, n, fuentes, herramientas, «Fs. N»). Un dato nunca va en Archivo si en un expediente real lo hubieran tipeado.",
+        "section": "typography"
+      },
+      {
+        "name": "The Condensed Asunto Rule",
+        "body": "Todo título de nivel h2 o mayor va en mayúsculas, peso 800–850 y ancho condensado entre 68 % y 80 %; cuanto más grande, más condensado.",
+        "section": "typography"
+      },
+      {
+        "name": "The Loose Sheet Rule",
+        "body": "Solo una hoja suelta proyecta sombra. Recuadros, notas, tablas, código y figuras se apoyan sobre el papel con un filete, sin sombra.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** abrir cada página con una carátula celeste y un solo Asunto.",
+      "**Do** tipear en Courier Prime todo número de expediente, fecha, n, fuente y herramienta; rotular en Archivo 700 mayúsculas a 0.75rem con +0.12em.",
+      "**Do** separar bloques con múltiplos de la pauta (1,75rem) y trazar filas con el filete de 1.5px en tinta.",
+      "**Do** declarar la medida (el n) de cada proyecto en la carátula, en la foja y en el libro de entradas.",
+      "**Do** reservar el violeta del sello para lo certificado, lo numerado, lo enlazado y lo activo.",
+      "**Do** escribir toda regla nueva en `styles.scss` con `var(--…)` y redefinir solo las variables `$exp-*` en `styles-dark.scss`.",
+      "**Do** mantener el estampado del sello como la única animación de entrada, y respetar `prefers-reduced-motion`."
+    ],
+    "donts": [
+      "**Don't** redondear esquinas fuera del sello de goma (6px) y los agujeros del broche.",
+      "**Don't** agregar sombras a recuadros, notas, tablas, figuras o botones; solo la hoja suelta se levanta.",
+      "**Don't** atenuar texto con `opacity` o alfa; usar `tinta-suave` o `caratula-tinta`.",
+      "**Don't** sumar un segundo acento de interfaz ni usar la cartulina celeste como color de texto o de enlace.",
+      "**Don't** volver a poner barra de color ni ícono en las notas al margen.",
+      "**Don't** mostrar títulos de nivel h2 o mayor en minúscula, sin condensar o por debajo de peso 800."
+    ]
+  }
+}

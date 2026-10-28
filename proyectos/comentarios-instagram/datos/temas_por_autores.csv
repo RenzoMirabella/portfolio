@@ -1,0 +1,17 @@
+tema,nivel,comentarios,autores,posts,max1,autores_sin_dominante,precision_aprox
+Epíteto kuka / zurdo / progre,registro,530,469,37,5.3,468,90.0
+Reclamo territorial explícito,tema,753,451,35,11.8,450,90.0
+Corrupción / robo,tema,807,451,37,29.1,450,92.0
+Epíteto vendepatria / cipayo,registro,571,398,37,7.0,397,95.0
+Salud mental del presidente (con loco/loca),tema_amplio,376,329,37,1.9,328,65.0
+Dólar / inflación / deuda,tema,420,324,36,5.0,323,100.0
+Sueldos / no llegar a fin de mes,tema,345,293,37,6.4,292,95.0
+Kirchnerismo / peronismo (referencia nominal),tema,332,285,37,2.7,284,90.0
+Apoyo explícito,tema,305,271,36,1.6,270,92.0
+Izquierda / comunismo (referencia ideológica),tema,221,200,36,3.2,199,70.0
+Salud mental del presidente (estricto),tema,234,199,36,3.0,198,92.0
+Jubilados,tema,215,172,36,5.6,171,95.0
+Uso de 'socialista / comunista',tema,161,150,18,1.9,149,85.0
+Educación,tema,164,140,33,3.0,139,85.0
+Política sanitaria,tema,171,132,36,7.0,131,85.0
+Uso de 'casta',tema,151,115,31,11.9,114,90.0

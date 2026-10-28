@@ -1,0 +1,11 @@
+---
+title: "Proyectos"
+description: "Análisis de datos, mapas e investigación aplicada. Cada proyecto empieza por una pregunta y termina con sus limitaciones."
+toc: false
+listing:
+  contents: "proyectos/*/index.qmd"
+  template: _parciales/libro-de-entradas.ejs
+  sort: "date desc"
+  fields: [title, description, date, categories, expediente, medida]
+  date-format: "MMM YYYY"
+---

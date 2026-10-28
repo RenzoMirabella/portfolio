@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Tablero</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+body{width:1440px;height:900px;overflow:hidden;background:#b8bcc0;font-family:Archivo,sans-serif;padding:48px}
+.board{background:#121212;height:100%;padding:36px 40px;border:10px solid #8d9196}
+h1{color:#f2f2ee;font-stretch:70%;font-weight:800;font-size:64px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:24px}
+.head,.row{display:grid;grid-template-columns:140px 1fr 260px 220px;gap:12px}
+.head{color:#f0a020;font-weight:700;font-size:22px;text-transform:uppercase;letter-spacing:.1em;padding-bottom:12px;border-bottom:2px solid #333}
+.row{padding:14px 0;border-bottom:2px solid #262626}
+.cell{display:flex;gap:4px}
+.cell i{font-style:normal;background:#1f1f1f;color:#f2f2ee;font-stretch:70%;font-weight:700;font-size:40px;width:32px;height:56px;display:flex;align-items:center;justify-content:center;border-top:1px solid #333;position:relative}
+.cell i:after{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:#000}
+.row .dest{color:#f2f2ee;font-stretch:72%;font-weight:700;font-size:40px;text-transform:uppercase}
+.estado{color:#f0a020;font-weight:800;font-size:30px;text-transform:uppercase}
+</style></head><body><div class="board">
+<h1>Renzo Mirabella · Análisis de datos</h1>
+<div class="head"><span>Fecha</span><span>Proyecto</span><span>Datos</span><span>Estado</span></div>
+<div class="row"><div class="cell"><i>0</i><i>9</i><i>/</i><i>2</i><i>6</i></div><div class="dest">Comentarios Instagram</div><div class="cell"><i>3</i><i>2</i><i>.</i><i>4</i><i>8</i><i>2</i></div><div class="estado">Validado</div></div>
+<div class="row"><div class="cell"><i>0</i><i>7</i><i>/</i><i>2</i><i>6</i></div><div class="dest">Locales gastronómicos</div><div class="cell"><i>1</i><i>.</i><i>2</i><i>6</i><i>1</i></div><div class="estado">Publicado</div></div>
+<div class="row"><div class="cell"><i>-</i><i>-</i><i>/</i><i>-</i><i>-</i></div><div class="dest">Sobre mí</div><div class="cell"><i>U</i><i>N</i><i>M</i><i>D</i><i>P</i></div><div class="estado">Abierto</div></div>
+</div></body></html>

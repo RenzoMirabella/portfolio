@@ -1,0 +1,83 @@
+---
+pagetitle: "Renzo Mirabella · Análisis de datos"
+toc: false
+page-layout: full
+title-block-banner: false
+listing:
+  id: destacados
+  contents: "proyectos/*/index.qmd"
+  template: _parciales/fojas.ejs
+  max-items: 4
+  sort: "date desc"
+  fields: [title, description, date, expediente, medida]
+---
+
+::: {.portada .column-screen}
+::: {.portada-interior}
+::: {.portada-texto}
+
+::: {.campos-portada}
+<dl class="campos">
+<div class="campo"><dt>Expte. N.º</dt><dd>RM-2026-001 a RM-2026-003</dd></div>
+<div class="campo"><dt>Iniciador</dt><dd>Renzo Mirabella</dd></div>
+<div class="campo"><dt>Formación</dt><dd>Sociología (UNMdP) · Ciencia de Datos (UTN)</dd></div>
+<div class="campo"><dt>Lugar</dt><dd>Mar del Plata · Buenos Aires o remoto</dd></div>
+</dl>
+:::
+
+# Datos para entender lo que pasa en el territorio {.asunto .unnumbered}
+
+::: {.lead}
+Soy estudiante avanzado de Sociología (UNMdP) con formación en Ciencia de Datos (UTN).
+Combino trabajo de campo con análisis cuantitativo: limpio, cruzo y visualizo datos
+para que se puedan leer y discutir.
+:::
+
+::: {.acciones}
+[Ver proyectos](proyectos.qmd){.btn-expediente}
+[Sobre mí](sobre-mi.qmd){.enlace-campo}
+:::
+
+:::
+
+::: {.portada-fojas}
+::: {#destacados}
+:::
+:::
+:::
+:::
+
+::: {.criterios .column-screen}
+
+## Cómo trabajo {.unnumbered}
+
+<dl class="criterios-lista">
+<div>
+<dt>Datos relevados por mí</dt>
+<dd>Armo mis propios scrapers cuando el dato no existe: 1.261 locales de Google Maps, 32.482 comentarios de Instagram.</dd>
+</div>
+<div>
+<dt>Validados a mano</dt>
+<dd>Antes de usar un modelo lo comparo contra casos anotados a mano y reporto intervalos de confianza.</dd>
+</div>
+<div>
+<dt>Cruzados con el territorio</dt>
+<dd>Asigno cada dato a su barrio y lo muestro en mapas que se pueden explorar.</dd>
+</div>
+<div>
+<dt>Con sus límites a la vista</dt>
+<dd>Cada proyecto dice qué cubre, qué no y por qué.</dd>
+</div>
+</dl>
+
+<dl class="campos campos-herramientas">
+<div class="campo"><dt>Herramientas</dt><dd>SQL · Python (pandas, plotly) · Power BI · Excel / Google Sheets · Mapas y datos geográficos · Scraping web · Análisis de texto · Encuestas (EPH-INDEC)</dd></div>
+</dl>
+
+:::
+
+::: {.cierre .column-screen}
+::: {.cierre-interior}
+<p class="cierre-texto">¿Tenés una búsqueda o un proyecto con datos? Escribime a <a href="mailto:renzomirabella@gmail.com">renzomirabella@gmail.com</a></p>
+:::
+:::

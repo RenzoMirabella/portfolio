@@ -1,0 +1,201 @@
+---
+title: "Qué se comenta en la cuenta de Instagram del presidente"
+description: "32.482 comentarios de los 69 posts de agosto de 2026: recolección propia, clasificación de sentimiento validada a mano y temas medidos por autores distintos."
+date: 2026-09-14
+categories: [Python, Scraping, Texto, Validación]
+image: miniatura.png
+expediente: "RM-2026-002"
+medida: "32.482 comentarios · 69 posts"
+jupyter: python3
+---
+
+::: {.ficha}
+<div><strong>Pregunta</strong>¿Qué clima de opinión y qué temas aparecen entre quienes comentan en la cuenta presidencial?</div>
+<div><strong>Corpus</strong>69 posts de @javiermilei · agosto 2026 · 32.482 comentarios raíz</div>
+<div><strong>Herramientas</strong>Python · Playwright · pandas · pysentimiento · plotly</div>
+<div><strong>Código</strong>[Ver en GitHub](https://github.com/RenzoMirabella/portfolio)</div>
+:::
+
+```{python}
+#| label: setup
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+
+posts = pd.read_csv("datos/metricas_por_post.csv", parse_dates=["taken_at"])
+posts["fecha"] = posts["taken_at"].dt.tz_convert("America/Argentina/Buenos_Aires").dt.date
+posts["categorias"] = posts["categorias"].str.replace("|", " + ", regex=False)
+temas = pd.read_csv("datos/temas_por_autores.csv")
+likes = pd.read_csv("datos/likes_distribucion.csv")
+
+# Paleta del sitio: violeta de sello y grafito, legibles en claro y oscuro
+AZUL, NARANJA = "#7457d0", "#8a8d92"
+GRIS = "#7a7972"
+
+def estilo(fig, alto=420):
+    fig.update_layout(
+        height=alto,
+        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(family="Archivo, Helvetica Neue, Arial, sans-serif", size=13, color=GRIS),
+        margin=dict(l=10, r=10, t=30, b=10),
+        hoverlabel=dict(font_size=13),
+        separators=",.",  # coma decimal y punto de miles
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0, title_text=""),
+    )
+    fig.update_xaxes(showgrid=False, linecolor="rgba(128,128,128,0.4)")
+    fig.update_yaxes(gridcolor="rgba(128,128,128,0.18)", zeroline=False)
+    return fig
+```
+
+::: {.callout-note appearance="simple"}
+**Qué mide y qué no.** El objeto es el clima de opinión **de quienes comentan** en esta
+cuenta, no la opinión pública ni la de sus seguidores. La página no transcribe ningún
+comentario ni muestra nombres de usuario: los usuarios están seudonimizados con un hash
+y todo lo que sigue son agregados.
+:::
+
+## Resumen
+
+- **58,1%** de los comentarios son negativos según el clasificador. El nivel no cambia a lo
+  largo del mes: el promedio diario se mueve entre 45% y 71%, publique lo que publique la cuenta.
+- El **apoyo** medido a mano es **32,3%** [IC95 27,6–37,0]. El modelo automático lo
+  subestima casi tres veces, así que esa cifra sale de la anotación humana y no del modelo.
+- **El tipo de publicación no predice la conversación.** Ataque al adversario, anuncio de
+  gestión o acto institucional: los comentarios se parecen.
+- Los temas se cuentan por **autores distintos**, no por apariciones. Así se detectó, por
+  ejemplo, que un «tema» de 202 comentarios lo sostenían 6 cuentas.
+- **75,4%** de los comentarios no recibe ningún like, y el 3% más likeado concentra el
+  82% de los likes.
+
+## Cuánto del debate se puede ver
+
+Instagram no muestra todos los comentarios: los ordena por relevancia y corta. Por eso
+el dato más importante de la recolección es la **cobertura**, la parte de los
+comentarios declarados que efectivamente se pudo bajar. En todo el mes fue **15,2%**
+(de 213.639 declarados), con una mediana de 15% por post.
+
+```{python}
+#| label: cobertura
+fig = px.scatter(
+    posts, x="declarados", y=posts["cobertura_raiz"] * 100, log_x=True,
+    custom_data=["fecha", "categorias", "n_raiz"],
+    labels={"declarados": "Comentarios declarados (escala log.)", "y": "Cobertura (%)"},
+)
+fig.update_traces(marker=dict(size=10, color=AZUL, line=dict(width=2, color="white")),
+                  hovertemplate="%{customdata[0]} · %{customdata[1]}<br>"
+                                "%{customdata[2]:,} de %{x:,} comentarios · cobertura %{y:.1f}%<extra></extra>")
+fig.update_yaxes(ticksuffix="%")
+estilo(fig, alto=400).show()
+```
+
+Cada punto es un post. La curva descendente no es casualidad: con un tope fijo de
+comentarios por post, **cuanto más grande el post, menos se ve de él**. Eso obliga a
+preguntarse si lo que no se ve habla de otras cosas. Lo medí comparando, dentro de los
+mismos posts, los primeros 400 comentarios contra los siguientes: el mix de temas casi
+no cambia (0,27 puntos de diferencia mediana), pero el tono sí (+12,2 puntos más de
+rechazo arriba del ranking). **La truncación recorta cuánto vemos, no de qué se habla.**
+
+## Clima de opinión día a día
+
+```{python}
+#| label: clima
+fig = px.scatter(
+    posts, x="taken_at", y=posts["prop_neg_modelo"] * 100, size="n_raiz", size_max=22,
+    custom_data=["fecha", "categorias", "n_raiz"],
+    labels={"taken_at": "", "y": "Comentarios negativos (%)"},
+)
+fig.update_traces(marker=dict(color=AZUL, line=dict(width=1.5, color="white"), opacity=0.85),
+                  hovertemplate="%{customdata[0]} · %{customdata[1]}<br>"
+                                "%{y:.1f}% negativos · %{customdata[2]:,} comentarios<extra></extra>")
+fig.add_hline(y=58.1, line_dash="dot", line_color=GRIS,
+              annotation_text="58,1% en el mes", annotation_position="bottom right",
+              annotation_font_color=GRIS)
+fig.update_yaxes(range=[0, 100], ticksuffix="%")
+fig.update_xaxes(tickformat="%d/%m")
+estilo(fig, alto=400).show()
+```
+
+Cada punto es un post, y su tamaño indica cuántos comentarios se analizaron. Los
+porcentajes salen de **pysentimiento**, un modelo entrenado con tweets de otro dialecto.
+Por eso lo validé contra 378 comentarios anotados a mano antes de usarlo:
+
+| | Modelo | Anotación humana |
+|---|---:|---:|
+| Negativo vs. no negativo (F1) | 0,748 | — |
+| Comentarios positivos | 6,9% | **19,8%** [15,8–23,9] |
+| Postura a favor | — | **32,3%** [27,6–37,0] |
+| Postura en contra | — | entre 44,5% y 66,9% |
+
+El modelo distingue bien lo negativo de lo que no lo es, pero manda a «negativo» la mitad
+de lo neutro y casi no reconoce el apoyo. Por eso el corte negativo/no negativo se toma
+del modelo y el reparto del resto, de la anotación humana.
+
+El rechazo se informa como **rango** y no como un número: auditando la anotación detecté
+un cambio de criterio a mitad de la planilla (la categoría «no se sabe» cae de 23% a 2%).
+El apoyo es estable a los dos lados del quiebre; el rechazo no. Lo que sí se sostiene en
+las dos mitades es que el rechazo supera al apoyo.
+
+## De qué se habla
+
+Cada tema se detecta con un léxico propio y auditable, y se cuenta por **autores
+distintos**: un tema que sostienen cinco cuentas pegando el mismo texto es una campaña,
+no un tema del debate. La precisión de cada léxico se midió anotando 50 casos por tema.
+
+```{python}
+#| label: temas
+t = temas[temas["nivel"] != "tema_amplio"].sort_values("autores")
+fig = go.Figure()
+fig.add_bar(y=t["tema"], x=t["comentarios"], orientation="h", name="Comentarios",
+            marker_color=NARANJA, customdata=t[["max1"]],
+            hovertemplate="<b>%{y}</b><br>%{x:,} comentarios · la cuenta más activa aporta %{customdata[0]:.1f}%<extra></extra>")
+fig.add_bar(y=t["tema"], x=t["autores"], orientation="h", name="Autores distintos",
+            marker_color=AZUL, customdata=t[["precision_aprox", "posts"]],
+            hovertemplate="<b>%{y}</b><br>%{x:,} autores en %{customdata[1]} posts · precisión aprox. %{customdata[0]:.0f}%<extra></extra>")
+fig.update_layout(barmode="group", bargap=0.25, bargroupgap=0.08)
+fig.update_xaxes(title_text="Cantidad", showgrid=True, gridcolor="rgba(128,128,128,0.18)")
+fig.update_yaxes(showgrid=False)
+estilo(fig, alto=620).show()
+```
+
+*Base: los primeros 37 posts del mes (18.312 comentarios), que es el corpus sobre el que se
+midió la precisión de los léxicos.*
+
+Cuando las dos barras se separan mucho, unas pocas cuentas están inflando el tema. El caso
+más claro es **corrupción**: una sola cuenta aportaba el 29% de los comentarios. Al sacarla,
+el volumen cae 29% pero la cantidad de autores no se mueve (451 → 450). Es un tema real,
+inflado por una cuenta.
+
+## Qué se likea
+
+```{python}
+#| label: likes
+fig = px.bar(likes, x="likes", y="comentarios", text="comentarios",
+             labels={"likes": "Likes recibidos por el comentario", "comentarios": "Comentarios"})
+fig.update_traces(marker_color=AZUL, texttemplate="%{text:,}", textposition="outside", cliponaxis=False,
+                  hovertemplate="%{x} likes: %{y:,} comentarios<extra></extra>")
+estilo(fig, alto=380).show()
+```
+
+Tres de cada cuatro comentarios no reciben ningún like. Lo muy likeado tiene un
+vocabulario propio: nombres propios y acusaciones concretas, más que epítetos. Y los likes
+**no son votos**: un comentario arriba del ranking recibe likes porque está arriba, y está
+arriba en parte porque los recibió.
+
+## Metodología
+
+- **Recolección.** Scraper propio con Playwright, con sesión y delays altos. Cola persistida
+  y reanudable, deduplicación por id del comentario y un registro por corrida para auditar
+  la completitud. Antes de cada cambio, una batería de pruebas offline contra un DOM sintético.
+- **Privacidad.** Los nombres de usuario se reemplazan por un hash con sal antes de analizar.
+  Ningún informe transcribe comentarios.
+- **Validación del clasificador.** 450 casos sorteados y anotados a mano, con libro de
+  códigos. Un control automático detecta si el criterio del anotador cambia a lo largo de
+  la planilla. Así apareció el quiebre que obliga a informar el rechazo como rango.
+- **Temas.** 16 léxicos versionados, cada uno con su patrón, su precisión (IC de Wilson) y la
+  fecha de medición. Los descartados quedan registrados con el motivo.
+- **Ventana congelada.** La precisión se midió sobre el corpus al 19 de agosto, y el
+  análisis de temas usa ese corte, para no aplicar una precisión medida en una población
+  a otra distinta.
+- **Limitaciones.** Solo comentarios raíz; las respuestas se recolectaron en 18 posts pero no
+  se analizan. La codificación de los posts por tipo no tiene medida de confiabilidad, así
+  que el resultado nulo se lee como «no se detecta efecto», no como «no hay efecto».

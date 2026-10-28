@@ -1,0 +1,14 @@
+/.quarto/
+/_site/
+*_files/
+__pycache__/
+.ipynb_checkpoints/
+.venv/
+
+**/*.quarto_ipynb
+
+# capturas de revisión de diseño (se regeneran)
+.impeccable/review/
+
+# configuración local de herramientas
+.claude/

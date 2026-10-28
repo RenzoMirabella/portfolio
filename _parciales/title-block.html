@@ -1,0 +1,24 @@
+$if(title)$
+<header id="title-block-header" class="quarto-title-block caratula">
+  <div class="quarto-title-banner">
+    <div class="quarto-title column-body caratula-interior">
+      $if(expediente)$
+      <dl class="campos">
+        <div class="campo"><dt>Expte. N.º</dt><dd>$expediente$</dd></div>
+        $if(date)$<div class="campo"><dt>Fecha</dt><dd>$date$</dd></div>$endif$
+        $if(medida)$<div class="campo"><dt>Medida</dt><dd>$medida$</dd></div>$endif$
+      </dl>
+      $endif$
+      <h1 class="title">$title$</h1>
+      $if(description)$
+      <p class="description">$description$</p>
+      $endif$
+      $if(categories)$
+      <ul class="rubros" aria-label="Temas">
+        $for(categories)$<li>$categories$</li>$endfor$
+      </ul>
+      $endif$
+    </div>
+  </div>
+</header>
+$endif$

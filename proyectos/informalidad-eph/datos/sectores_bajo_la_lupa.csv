@@ -1,0 +1,51 @@
+rama,tamano_regla,casos,ocupados (miles),informales (miles),tasa de informalidad (%),% de los informales con empleador privado (acum.),confiabilidad
+F Construcción,Hasta 5,513,306.3,287.9,94.0,10.6,normal
+R Arte y recreación,Hasta 5,51,30.8,26.9,87.2,11.6,baja
+I Alojamiento y gastronomía,Hasta 5,232,182.8,142.6,78.0,16.9,normal
+H Transporte,Hasta 5,105,84.3,65.4,77.6,19.3,normal
+C Industria,Hasta 5,216,203.0,151.6,74.7,24.9,normal
+G Comercio,Hasta 5,917,581.7,413.6,71.1,40.2,normal
+R Arte y recreación,6 a 40,72,48.6,33.6,69.2,41.5,baja
+A Agro y pesca,Hasta 5,35,11.7,7.9,67.8,41.8,baja
+M Profesionales,Hasta 5,80,74.1,49.0,66.1,43.6,baja
+H Transporte,Sin dato,117,109.3,69.2,63.3,46.1,normal
+A Agro y pesca,6 a 40,72,20.8,12.8,61.6,46.6,baja
+F Construcción,6 a 40,249,156.6,93.2,59.5,50.0,normal
+F Construcción,Sin dato,77,58.3,33.6,57.7,51.3,baja
+I Alojamiento y gastronomía,6 a 40,363,252.8,139.0,55.0,56.4,normal
+S Otros servicios,Hasta 5,105,100.9,55.2,54.7,58.5,normal
+G Comercio,Sin dato,208,152.2,82.9,54.5,61.5,normal
+N Servicios de apoyo,Hasta 5,97,72.3,38.8,53.6,63.0,baja
+Q Salud,Hasta 5,58,44.4,23.0,51.8,63.8,baja
+Q Salud,6 a 40,179,126.0,61.5,48.8,66.1,normal
+R Arte y recreación,Sin dato,30,27.6,12.1,43.8,66.5,baja
+I Alojamiento y gastronomía,Sin dato,70,57.1,24.3,42.6,67.4,baja
+R Arte y recreación,Más de 40,42,22.8,9.5,41.9,67.8,baja
+S Otros servicios,6 a 40,35,22.2,9.3,41.9,68.1,baja
+Q Salud,Sin dato,41,25.4,10.6,41.7,68.5,baja
+J Información y comunicación,6 a 40,98,89.7,37.1,41.4,69.9,baja
+J Información y comunicación,Sin dato,33,26.9,10.9,40.3,70.3,baja
+H Transporte,6 a 40,152,106.5,39.6,37.2,71.8,normal
+P Enseñanza,Sin dato,41,29.8,10.6,35.6,72.2,baja
+M Profesionales,6 a 40,90,88.8,30.5,34.3,73.3,baja
+F Construcción,Más de 40,100,65.0,21.7,33.4,74.1,normal
+C Industria,6 a 40,390,326.4,104.2,31.9,77.9,normal
+H Transporte,Más de 40,268,276.6,87.9,31.8,81.2,normal
+L Inmobiliarias,Hasta 5,42,36.6,11.6,31.7,81.6,baja
+G Comercio,6 a 40,701,463.9,145.4,31.3,87.0,normal
+C Industria,Sin dato,69,62.9,19.6,31.1,87.7,baja
+N Servicios de apoyo,6 a 40,196,136.0,37.2,27.3,89.1,normal
+P Enseñanza,6 a 40,152,104.0,23.5,22.6,89.9,normal
+N Servicios de apoyo,Sin dato,73,64.3,11.1,17.3,90.4,baja
+Q Salud,Más de 40,215,217.4,36.2,16.6,91.7,normal
+I Alojamiento y gastronomía,Más de 40,47,31.0,4.7,15.3,91.9,baja
+G Comercio,Más de 40,242,222.7,32.3,14.5,93.1,normal
+P Enseñanza,Más de 40,144,133.7,18.0,13.5,93.7,normal
+N Servicios de apoyo,Más de 40,169,173.8,19.6,11.3,94.5,normal
+J Información y comunicación,Más de 40,105,149.2,16.6,11.1,95.1,normal
+K Finanzas,6 a 40,74,67.2,6.3,9.3,95.3,baja
+C Industria,Más de 40,424,430.3,38.2,8.9,96.7,normal
+K Finanzas,Más de 40,64,84.6,7.3,8.6,97.0,baja
+M Profesionales,Más de 40,35,47.4,2.8,5.9,97.1,baja
+D Electricidad y gas,Más de 40,31,26.1,0.3,1.1,97.1,baja
+B Minería,Más de 40,86,36.6,0.2,0.6,97.1,baja

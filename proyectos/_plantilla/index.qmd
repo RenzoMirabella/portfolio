@@ -1,0 +1,56 @@
+---
+# PLANTILLA PARA UN PROYECTO NUEVO
+# 1. Copiá esta carpeta y renombrala (sin guion bajo adelante), por ejemplo: proyectos/eph-ingresos/
+#    Las carpetas que empiezan con "_" no se publican, por eso esta no aparece en el sitio.
+# 2. Poné tus datos en la subcarpeta datos/ y una imagen miniatura.png (aprox. 1200x700).
+# 3. Completá los campos de abajo.
+title: "Título del proyecto"
+description: "Una oración que diga qué pregunta responde."
+date: 2026-10-16
+categories: [Python, SQL]
+image: miniatura.png
+# Datos de la carátula: número correlativo y tamaño del dato
+expediente: "RM-2026-003"
+medida: "n = 0 casos"
+jupyter: python3
+---
+
+::: {.ficha}
+<div><strong>Pregunta</strong>¿Qué querías averiguar?</div>
+<div><strong>Fuentes</strong>Ej.: EPH-INDEC, 2° trimestre 2025</div>
+<div><strong>Herramientas</strong>Python · pandas · plotly</div>
+<div><strong>Código</strong>[Ver en GitHub](https://github.com/RenzoMirabella/portfolio)</div>
+:::
+
+```{python}
+import pandas as pd
+import plotly.express as px
+
+df = pd.read_csv("datos/mis_datos.csv")
+```
+
+## Contexto
+
+Por qué importa la pregunta.
+
+## Resultados
+
+```{python}
+# fig = px.bar(df, x="...", y="...")
+# fig.show()
+```
+
+## Conclusiones
+
+Qué encontraste y qué limitaciones tiene.
+
+## Metodología
+
+Fuente, limpieza y decisiones.
+
+<!-- Para sumar una figura interactiva, generá el HTML con un script en _figuras/
+     (ver README) e insertalo así:
+::: {incluir="_figura-nombre.html"}
+:::
+-->
+

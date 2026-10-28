@@ -1,0 +1,326 @@
+---
+title: "Locales gastronómicos de Mar del Plata"
+description: "Relevamiento propio de 1.261 bares, cafés y restaurantes con scraping de Google Maps: dónde se concentran, cómo se puntúan y qué barrios lideran."
+date: 2026-07-18
+categories: [Mapas, Python, Scraping, Geoespacial]
+image: miniatura.png
+expediente: "RM-2026-001"
+medida: "1.261 locales · 124 barrios"
+jupyter: python3
+---
+
+::: {.ficha}
+<div><strong>Pregunta</strong>¿Cómo se distribuye la oferta gastronómica en la ciudad y qué barrios la concentran?</div>
+<div><strong>Fuentes</strong>Google Maps (relevamiento propio, julio 2026) · Barrios por sociedad de fomento (124 polígonos)</div>
+<div><strong>Herramientas</strong>Python · Playwright · pandas · geopandas · folium · plotly</div>
+<div><strong>Código</strong>[Ver en GitHub](https://github.com/RenzoMirabella/portfolio)</div>
+:::
+
+```{python}
+#| label: setup
+import json
+import pandas as pd
+import plotly.express as px
+import folium
+from folium.plugins import HeatMap
+from itables import init_notebook_mode, show
+
+init_notebook_mode(all_interactive=False)
+
+locales = pd.read_csv("datos/locales_con_barrio.csv")
+locales["barrio"] = locales["barrio"].str.title()
+with open("datos/barrios.geojson", encoding="utf-8") as f:
+    barrios_geo = json.load(f)
+for feat in barrios_geo["features"]:
+    nombre = feat["properties"].get("soc_fomen") or ""
+    feat["properties"]["barrio"] = nombre.title()
+
+# Una fila por par local-categoría (un local puede ser bar y restaurante a la vez)
+por_categoria = locales.assign(categoria=locales["categorias"].str.split("; ")).explode("categoria")
+
+CATEGORIAS = ["restaurante", "bar", "café"]
+# Paleta del sitio: violeta de sello, celeste de cartulina y grafito.
+# Tonos medios para que se lean sobre el fondo claro y el oscuro.
+COLORES = {"café": "#8a8d92", "restaurante": "#7457d0", "bar": "#4f9cc9"}
+AZUL = "#7457d0"  # color principal de los gráficos (violeta sello)
+GRIS = "#7a7972"
+CENTRO_MDP = [-38.0175, -57.58]
+# Fondo gris neutro y gratuito (las teselas de CARTO ahora piden API key)
+FONDO = dict(
+    tiles="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+    attr="Tiles © Esri — Esri, HERE, Garmin, © colaboradores de OpenStreetMap",
+    max_zoom=16,
+)
+# Encuadre: el rectángulo que contiene a todos los locales
+LIMITES = [[locales.lat.min(), locales.lng.min()], [locales.lat.max(), locales.lng.max()]]
+
+def estilo(fig, alto=420):
+    fig.update_layout(
+        height=alto,
+        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(family="Archivo, Helvetica Neue, Arial, sans-serif", size=13, color=GRIS),
+        margin=dict(l=10, r=10, t=30, b=10),
+        hoverlabel=dict(font_size=13),
+        separators=",.",  # coma decimal y punto de miles
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0, title_text=""),
+    )
+    fig.update_xaxes(showgrid=False, linecolor="rgba(128,128,128,0.4)")
+    fig.update_yaxes(gridcolor="rgba(128,128,128,0.18)", zeroline=False)
+    return fig
+
+def miles(n):
+    return f"{n:,.0f}".replace(",", ".")
+
+n_locales = len(locales)
+con_rating = locales.dropna(subset=["rating"])
+con_reviews = locales.dropna(subset=["n_reviews"])
+pct_barrio = locales["barrio"].notna().mean() * 100
+```
+
+## Resumen
+
+Con un scraper propio sobre Google Maps relevé **`{python} miles(n_locales)` locales
+gastronómicos** dentro del casco urbano de Mar del Plata. Les asigné un barrio a
+**`{python} f"{pct_barrio:.1f}".replace(".", ",")`%** de ellos cruzando sus coordenadas
+con los polígonos de las sociedades de fomento.
+
+- La oferta se concentra en el **centro y la costa**, con corredores secundarios hacia los barrios.
+- **Restaurante** es la categoría dominante: aparece en más locales que bar y café juntos.
+- La popularidad está muy concentrada: la mitad de los locales tiene menos de 150 reseñas,
+  y un grupo chico supera las 5.000.
+- Los ratings son altos en general (promedio **`{python} f"{con_rating.rating.mean():.2f}".replace(".", ",")`**),
+  como es típico en Google Maps. Por eso los rankings exigen un mínimo de reseñas.
+
+## Dónde están
+
+Cada punto es un local. Con el selector de arriba a la derecha podés prender y apagar
+cada categoría, y con un clic sobre un punto ves el nombre, el rating y las reseñas.
+
+```{python}
+#| label: mapa-categorias
+lienzo = folium.Figure(width="100%", height=500)
+mapa = folium.Map(location=CENTRO_MDP, zoom_start=13, tiles=None, zoom_snap=0.25).add_to(lienzo)
+folium.TileLayer(**FONDO, control=False).add_to(mapa)  # el fondo no va en el selector
+
+for cat in CATEGORIAS:
+    sub = por_categoria[por_categoria["categoria"] == cat]
+    capa = folium.FeatureGroup(name=f"{cat.capitalize()} ({len(sub)})", show=True)
+    for _, f in sub.iterrows():
+        rating = "s/d" if pd.isna(f.rating) else f"{f.rating:.1f}"
+        reviews = "s/d" if pd.isna(f.n_reviews) else miles(f.n_reviews)
+        folium.CircleMarker(
+            location=[f.lat, f.lng], radius=4,
+            color="white", weight=1, fill=True, fill_color=COLORES[cat], fill_opacity=0.85,
+            tooltip=f.nombre,
+            popup=folium.Popup(
+                f"<b>{f.nombre}</b><br>{cat.capitalize()} · {f.barrio if pd.notna(f.barrio) else 'sin barrio'}"
+                f"<br>Rating {rating} · {reviews} reseñas",
+                max_width=260,
+            ),
+        ).add_to(capa)
+    capa.add_to(mapa)
+
+folium.LayerControl(collapsed=False).add_to(mapa)
+mapa.fit_bounds(LIMITES)
+lienzo
+```
+
+### Mapa de calor
+
+La misma información como densidad: cada local suma lo mismo, así que las zonas más
+intensas son las de mayor concentración de oferta.
+
+```{python}
+#| label: mapa-calor
+lienzo = folium.Figure(width="100%", height=460)
+mapa = folium.Map(location=CENTRO_MDP, zoom_start=13, tiles=FONDO["tiles"], attr=FONDO["attr"], max_zoom=FONDO["max_zoom"], zoom_snap=0.25).add_to(lienzo)
+# de papel a tinta pasando por el violeta del sello
+HeatMap(locales[["lat", "lng"]].values.tolist(), radius=14, blur=18,
+        gradient={0.2: "#d9d1f1", 0.45: "#9f8ce0", 0.7: "#7457d0", 0.9: "#4a2f91", 1: "#17171a"}).add_to(mapa)
+mapa.fit_bounds(LIMITES)
+lienzo
+```
+
+## Por barrio
+
+Para asignar el barrio usé dos pasos. Primero, **punto en polígono**. Después, para los
+locales de playa (que quedan fuera de los polígonos porque los barrios terminan en la
+costanera), el **barrio más cercano hasta 500 m**, medido en metros reales con la
+proyección POSGAR 2007. Los que quedan más lejos se consideran periferia.
+
+```{python}
+#| label: mapa-barrios
+conteo = locales["barrio"].value_counts()
+for feat in barrios_geo["features"]:
+    feat["properties"]["locales"] = int(conteo.get(feat["properties"]["barrio"], 0))
+tabla_barrios = pd.DataFrame(
+    [{"barrio": ft["properties"]["barrio"], "locales": ft["properties"]["locales"]} for ft in barrios_geo["features"]]
+)
+
+lienzo = folium.Figure(width="100%", height=500)
+mapa = folium.Map(location=CENTRO_MDP, zoom_start=12, tiles=FONDO["tiles"], attr=FONDO["attr"], max_zoom=FONDO["max_zoom"], zoom_snap=0.25).add_to(lienzo)
+
+# La distribución está muy sesgada (el centro tiene 180+ y la mayoría menos de 10):
+# cortes finos abajo y anchos arriba para que se vean las diferencias
+cortes = [0, 1, 3, 6, 12, 25, 60, int(tabla_barrios["locales"].max()) + 1]
+coropleta = folium.Choropleth(
+    geo_data=barrios_geo, data=tabla_barrios, columns=["barrio", "locales"],
+    key_on="feature.properties.barrio", fill_color="Purples", fill_opacity=0.85,
+    line_opacity=0.35, line_color="white", threshold_scale=cortes,
+    legend_name="Locales gastronómicos por barrio",
+)
+# La leyenda automática es una barra lineal donde los cortes chicos se pisan:
+# la reemplazo por una leyenda de casilleros
+for clave in list(coropleta._children):
+    if clave.startswith("color_map"):
+        del coropleta._children[clave]
+coropleta.add_to(mapa)
+
+from branca.utilities import color_brewer
+azules = color_brewer("Purples", n=7)  # los mismos colores que usa la coropleta
+rangos = ["0", "1–2", "3–5", "6–11", "12–24", "25–59", f"60–{cortes[-1] - 1}"]
+filas = "".join(
+    f'<div style="display:flex;align-items:center;gap:6px">'
+    f'<span style="width:14px;height:14px;background:{c};border:1px solid #9aa"></span>{r}</div>'
+    for c, r in zip(azules, rangos)
+)
+leyenda = folium.Element(
+    '<div style="position:absolute;bottom:24px;left:10px;z-index:9999;background:rgba(255,255,255,.92);'
+    'padding:8px 10px;border-radius:6px;font:12px system-ui,sans-serif;color:#333;line-height:1.5">'
+    f'<b>Locales por barrio</b>{filas}</div>'
+)
+mapa.get_root().html.add_child(leyenda)
+folium.GeoJson(
+    barrios_geo, style_function=lambda _: {"fillOpacity": 0, "weight": 0},
+    tooltip=folium.GeoJsonTooltip(fields=["barrio", "locales"], aliases=["Barrio:", "Locales:"]),
+).add_to(mapa)
+mapa.fit_bounds(LIMITES)
+lienzo
+```
+
+```{python}
+#| label: top-barrios
+top_barrios = conteo.head(15).sort_values().reset_index()
+top_barrios.columns = ["barrio", "locales"]
+fig = px.bar(top_barrios, x="locales", y="barrio", orientation="h",
+             labels={"locales": "Locales gastronómicos", "barrio": ""},
+             title="Los 15 barrios con más locales")
+fig.update_traces(marker_color=AZUL, hovertemplate="<b>%{y}</b><br>%{x} locales<extra></extra>")
+estilo(fig, alto=480).show()
+```
+
+```{python}
+#| label: rating-barrios
+rb = (con_rating.dropna(subset=["barrio"]).groupby("barrio")
+      .agg(locales=("place_id", "count"), rating=("rating", "mean")).reset_index())
+rb = rb[rb["locales"] >= 10].sort_values("rating")
+fig = px.scatter(rb, x="rating", y="barrio", custom_data=["locales"],
+                 labels={"rating": "Rating promedio", "barrio": ""},
+                 title="Rating promedio por barrio (barrios con 10 o más locales puntuados)")
+fig.update_traces(marker=dict(size=11, color=AZUL, line=dict(width=2, color="white")),
+                  hovertemplate="<b>%{y}</b><br>Rating %{x:.2f} · %{customdata[0]} locales<extra></extra>")
+fig.update_xaxes(showgrid=True, gridcolor="rgba(128,128,128,0.18)")
+fig.update_yaxes(showgrid=False)
+estilo(fig, alto=max(360, 26 * len(rb))).show()
+```
+
+## Categorías, reseñas y ratings
+
+```{python}
+#| label: categorias
+cc = por_categoria["categoria"].value_counts().reindex(CATEGORIAS).reset_index()
+cc.columns = ["categoria", "locales"]
+cc["categoria_txt"] = cc["categoria"].str.capitalize()
+fig = px.bar(cc, x="categoria_txt", y="locales", color="categoria", color_discrete_map=COLORES,
+             text="locales", labels={"categoria_txt": "", "locales": "Locales"},
+             title="Locales por categoría")
+fig.update_traces(textposition="outside", cliponaxis=False,
+                  hovertemplate="%{x}: %{y} locales<extra></extra>")
+fig.update_layout(showlegend=False)
+estilo(fig, alto=360).show()
+```
+
+Un local puede tener más de una categoría: **`{python} int((locales.n_categorias > 1).sum())`**
+combinan dos o tres, sobre todo bar + restaurante.
+
+```{python}
+#| label: tramos-reviews
+tramos = [0, 10, 50, 100, 500, 1000, 5000, float("inf")]
+etiquetas = ["menos de 10", "10 a 49", "50 a 99", "100 a 499", "500 a 999", "1.000 a 4.999", "5.000 o más"]
+tr = (pd.cut(con_reviews["n_reviews"], bins=tramos, labels=etiquetas, right=False)
+      .value_counts().reindex(etiquetas).reset_index())
+tr.columns = ["tramo", "locales"]
+fig = px.bar(tr, x="tramo", y="locales", text="locales",
+             labels={"tramo": "Cantidad de reseñas", "locales": "Locales"},
+             title=f"Locales según cantidad de reseñas (n = {miles(len(con_reviews))})")
+fig.update_traces(marker_color=AZUL, textposition="outside", cliponaxis=False,
+                  hovertemplate="%{x}: %{y} locales<extra></extra>")
+estilo(fig, alto=380).show()
+```
+
+```{python}
+#| label: rating-vs-reviews
+datos = locales.dropna(subset=["rating", "n_reviews"])
+fig = px.scatter(datos, x="n_reviews", y="rating", log_x=True, opacity=0.45,
+                 hover_name="nombre", custom_data=["barrio"],
+                 labels={"n_reviews": "Reseñas (escala log.)", "rating": "Rating"},
+                 title="¿Más reseñas implica mejor rating?")
+fig.update_traces(marker=dict(size=8, color=AZUL, line=dict(width=1, color="white")),
+                  hovertemplate="<b>%{hovertext}</b><br>%{customdata[0]}<br>Rating %{y} · %{x:,.0f} reseñas<extra></extra>")
+estilo(fig, alto=440).show()
+```
+
+Los locales con menos de 10 reseñas ocupan todo el rango, de 1 a 5, y la mitad tiene
+un 5,0 perfecto. A medida que crecen las reseñas, el rating se estrecha: entre los que
+superan las mil, el 80% central está entre 4,1 y 4,6. Un 5,0 con tres reseñas no dice
+mucho; un 4,6 con miles es un veredicto.
+
+## Los más reseñados
+
+```{python}
+#| label: top-reviews
+top = locales.nlargest(15, "n_reviews").sort_values("n_reviews")
+fig = px.bar(top, x="n_reviews", y="nombre", orientation="h", custom_data=["rating", "barrio"],
+             labels={"n_reviews": "Reseñas en Google Maps", "nombre": ""})
+fig.update_traces(marker_color=AZUL,
+                  hovertemplate="<b>%{y}</b><br>%{customdata[1]}<br>%{x:,.0f} reseñas · rating %{customdata[0]}<extra></extra>")
+estilo(fig, alto=500).show()
+```
+
+## Explorá los datos
+
+Todos los locales relevados. Podés buscar por nombre o barrio y ordenar por cualquier columna.
+
+```{python}
+#| label: tabla
+tabla = (locales[["nombre", "barrio", "categorias", "rating", "n_reviews"]]
+         .rename(columns={"nombre": "Local", "barrio": "Barrio", "categorias": "Categorías",
+                          "rating": "Rating", "n_reviews": "Reseñas"})
+         .sort_values("Reseñas", ascending=False).reset_index(drop=True))
+tabla["Barrio"] = tabla["Barrio"].fillna("Sin barrio")
+tabla["Reseñas"] = tabla["Reseñas"].astype("Int64")
+
+ESPANOL = {
+    "search": "Buscar:", "lengthMenu": "_MENU_ filas por página",
+    "info": "Filas _START_ a _END_ de _TOTAL_", "infoEmpty": "Sin resultados",
+    "infoFiltered": "(filtrado de _MAX_ filas)", "zeroRecords": "No hay coincidencias",
+    "paginate": {"first": "«", "previous": "‹", "next": "›", "last": "»"},
+}
+show(tabla, showIndex=False, pageLength=10, lengthMenu=[10, 25, 50], classes="display compact",
+     style="width:100%", language=ESPANOL,
+     columnDefs=[{"className": "dt-left", "targets": [0, 1, 2]},
+                 {"className": "dt-right", "targets": [3, 4]}])
+```
+
+## Metodología
+
+- **Recolección.** Scraper propio con Playwright sobre Google Maps. Dividí el casco urbano
+  en una grilla de celdas y busqué cada categoría (bar, café, restaurante) en cada celda,
+  deduplicando por el identificador del lugar (`place_id`).
+- **Limpieza.** Excluí 75 resultados que Google devolvió fuera del área de estudio
+  (Santa Clara del Mar, Chapadmalal). Los locales sin rating o sin reseñas quedan en el
+  dataset y se excluyen solo de los análisis que usan esos campos.
+- **Barrios.** Reparé las geometrías inválidas del archivo de barrios, asigné por punto en
+  polígono (1.147 locales) y recuperé 100 más por cercanía (≤ 500 m). Quedan 14 sin barrio.
+- **Limitaciones.** Google Maps no es un padrón: faltan locales sin ficha y puede haber
+  fichas de locales cerrados. El rating y las reseñas son una foto de julio de 2026.

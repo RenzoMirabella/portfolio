@@ -1,0 +1,31 @@
+<%
+// Página Proyectos: cada proyecto es un asiento del libro de entradas.
+%>
+```{=html}
+<table class="libro" data-quarto-disable-processing="true">
+  <thead>
+    <tr>
+      <th scope="col">Expte.</th>
+      <th scope="col">Asunto</th>
+      <th scope="col">Medida</th>
+      <th scope="col">Fecha</th>
+    </tr>
+  </thead>
+  <tbody class="list">
+<% for (const item of items) { %>
+    <tr <%= metadataAttrs(item) %>>
+      <td class="libro-expte"><%= item.expediente || "" %></td>
+      <td class="libro-asunto">
+        <a class="listing-title" href="<%- item.path %>"><%= item.title %></a>
+        <p class="listing-description"><%= item.description %></p>
+        <% if (item.categories) { %>
+        <ul class="rubros"><% for (const c of item.categories) { %><li><%= c %></li><% } %></ul>
+        <% } %>
+      </td>
+      <td class="libro-medida"><%= item.medida || "" %></td>
+      <td class="libro-fecha"><%= item.date %></td>
+    </tr>
+<% } %>
+  </tbody>
+</table>
+```
