@@ -79,8 +79,23 @@ def informalidad():
     plt.close(fig)
 
 
+def busqueda():
+    carpeta = RAIZ / "proyectos" / "busqueda-laboral"
+    e = pd.read_csv(carpeta / "datos" / "embudo.csv").iloc[::-1]
+    colores = ["#7457d0", "#4f9cc9", "#b9bab5", "#b9bab5", "#b9bab5"]
+    fig, ax = lienzo()
+    y = range(len(e))
+    ax.barh(list(y), e["avisos"], height=0.62, color=colores, left=(e["avisos"].max() - e["avisos"]) / 2)
+    ax.set_xlim(-10, e["avisos"].max() + 10)
+    ax.set_ylim(-0.6, len(e) - 0.4)
+    ax.set_position([0.05, 0.08, 0.90, 0.84])
+    fig.savefig(carpeta / "miniatura.png", facecolor=PAPEL, metadata=origen("datos/embudo.csv (de 663 avisos de nivel inicial a 53 con buena chance)"))
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     locales()
     comentarios()
     informalidad()
+    busqueda()
     print("miniaturas regeneradas")

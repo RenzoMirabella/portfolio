@@ -1,0 +1,340 @@
+---
+title: "Buscar trabajo con datos"
+description: "Armé una extensión de Chrome que lee avisos de empleo y la usé para convertir mi búsqueda de primer trabajo en datos: qué piden de verdad los puestos de nivel inicial y dónde una regla automática no reemplaza al criterio."
+date: 2026-11-12
+categories: [Python, Herramienta propia, Texto, Mercado laboral]
+image: miniatura.png
+expediente: "RM-2026-004"
+medida: "663 avisos · 257 evaluados"
+jupyter: python3
+---
+
+::: {.ficha}
+<div><strong>Pregunta</strong>De todo lo que se publica como «nivel inicial», ¿cuánto es de verdad para alguien que busca su primer trabajo en datos, y qué piden esos puestos?</div>
+<div><strong>Fuentes</strong>Mis evaluaciones con la extensión (257 avisos, 13/10 al 12/11/2026) · Búsquedas de nivel inicial y prácticas en LinkedIn (663 avisos publicados entre el 31/10 y el 12/11/2026)</div>
+<div><strong>Herramientas</strong>Extensión de Chrome propia · Google Sheets · Python · pandas · expresiones regulares · plotly</div>
+<div><strong>Código</strong>[Cuaderno completo](notebook.ipynb)</div>
+:::
+
+```{python}
+#| label: setup
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+
+# Paleta del sitio: violeta de sello, celeste de cartulina y grafito
+VIOLETA = "#7457d0"
+VIOLETA_CLARO = "#b3a3e8"
+CELESTE = "#4f9cc9"
+GRIS = "#7a7972"
+GRIS_CLARO = "#b9bab5"
+
+def estilo(fig, alto=420):
+    fig.update_layout(
+        height=alto,
+        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(family="Archivo, Helvetica Neue, Arial, sans-serif", size=13, color=GRIS),
+        margin=dict(l=10, r=10, t=30, b=10),
+        hoverlabel=dict(font_size=13),
+        separators=",.",  # coma decimal y punto de miles
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0, title_text=""),
+    )
+    fig.update_xaxes(showgrid=False, linecolor="rgba(128,128,128,0.4)")
+    fig.update_yaxes(gridcolor="rgba(128,128,128,0.18)", zeroline=False)
+    return fig
+
+def pct(a, b):
+    return f"{round(100 * a / b)} %"
+
+# Solo agregados: los textos de los avisos son de las empresas y no se publican
+embudo = pd.read_csv("datos/embudo.csv")
+motivos = pd.read_csv("datos/motivos_descarte.csv")
+experiencia = pd.read_csv("datos/experiencia_nivel_inicial.csv")
+carreras = pd.read_csv("datos/carreras.csv")
+herramientas = pd.read_csv("datos/herramientas.csv")
+excluyentes = pd.read_csv("datos/herramientas_excluyentes.csv")
+modalidad = pd.read_csv("datos/modalidad_ingles.csv")
+cruce = pd.read_csv("datos/reglas_vs_criterio.csv").set_index("mi criterio")
+postulate = pd.read_csv("datos/postulate_descartados.csv")
+cifras = pd.read_csv("datos/cifras.csv").set_index("dato")["valor"]
+
+e = embudo.set_index("etapa")["avisos"]
+n_total, n_buena = int(e["Avisos que devolvió la búsqueda"]), int(e["Buena chance"])
+x = experiencia.set_index("experiencia pedida")["avisos"]
+n_entrada = int(x.sum())
+n_2mas = int(x["2 años"] + x["3 años o más"])
+c = carreras.set_index("carreras")["avisos"]
+m = modalidad.set_index("modalidad")
+```
+
+## Resumen
+
+Mientras buscaba mi primer trabajo como analista de datos armé una **extensión de Chrome**
+que lee un aviso y me dice qué pide, qué me falta y qué tan lejos estoy. Cada aviso evaluado
+queda guardado en una hoja de cálculo, y eso me dejó convertir la búsqueda en datos.
+
+- **El nivel inicial es más chico de lo que parece.** De `{python} n_total` avisos que
+  devolvieron mis búsquedas de nivel inicial y prácticas, solo **`{python} n_buena`**
+  (`{python} pct(n_buena, n_total)`) quedaron como una chance real.
+- **El «junior» que no es junior.** Entre los avisos que la propia empresa etiquetó como
+  nivel inicial o prácticas, **`{python} pct(n_2mas, n_entrada)` pide 2 años de experiencia o más**.
+- **Las credenciales pesan.** Entre los avisos que hablan de formación, `{python} int(c["Económicas / administración"])`
+  nombran carreras económicas o de administración; ciencias sociales, apenas `{python} int(c["Ciencias sociales / sociología"])`.
+- **Una regla automática descarta rápido, pero no decide.** Separar lo aplicable de lo que
+  tiene chances reales necesitó que yo definiera el criterio con ejemplos marcados a mano.
+
+::: {.callout-note appearance="minimal"}
+Estos datos son una muestra: salen de mis búsquedas (análisis de datos, puestos administrativos
+y recursos humanos), en LinkedIn y en pocas semanas. No representan «el mercado laboral
+argentino»: describen el recorte que ve alguien que busca un primer puesto en datos desde
+Mar del Plata.
+:::
+
+## La herramienta
+
+Abro un aviso, selecciono el texto y con **clic derecho → «Evaluar este aviso»** se abre un
+panel con:
+
+- un **veredicto** (*Postulate*, *Alcanzable* o *Lejos*) y su motivo;
+- los requisitos separados en **excluyentes**, **deseables** y los que **solo se mencionan** en las tareas;
+- el **nivel** que piden en cada herramienta, comparado con el mío;
+- alertas sobre **años de experiencia**, puestos **senior encubiertos**, **carreras**, **idiomas** y **modalidad**.
+
+Cuando un aviso pide algo que la extensión no sabe de mí, me lo pregunta y lo guarda, así
+que el perfil se arma con el uso. Los avisos quedan en una página, «Mis avisos», que se
+sincroniza con Google Sheets.
+
+Uso dos fuentes. **Mis evaluaciones** (`{python} int(cifras["mis_evaluaciones"])` avisos)
+están sesgadas por mi elección: abría lo que me parecía cercano. Las **búsquedas en LinkedIn**
+son todo lo que devolvió el buscador con filtro de nivel inicial y prácticas, importado y
+evaluado en lote con las mismas reglas. Comparar las dos dice algo sobre cómo uno filtra sin
+darse cuenta.
+
+## El embudo
+
+Clasifiqué cada aviso de las búsquedas en tres niveles. **No**: está cerrado, es senior,
+pide 3 años o más (o 2 en un área que no es la mía), pide una carrera dura, es de ventas o
+está fuera de Buenos Aires o Mar del Plata sin ser remoto. **Aplicable**: podría postularme,
+pero piden experiencia específica o carreras puntuales que no tengo. **Buena chance**: cumplo
+lo que piden.
+
+```{python}
+#| label: embudo
+emb = embudo.iloc[::-1].copy()
+emb["texto"] = [f"{v:,}".replace(",", ".") + f"  ·  {pct(v, n_total)}" for v in emb["avisos"]]
+fig = go.Figure(go.Bar(
+    x=emb["avisos"], y=emb["etapa"], orientation="h", text=emb["texto"],
+    textposition="outside", cliponaxis=False,
+    marker_color=[VIOLETA, CELESTE, GRIS_CLARO, GRIS_CLARO, GRIS_CLARO],
+    hovertemplate="<b>%{y}</b><br>%{x} avisos<extra></extra>",
+))
+fig.update_xaxes(title="avisos", range=[0, 800])
+fig.update_yaxes(showgrid=False)
+estilo(fig, alto=320).show()
+```
+
+Un mismo aviso puede caerse por varias razones a la vez; el gráfico cuenta cada razón por
+separado, sobre los `{python} int(cifras["avisos_descartados"])` avisos descartados.
+
+```{python}
+#| label: motivos
+mo = motivos.iloc[::-1]
+fig = go.Figure(go.Bar(
+    x=mo["avisos"], y=mo["motivo"], orientation="h", text=mo["avisos"],
+    textposition="outside", cliponaxis=False, marker_color=GRIS,
+    hovertemplate="<b>%{y}</b><br>%{x} avisos<extra></extra>",
+))
+fig.update_xaxes(title="avisos descartados por ese motivo")
+fig.update_yaxes(showgrid=False)
+estilo(fig, alto=380).show()
+```
+
+Lo que más descarta no es una herramienta que me falte: es que el puesto es **senior** o
+pide **más años de experiencia**, aunque haya aparecido en una búsqueda de nivel inicial.
+
+## El «junior» que no es junior
+
+LinkedIn le pone a cada aviso un nivel, que elige la empresa. Entre los avisos abiertos que
+la empresa marcó como **nivel inicial o prácticas**, busqué en el texto cuántos años de
+experiencia piden.
+
+```{python}
+#| label: experiencia
+COLORES_TRAMO = {"No dice": GRIS_CLARO, "Hasta 1 año": CELESTE, "2 años": VIOLETA_CLARO, "3 años o más": VIOLETA}
+fig = go.Figure(go.Bar(
+    x=experiencia["experiencia pedida"], y=experiencia["avisos"],
+    text=[f"{v} ({pct(v, n_entrada)})" for v in experiencia["avisos"]], textposition="outside", cliponaxis=False,
+    marker_color=experiencia["experiencia pedida"].map(COLORES_TRAMO),
+    hovertemplate="<b>%{x}</b><br>%{y} avisos<extra></extra>",
+))
+fig.update_yaxes(title="avisos", range=[0, 60])
+estilo(fig, alto=360).show()
+```
+
+De `{python} n_entrada` avisos etiquetados como de entrada, **`{python} n_2mas` piden 2 años o más**
+y `{python} int(x["3 años o más"])` piden 3 o más. Buscar por la etiqueta no alcanza: filtrar
+por lo que dice el texto ahorra tiempo.
+
+## Qué carreras piden
+
+Muchas tareas de análisis de datos (armar reportes, leer indicadores, diseñar encuestas) son
+las que se aprenden en ciencias sociales. Para no contar menciones sueltas (por ejemplo
+«business» en la descripción de la empresa), miré **solo las oraciones que hablan de estudios
+o formación**.
+
+```{python}
+#| label: carreras
+ca = carreras.sort_values("avisos")
+propias = ("Ciencias sociales / sociología", "Cualquier carrera")
+fig = go.Figure(go.Bar(
+    x=ca["avisos"], y=ca["carreras"], orientation="h", text=ca["avisos"],
+    textposition="outside", cliponaxis=False,
+    marker_color=[VIOLETA if g in propias else GRIS_CLARO for g in ca["carreras"]],
+    hovertemplate="<b>%{y}</b><br>%{x} avisos<extra></extra>",
+))
+fig.update_layout(title=f"Avisos abiertos que nombran cada grupo de carreras (de {int(cifras['avisos_con_formacion'])} que hablan de formación)")
+fig.update_xaxes(title="avisos")
+fig.update_yaxes(showgrid=False)
+estilo(fig, alto=380).show()
+```
+
+Económicas, marketing e ingenierías dominan aunque el trabajo sea leer datos y armar
+reportes; las ciencias sociales casi no aparecen, y «cualquier carrera» menos. No cierra la
+puerta, pero dice qué hay que hacer: **mostrar qué sé hacer** (proyectos, este portfolio)
+y no solo qué estudié.
+
+## Qué herramientas piden
+
+Acá uso mis evaluaciones, porque la extensión desglosó cada aviso en requisitos y marcó si
+cada uno es excluyente, deseable o solo se menciona. No son «las herramientas más pedidas del
+mercado»: son las más pedidas en los puestos a los que apunto.
+
+```{python}
+#| label: herramientas
+orden_req = herramientas.groupby("requisito")["avisos"].sum().sort_values().index.tolist()
+fig = px.bar(
+    herramientas, x="avisos", y="requisito", color="tipo", orientation="h",
+    category_orders={"requisito": orden_req[::-1], "tipo": ["excluyente", "deseable", "se menciona"]},
+    color_discrete_map={"excluyente": VIOLETA, "deseable": VIOLETA_CLARO, "se menciona": GRIS_CLARO},
+    labels={"requisito": "", "avisos": "avisos", "tipo": ""},
+)
+fig.update_traces(hovertemplate="<b>%{y}</b><br>%{x} avisos<extra></extra>")
+fig.update_yaxes(showgrid=False, autorange="reversed")
+estilo(fig, alto=520).show()
+```
+
+Que algo aparezca mucho no lo vuelve un filtro. Lo que cierra puertas es lo que se pide como
+**excluyente**:
+
+```{python}
+#| label: excluyentes
+ex = excluyentes.assign(pct=lambda d: 100 * d["excluyente"] / d["avisos"]).sort_values("pct")
+fig = go.Figure(go.Bar(
+    x=ex["pct"], y=ex["requisito"], orientation="h",
+    text=[f"{round(v)} %" for v in ex["pct"]], textposition="outside", cliponaxis=False,
+    marker_color=[VIOLETA if v >= 50 else GRIS_CLARO for v in ex["pct"]],
+    customdata=ex[["avisos", "excluyente"]],
+    hovertemplate="<b>%{y}</b><br>Excluyente en %{customdata[1]} de %{customdata[0]} avisos<extra></extra>",
+))
+fig.update_layout(title="En qué proporción de los avisos que la nombran es excluyente (mínimo 12 avisos)")
+fig.update_xaxes(title="% de los avisos que la mencionan", range=[0, 100])
+fig.update_yaxes(showgrid=False)
+estilo(fig, alto=540).show()
+```
+
+El inglés, Google Sheets, Power Query y Excel son excluyentes en casi 6 de cada 10 avisos que
+los nombran; SQL y los tableros, en la mitad. Python aparece seguido, pero es excluyente solo
+en 1 de cada 4.
+
+Cruzar esta lista con lo que uno sabe convierte la búsqueda en un plan: la extensión arma
+**qué destacar en el CV** (lo más pedido que ya manejo) y **qué reforzar** (lo más pedido que me
+falta, con cuántos avisos me «destrabaría» aprenderlo). Mis niveles no los publico; el punto es
+el método.
+
+## Inglés, modalidad y Mar del Plata
+
+```{python}
+#| label: ingles
+mo = modalidad.copy()
+mo["sin_ingles"] = mo["avisos"] - mo["con_ingles"]
+fig = go.Figure()
+fig.add_bar(x=mo["modalidad"], y=mo["con_ingles"], name="Piden inglés o están en inglés", marker_color=VIOLETA,
+            text=[pct(a, b) for a, b in zip(mo["con_ingles"], mo["avisos"])], textposition="inside",
+            hovertemplate="<b>%{x}</b><br>%{y} avisos con inglés<extra></extra>")
+fig.add_bar(x=mo["modalidad"], y=mo["sin_ingles"], name="Sin inglés", marker_color=GRIS_CLARO,
+            hovertemplate="<b>%{x}</b><br>%{y} avisos sin inglés<extra></extra>")
+fig.update_layout(barmode="stack", legend_traceorder="normal")
+fig.update_yaxes(title="avisos abiertos")
+estilo(fig, alto=380).show()
+```
+
+El **`{python} round(float(cifras["abiertos_ingles_pct"]))` %** de los avisos abiertos pide inglés o está
+escrito en inglés, y entre los remotos sube al **`{python} pct(m.loc["Remoto", "con_ingles"], m.loc["Remoto", "avisos"])`**.
+Desde Mar del Plata eso pesa: las búsquedas filtradas por la ciudad devolvieron casi todo
+trabajo remoto. Solo `{python} int(cifras["mdp_en_la_ciudad"])` avisos abiertos eran de verdad
+en la ciudad, y sacando ventas y puestos senior quedó `{python} int(cifras["mdp_sin_ventas_ni_senior"])`.
+
+## Las reglas contra mi criterio
+
+La extensión decide con reglas: busca años, niveles de herramientas, carreras y modalidad en
+el texto. El veredicto no alcanzaba para separar *aplicable* de *buena chance*, así que marqué
+a mano una muestra de avisos anotando por qué («tengo los conocimientos, pero piden
+experiencia en esa tarea», «piden carreras económicas») y apliqué ese criterio al resto.
+¿Cuánto coinciden?
+
+```{python}
+#| label: cruce
+fig = go.Figure(go.Heatmap(
+    z=cruce.values, x=cruce.columns, y=cruce.index, text=cruce.values, texttemplate="%{text}",
+    colorscale=[[0, "#f1eefb"], [0.5, VIOLETA_CLARO], [1, VIOLETA]], showscale=False,
+    hovertemplate="Mi criterio: <b>%{y}</b><br>Extensión: <b>%{x}</b><br>%{z} avisos<extra></extra>",
+    xgap=3, ygap=3,
+))
+fig.update_xaxes(title="Veredicto de la extensión (reglas)", side="top", showline=False)
+fig.update_yaxes(title="Mi criterio", autorange="reversed", showgrid=False)
+estilo(fig, alto=340).show()
+```
+
+```{python}
+#| label: razones
+pr = postulate.head(4)
+razones = ", ".join(f"{r.motivo.lower()} ({r.menciones})" for r in pr.itertuples())
+```
+
+La extensión le dice **Postulate** a `{python} int(cifras["postulate_descartados"])` avisos que yo
+descarto. Las razones más comunes: `{python} razones`. Son cosas que las reglas no ven o ven
+distinto: si el aviso sigue abierto, el nivel que publicó la empresa (que no está en el texto)
+y, sobre todo, **qué experiencia cuenta**. La extensión suma mis años de trabajo en general;
+mi criterio pide experiencia en esa tarea puntual.
+
+## Lo que me llevo
+
+- **Buscar «nivel inicial» no alcanza.** Una parte grande de lo que se publica como inicial
+  pide experiencia que alguien que arranca no tiene.
+- **Las credenciales pesan tanto como las tareas.** Por eso un portfolio con proyectos dice
+  más que el título.
+- **El inglés abre más que cualquier herramienta**, sobre todo en el trabajo remoto, que es
+  casi todo lo que veo desde Mar del Plata.
+- **La herramienta ayuda, pero el criterio es mío.** Las reglas sirven para descartar rápido;
+  separar lo aplicable de lo que tiene chances necesitó definir el criterio con ejemplos.
+
+## Metodología
+
+- **Datos.** Mis evaluaciones (`{python} int(cifras["mis_evaluaciones"])` avisos, del 13/10 al
+  12/11/2026), exportadas desde la extensión con sus requisitos desglosados. Las búsquedas de
+  LinkedIn: `{python} n_total` resultados de búsquedas de nivel inicial y prácticas en Argentina
+  y Mar del Plata, publicados en las dos semanas previas al 12/11/2026; `{python} int(e["Sin repetidos"])`
+  sin repetidos y `{python} int(e["Todavía abiertos"])` todavía abiertos.
+- **Clasificación.** Filtros duros por reglas y una calibración propia para separar *aplicable*
+  de *buena chance*, definida sobre una muestra marcada a mano.
+- **Detección en el texto.** Años de experiencia, carreras e idioma se detectan con expresiones
+  regulares sobre el texto normalizado (sin tildes, en minúsculas). Para las carreras solo se
+  miran las oraciones que hablan de formación.
+- **Limitaciones.** Es una muestra de mis búsquedas, no del mercado. Las expresiones regulares
+  pueden dar falsos positivos y negativos. Todavía no registré de forma consistente a qué
+  avisos me postulé, así que el embudo no llega hasta las respuestas: queda para una segunda parte.
+- **Privacidad.** No publico los textos de los avisos ni los datos crudos, porque son contenido
+  de las empresas: esta página lee solo tablas agregadas.
+
+El proceso completo, con el código de cada sección, está en el
+[cuaderno completo](notebook.ipynb).

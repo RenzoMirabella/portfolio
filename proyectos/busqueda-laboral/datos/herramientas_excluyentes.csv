@@ -1,0 +1,20 @@
+requisito,avisos,excluyente
+CRM (Salesforce / HubSpot),25,8
+Data warehouse (BigQuery / Snowflake),14,7
+ERP / SAP,35,13
+"ETL / pipelines (dbt, Airflow)",13,5
+Estadística / modelos predictivos,40,15
+Excel,114,65
+Google Ads / Meta Ads,13,5
+Google Analytics / web analytics,15,5
+Google Sheets,28,17
+Herramientas de IA,87,29
+Inglés,166,100
+"Investigación (entrevistas, encuestas)",14,1
+Nube (AWS / GCP / Azure),16,7
+Power Query,12,7
+Presentaciones,33,10
+Python,55,15
+RRHH / People Analytics,31,10
+SQL,84,42
+"Tableros (Power BI, Tableau…)",99,50

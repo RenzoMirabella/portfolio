@@ -1,0 +1,45 @@
+requisito,tipo,avisos
+CRM (Salesforce / HubSpot),deseable,7
+CRM (Salesforce / HubSpot),excluyente,8
+CRM (Salesforce / HubSpot),se menciona,10
+ERP / SAP,deseable,14
+ERP / SAP,excluyente,13
+ERP / SAP,se menciona,8
+Estadística / modelos predictivos,deseable,3
+Estadística / modelos predictivos,excluyente,15
+Estadística / modelos predictivos,se menciona,22
+Excel,deseable,15
+Excel,excluyente,65
+Excel,se menciona,34
+Google Analytics / web analytics,deseable,2
+Google Analytics / web analytics,excluyente,5
+Google Analytics / web analytics,se menciona,8
+Google Sheets,deseable,4
+Google Sheets,excluyente,17
+Google Sheets,se menciona,7
+Herramientas de IA,deseable,18
+Herramientas de IA,excluyente,29
+Herramientas de IA,se menciona,40
+Inglés,deseable,17
+Inglés,excluyente,100
+Inglés,se menciona,49
+"Investigación (entrevistas, encuestas)",excluyente,1
+"Investigación (entrevistas, encuestas)",se menciona,13
+Nube (AWS / GCP / Azure),deseable,4
+Nube (AWS / GCP / Azure),excluyente,7
+Nube (AWS / GCP / Azure),se menciona,5
+Presentaciones,deseable,2
+Presentaciones,excluyente,10
+Presentaciones,se menciona,21
+Python,deseable,23
+Python,excluyente,15
+Python,se menciona,17
+RRHH / People Analytics,deseable,3
+RRHH / People Analytics,excluyente,10
+RRHH / People Analytics,se menciona,18
+SQL,deseable,17
+SQL,excluyente,42
+SQL,se menciona,25
+"Tableros (Power BI, Tableau…)",deseable,26
+"Tableros (Power BI, Tableau…)",excluyente,50
+"Tableros (Power BI, Tableau…)",se menciona,23

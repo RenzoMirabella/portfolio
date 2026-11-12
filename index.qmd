@@ -18,7 +18,7 @@ listing:
 
 ::: {.campos-portada}
 <dl class="campos">
-<div class="campo"><dt>Expte. N.º</dt><dd>RM-2026-001 a RM-2026-003</dd></div>
+<div class="campo"><dt>Expte. N.º</dt><dd>RM-2026-001 a RM-2026-004</dd></div>
 <div class="campo"><dt>Iniciador</dt><dd>Renzo Mirabella</dd></div>
 <div class="campo"><dt>Formación</dt><dd>Sociología (UNMdP) · Ciencia de Datos (UTN)</dd></div>
 <div class="campo"><dt>Lugar</dt><dd>Mar del Plata · Buenos Aires o remoto</dd></div>
