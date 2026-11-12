@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/proyectos/busqueda-laboral/index.html",
       "/proyectos/informalidad-eph/index.html",
       "/proyectos/comentarios-instagram/index.html",
       "/proyectos/locales-gastronomicos-mdp/index.html"
@@ -10,6 +11,7 @@
   {
     "listing": "/proyectos.html",
     "items": [
+      "/proyectos/busqueda-laboral/index.html",
       "/proyectos/informalidad-eph/index.html",
       "/proyectos/comentarios-instagram/index.html",
       "/proyectos/locales-gastronomicos-mdp/index.html"

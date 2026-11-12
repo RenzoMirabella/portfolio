@@ -112,130 +112,46 @@
     "text": "15) Auditoría por sexo y región\nSe audita la herramienta recomendada (la regla dentro de los asalariados privados, con el foco del paso 13) sobre el test, mirando el recall de cada grupo frente al promedio y la calibración del riesgo estimado.\n\n\nVer código\n# =============================================================================\n# 15) Recall y calibración por grupo\n# =============================================================================\nf_regla = np.zeros(len(test))\nf_regla[alc] = fraccion_seleccionada(regla_t[alc], w_test[alc], k_igual)\nauditable = test[alc].assign(\n    w=w_test[alc], wy=(w_test * y_test)[alc], sel_wy=(f_regla * w_test * y_test)[alc],\n    sel_w=(f_regla * w_test)[alc], regla_w=(regla_t * w_test)[alc],\n    modelo_w=(s_test[ELEGIDO] * w_test)[alc])\nrecall_medio = auditable['sel_wy'].sum() / auditable['wy'].sum() * 100\n\n\ndef auditoria(col):\n    g = auditable.groupby(col)\n    t = pd.DataFrame({\n        'casos': g.size(),\n        'tasa real (%)': g['wy'].sum() / g['w'].sum() * 100,\n        'riesgo estimado: regla (%)': g['regla_w'].sum() / g['w'].sum() * 100,\n        f'riesgo estimado: {ELEGIDO} (%)': g['modelo_w'].sum() / g['w'].sum() * 100,\n        '% del grupo bajo la lupa': g['sel_w'].sum() / g['w'].sum() * 100,\n        'recall del grupo (%)': g['sel_wy'].sum() / g['wy'].sum() * 100,\n    })\n    t['recall − promedio (p.p.)'] = t['recall del grupo (%)'] - recall_medio\n    t['cumple criterio (≥ −10)'] = t['recall − promedio (p.p.)'] &gt;= -10\n    return t.round(1)\n\n\ntabla_auditoria = pd.concat({'sexo': auditoria('sexo'), 'región': auditoria('region')})\ntabla_auditoria.to_csv(RESULTS_DIR / 'auditoria_grupos_test.csv')\nprint(f'Recall promedio (asal. privados, test): {recall_medio:.1f} %')\ntabla_auditoria\n\n\nRecall promedio (asal. privados, test): 65.8 %\n\n\n\n\n\n\n\n\n\n\ncasos\ntasa real (%)\nriesgo estimado: regla (%)\nriesgo estimado: Random Forest (%)\n% del grupo bajo la lupa\nrecall del grupo (%)\nrecall − promedio (p.p.)\ncumple criterio (≥ −10)\n\n\n\n\nsexo\nMujer\n634\n41.7\n39.5\n42.7\n38.4\n61.7\n-4.1\nTrue\n\n\nVarón\n1077\n39.9\n41.6\n41.7\n41.5\n68.4\n2.6\nTrue\n\n\nregión\nCuyo\n163\n51.0\n40.8\n47.7\n36.9\n59.5\n-6.3\nTrue\n\n\nGBA\n365\n38.4\n39.7\n41.2\n38.4\n64.1\n-1.7\nTrue\n\n\nNEA\n143\n60.0\n49.6\n53.3\n62.5\n74.7\n8.8\nTrue\n\n\nNOA\n320\n56.1\n46.7\n50.5\n50.8\n77.4\n11.6\nTrue\n\n\nPampeana\n539\n38.0\n42.1\n40.5\n41.3\n65.5\n-0.3\nTrue\n\n\nPatagonia\n181\n25.0\n32.5\n29.6\n29.5\n61.5\n-4.3\nTrue\n\n\n\n\n\n\n\n\n\nVer código\n# =============================================================================\n# 15.1) Figura 10, recall por grupo y calibración\n# =============================================================================\nfig, ejes = plt.subplots(1, 2, figsize=(13, 4.5))\nt = tabla_auditoria.reset_index(level=0, names='atributo')\nejes[0].barh(t.index, t['recall del grupo (%)'],\n             color=np.where(t['cumple criterio (≥ −10)'], '#2E5A9C', '#C44E52'))\nejes[0].axvline(recall_medio, color='black', lw=1, label=f'Promedio ({recall_medio:.0f} %)')\nejes[0].axvline(recall_medio - 10, color='#C44E52', ls='--', lw=1, label='Promedio − 10 p.p.')\nejes[0].invert_yaxis()\nejes[0].set_xlabel('Recall: % de los informales del grupo que quedan bajo la lupa')\nejes[0].legend(fontsize=8)\n\nfor columna, marca, color in [('riesgo estimado: regla (%)', 'o', '#DD8452'),\n                              (f'riesgo estimado: {ELEGIDO} (%)', 's', '#2E5A9C')]:\n    ejes[1].scatter(t['tasa real (%)'], t[columna], marker=marca, color=color, label=columna)\nfor nombre, fila in t.iterrows():\n    ejes[1].annotate(nombre, (fila['tasa real (%)'], fila['riesgo estimado: regla (%)']),\n                     fontsize=7, xytext=(4, -8), textcoords='offset points')\nlimites = [t['tasa real (%)'].min() - 5, t['tasa real (%)'].max() + 5]\nejes[1].plot(limites, limites, color='gray', ls=':', lw=1)\nejes[1].set_xlabel('Tasa real de informalidad (%)')\nejes[1].set_ylabel('Riesgo estimado (%)')\nejes[1].legend(fontsize=8)\nplt.tight_layout()\nplt.savefig(RESULTS_DIR / 'fig10_auditoria.png', dpi=150)\nplt.show()"
   },
   {
-    "objectID": "proyectos/locales-gastronomicos-mdp/index.html",
-    "href": "proyectos/locales-gastronomicos-mdp/index.html",
-    "title": "Locales gastronómicos de Mar del Plata",
+    "objectID": "sobre-mi.html",
+    "href": "sobre-mi.html",
+    "title": "Sobre mí",
     "section": "",
-    "text": "Pregunta¿Cómo se distribuye la oferta gastronómica en la ciudad y qué barrios la concentran?\n\n\nFuentesGoogle Maps (relevamiento propio, julio 2026) · Barrios por sociedad de fomento (124 polígonos)\n\n\nHerramientasPython · Playwright · pandas · geopandas · folium · plotly\n\n\nCódigoVer en GitHub\nThis is the init_notebook_mode cell from ITables v2.9.1\n(you should not see this message - is your notebook trusted?)"
+    "text": "Estudio Sociología en la Universidad Nacional de Mar del Plata y defiendo la tesis en las mesas de marzo. Hice la Diplomatura en Ciencia de Datos y Análisis Avanzado (UTN) y formo parte de un equipo de investigación de la universidad que hace trabajo de campo con referentes barriales.\nMe interesa el análisis de datos aplicado a problemas sociales y urbanos: cómo se distribuye la inversión pública, quién accede a qué servicios, qué muestran las encuestas cuando se las cruza con el territorio."
   },
   {
-    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#resumen",
-    "href": "proyectos/locales-gastronomicos-mdp/index.html#resumen",
-    "title": "Locales gastronómicos de Mar del Plata",
-    "section": "Resumen",
-    "text": "Resumen\nCon un scraper propio sobre Google Maps relevé 1.261 locales gastronómicos dentro del casco urbano de Mar del Plata. Les asigné un barrio a 98,9% de ellos cruzando sus coordenadas con los polígonos de las sociedades de fomento.\n\nLa oferta se concentra en el centro y la costa, con corredores secundarios hacia los barrios.\nRestaurante es la categoría dominante: aparece en más locales que bar y café juntos.\nLa popularidad está muy concentrada: la mitad de los locales tiene menos de 150 reseñas, y un grupo chico supera las 5.000.\nLos ratings son altos en general (promedio 4,38), como es típico en Google Maps. Por eso los rankings exigen un mínimo de reseñas."
+    "objectID": "sobre-mi.html#formación",
+    "href": "sobre-mi.html#formación",
+    "title": "Sobre mí",
+    "section": "Formación",
+    "text": "Formación\n\nLic. en Sociología — Universidad Nacional de Mar del Plata (en curso, tesis en 2027)\nDiplomatura en Ciencia de Datos y Análisis Avanzado — UTN\nCurso de Recursos Humanos"
   },
   {
-    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#dónde-están",
-    "href": "proyectos/locales-gastronomicos-mdp/index.html#dónde-están",
-    "title": "Locales gastronómicos de Mar del Plata",
-    "section": "Dónde están",
-    "text": "Dónde están\nCada punto es un local. Con el selector de arriba a la derecha podés prender y apagar cada categoría, y con un clic sobre un punto ves el nombre, el rating y las reseñas.\n\n\n\n\n\n\nMapa de calor\nLa misma información como densidad: cada local suma lo mismo, así que las zonas más intensas son las de mayor concentración de oferta."
+    "objectID": "sobre-mi.html#experiencia",
+    "href": "sobre-mi.html#experiencia",
+    "title": "Sobre mí",
+    "section": "Experiencia",
+    "text": "Experiencia\nCajero administrativo · sep. 2025 – oct. 2026\nManejo de caja, seguimiento de clientes y planillas de Excel automatizadas para control y reportes.\nEquipo de investigación · Universidad Nacional de Mar del Plata\nTrabajo de campo con referentes barriales."
   },
   {
-    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#por-barrio",
-    "href": "proyectos/locales-gastronomicos-mdp/index.html#por-barrio",
-    "title": "Locales gastronómicos de Mar del Plata",
-    "section": "Por barrio",
-    "text": "Por barrio\nPara asignar el barrio usé dos pasos. Primero, punto en polígono. Después, para los locales de playa (que quedan fuera de los polígonos porque los barrios terminan en la costanera), el barrio más cercano hasta 500 m, medido en metros reales con la proyección POSGAR 2007. Los que quedan más lejos se consideran periferia."
+    "objectID": "sobre-mi.html#herramientas",
+    "href": "sobre-mi.html#herramientas",
+    "title": "Sobre mí",
+    "section": "Herramientas",
+    "text": "Herramientas\nSQL · Python (pandas, plotly, folium) · Power BI · Excel · Google Sheets · Quarto"
   },
   {
-    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#categorías-reseñas-y-ratings",
-    "href": "proyectos/locales-gastronomicos-mdp/index.html#categorías-reseñas-y-ratings",
-    "title": "Locales gastronómicos de Mar del Plata",
-    "section": "Categorías, reseñas y ratings",
-    "text": "Categorías, reseñas y ratings\n\n\n                            \n                                            \n\n\nUn local puede tener más de una categoría: 71 combinan dos o tres, sobre todo bar + restaurante.\n\n\n                            \n                                            \n\n\n\n\n                            \n                                            \n\n\nLos locales con menos de 10 reseñas ocupan todo el rango, de 1 a 5, y la mitad tiene un 5,0 perfecto. A medida que crecen las reseñas, el rating se estrecha: entre los que superan las mil, el 80% central está entre 4,1 y 4,6. Un 5,0 con tres reseñas no dice mucho; un 4,6 con miles es un veredicto."
+    "objectID": "sobre-mi.html#idiomas",
+    "href": "sobre-mi.html#idiomas",
+    "title": "Sobre mí",
+    "section": "Idiomas",
+    "text": "Idiomas\nEspañol nativo · Inglés avanzado"
   },
   {
-    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#los-más-reseñados",
-    "href": "proyectos/locales-gastronomicos-mdp/index.html#los-más-reseñados",
-    "title": "Locales gastronómicos de Mar del Plata",
-    "section": "Los más reseñados",
-    "text": "Los más reseñados"
-  },
-  {
-    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#explorá-los-datos",
-    "href": "proyectos/locales-gastronomicos-mdp/index.html#explorá-los-datos",
-    "title": "Locales gastronómicos de Mar del Plata",
-    "section": "Explorá los datos",
-    "text": "Explorá los datos\nTodos los locales relevados. Podés buscar por nombre o barrio y ordenar por cualquier columna.\n\n\n\n\n  \n    \n      \n    \n        \n        \n        \n        \n        \n        \n        \n        \n    \n    \n   \n    \n      \n  \n        \n    \n    \n  \n        \n    \n    \n  \n        \n    \n      \n  \n        \n            \n                \n                \n            \n\n            \n                \n                \n            \n\n            \n                \n                \n            \n\n            \n                \n                \n            \n\n            \n                \n                \n            \n        \n    \n\n\n        Loading ITables v2.9.1 from the init_notebook_mode cell...\n        (need help?)\n      \n    \n  \n\n    \n      🔒ⓘLocal\n      Barrio\n      Categorías\n      Rating\n      Reseñas\n    \nLos Gallegos ShoppingArea Centrorestaurante4.242712\nRestaurant ChichiloDel Puertorestaurante4.125127\nManoloLeandro N. Alemrestaurante4.320943\nCHICHILODel Puertorestaurante4.216986\nRestaurante La MarinaDel Puertorestaurante4.614269\nGlück Cervecería - zona OlavarríaLos Troncosbar4.513618\nPunto y Banca Bar-RestauranteArea Centrorestaurante4.412797\nLa NieveArea Centrorestaurante4.411718\nTío CurzioLomas De Stella Marisrestaurante4.311385\nMirador WaikikiPunta Mogotesrestaurante4.411243\n(1,251 more rows not shown)"
-  },
-  {
-    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#metodología",
-    "href": "proyectos/locales-gastronomicos-mdp/index.html#metodología",
-    "title": "Locales gastronómicos de Mar del Plata",
-    "section": "Metodología",
-    "text": "Metodología\n\nRecolección. Scraper propio con Playwright sobre Google Maps. Dividí el casco urbano en una grilla de celdas y busqué cada categoría (bar, café, restaurante) en cada celda, deduplicando por el identificador del lugar (place_id).\nLimpieza. Excluí 75 resultados que Google devolvió fuera del área de estudio (Santa Clara del Mar, Chapadmalal). Los locales sin rating o sin reseñas quedan en el dataset y se excluyen solo de los análisis que usan esos campos.\nBarrios. Reparé las geometrías inválidas del archivo de barrios, asigné por punto en polígono (1.147 locales) y recuperé 100 más por cercanía (≤ 500 m). Quedan 14 sin barrio.\nLimitaciones. Google Maps no es un padrón: faltan locales sin ficha y puede haber fichas de locales cerrados. El rating y las reseñas son una foto de julio de 2026."
-  },
-  {
-    "objectID": "proyectos/comentarios-instagram/index.html",
-    "href": "proyectos/comentarios-instagram/index.html",
-    "title": "Qué se comenta en la cuenta de Instagram del presidente",
-    "section": "",
-    "text": "Pregunta¿Qué clima de opinión y qué temas aparecen entre quienes comentan en la cuenta presidencial?\n\n\nCorpus69 posts de @javiermilei · agosto 2026 · 32.482 comentarios raíz\n\n\nHerramientasPython · Playwright · pandas · pysentimiento · plotly\n\n\nCódigoVer en GitHub"
-  },
-  {
-    "objectID": "proyectos/comentarios-instagram/index.html#resumen",
-    "href": "proyectos/comentarios-instagram/index.html#resumen",
-    "title": "Qué se comenta en la cuenta de Instagram del presidente",
-    "section": "Resumen",
-    "text": "Resumen\n\n58,1% de los comentarios son negativos según el clasificador. El nivel no cambia a lo largo del mes: el promedio diario se mueve entre 45% y 71%, publique lo que publique la cuenta.\nEl apoyo medido a mano es 32,3% [IC95 27,6–37,0]. El modelo automático lo subestima casi tres veces, así que esa cifra sale de la anotación humana y no del modelo.\nEl tipo de publicación no predice la conversación. Ataque al adversario, anuncio de gestión o acto institucional: los comentarios se parecen.\nLos temas se cuentan por autores distintos, no por apariciones. Así se detectó, por ejemplo, que un «tema» de 202 comentarios lo sostenían 6 cuentas.\n75,4% de los comentarios no recibe ningún like, y el 3% más likeado concentra el 82% de los likes."
-  },
-  {
-    "objectID": "proyectos/comentarios-instagram/index.html#cuánto-del-debate-se-puede-ver",
-    "href": "proyectos/comentarios-instagram/index.html#cuánto-del-debate-se-puede-ver",
-    "title": "Qué se comenta en la cuenta de Instagram del presidente",
-    "section": "Cuánto del debate se puede ver",
-    "text": "Cuánto del debate se puede ver\nInstagram no muestra todos los comentarios: los ordena por relevancia y corta. Por eso el dato más importante de la recolección es la cobertura, la parte de los comentarios declarados que efectivamente se pudo bajar. En todo el mes fue 15,2% (de 213.639 declarados), con una mediana de 15% por post.\n\n\n                            \n                                            \n\n\nCada punto es un post. La curva descendente no es casualidad: con un tope fijo de comentarios por post, cuanto más grande el post, menos se ve de él. Eso obliga a preguntarse si lo que no se ve habla de otras cosas. Lo medí comparando, dentro de los mismos posts, los primeros 400 comentarios contra los siguientes: el mix de temas casi no cambia (0,27 puntos de diferencia mediana), pero el tono sí (+12,2 puntos más de rechazo arriba del ranking). La truncación recorta cuánto vemos, no de qué se habla."
-  },
-  {
-    "objectID": "proyectos/comentarios-instagram/index.html#clima-de-opinión-día-a-día",
-    "href": "proyectos/comentarios-instagram/index.html#clima-de-opinión-día-a-día",
-    "title": "Qué se comenta en la cuenta de Instagram del presidente",
-    "section": "Clima de opinión día a día",
-    "text": "Clima de opinión día a día\n\n\n                            \n                                            \n\n\nCada punto es un post, y su tamaño indica cuántos comentarios se analizaron. Los porcentajes salen de pysentimiento, un modelo entrenado con tweets de otro dialecto. Por eso lo validé contra 378 comentarios anotados a mano antes de usarlo:\n\n\n\n\nModelo\nAnotación humana\n\n\n\n\nNegativo vs. no negativo (F1)\n0,748\n—\n\n\nComentarios positivos\n6,9%\n19,8% [15,8–23,9]\n\n\nPostura a favor\n—\n32,3% [27,6–37,0]\n\n\nPostura en contra\n—\nentre 44,5% y 66,9%\n\n\n\nEl modelo distingue bien lo negativo de lo que no lo es, pero manda a «negativo» la mitad de lo neutro y casi no reconoce el apoyo. Por eso el corte negativo/no negativo se toma del modelo y el reparto del resto, de la anotación humana.\nEl rechazo se informa como rango y no como un número: auditando la anotación detecté un cambio de criterio a mitad de la planilla (la categoría «no se sabe» cae de 23% a 2%). El apoyo es estable a los dos lados del quiebre; el rechazo no. Lo que sí se sostiene en las dos mitades es que el rechazo supera al apoyo."
-  },
-  {
-    "objectID": "proyectos/comentarios-instagram/index.html#de-qué-se-habla",
-    "href": "proyectos/comentarios-instagram/index.html#de-qué-se-habla",
-    "title": "Qué se comenta en la cuenta de Instagram del presidente",
-    "section": "De qué se habla",
-    "text": "De qué se habla\nCada tema se detecta con un léxico propio y auditable, y se cuenta por autores distintos: un tema que sostienen cinco cuentas pegando el mismo texto es una campaña, no un tema del debate. La precisión de cada léxico se midió anotando 50 casos por tema.\n\n\n                            \n                                            \n\n\nBase: los primeros 37 posts del mes (18.312 comentarios), que es el corpus sobre el que se midió la precisión de los léxicos.\nCuando las dos barras se separan mucho, unas pocas cuentas están inflando el tema. El caso más claro es corrupción: una sola cuenta aportaba el 29% de los comentarios. Al sacarla, el volumen cae 29% pero la cantidad de autores no se mueve (451 → 450). Es un tema real, inflado por una cuenta."
-  },
-  {
-    "objectID": "proyectos/comentarios-instagram/index.html#qué-se-likea",
-    "href": "proyectos/comentarios-instagram/index.html#qué-se-likea",
-    "title": "Qué se comenta en la cuenta de Instagram del presidente",
-    "section": "Qué se likea",
-    "text": "Qué se likea\n\n\n                            \n                                            \n\n\nTres de cada cuatro comentarios no reciben ningún like. Lo muy likeado tiene un vocabulario propio: nombres propios y acusaciones concretas, más que epítetos. Y los likes no son votos: un comentario arriba del ranking recibe likes porque está arriba, y está arriba en parte porque los recibió."
-  },
-  {
-    "objectID": "proyectos/comentarios-instagram/index.html#metodología",
-    "href": "proyectos/comentarios-instagram/index.html#metodología",
-    "title": "Qué se comenta en la cuenta de Instagram del presidente",
-    "section": "Metodología",
-    "text": "Metodología\n\nRecolección. Scraper propio con Playwright, con sesión y delays altos. Cola persistida y reanudable, deduplicación por id del comentario y un registro por corrida para auditar la completitud. Antes de cada cambio, una batería de pruebas offline contra un DOM sintético.\nPrivacidad. Los nombres de usuario se reemplazan por un hash con sal antes de analizar. Ningún informe transcribe comentarios.\nValidación del clasificador. 450 casos sorteados y anotados a mano, con libro de códigos. Un control automático detecta si el criterio del anotador cambia a lo largo de la planilla. Así apareció el quiebre que obliga a informar el rechazo como rango.\nTemas. 16 léxicos versionados, cada uno con su patrón, su precisión (IC de Wilson) y la fecha de medición. Los descartados quedan registrados con el motivo.\nVentana congelada. La precisión se midió sobre el corpus al 19 de agosto, y el análisis de temas usa ese corte, para no aplicar una precisión medida en una población a otra distinta.\nLimitaciones. Solo comentarios raíz; las respuestas se recolectaron en 18 posts pero no se analizan. La codificación de los posts por tipo no tiene medida de confiabilidad, así que el resultado nulo se lee como «no se detecta efecto», no como «no hay efecto»."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Datos para entender lo que pasa en el territorio",
-    "section": "",
-    "text": "Expte. N.º\n\n\nRM-2026-001 a RM-2026-003\n\n\n\n\nIniciador\n\n\nRenzo Mirabella\n\n\n\n\nFormación\n\n\nSociología (UNMdP) · Ciencia de Datos (UTN)\n\n\n\n\nLugar\n\n\nMar del Plata · Buenos Aires o remoto\n\n\n\n\n\n\n\nSoy estudiante avanzado de Sociología (UNMdP) con formación en Ciencia de Datos (UTN). Combino trabajo de campo con análisis cuantitativo: limpio, cruzo y visualizo datos para que se puedan leer y discutir.\n\n\nVer proyectos Sobre mí\n\n\n\n\n\n\n\n  \n    \n      Fs. 3\n      RM-2026-003\n      Dónde poner la lupa\n      Un modelo de riesgo sobre la EPH para decidir en qué sectores concentrar las inspecciones e incentivos de la nueva ley de formalización laboral, y qué parte de la informalidad queda fuera de su alcance.\n      19.560 ocupados · EPH 1T 2026\n    \n  \n\n  \n    \n      Fs. 2\n      RM-2026-002\n      Qué se comenta en la cuenta de Instagram del presidente\n      32.482 comentarios de los 69 posts de agosto de 2026: recolección propia, clasificación de sentimiento validada a mano y temas medidos por autores distintos.\n      32.482 comentarios · 69 posts\n    \n  \n\n  \n    \n      Fs. 1\n      RM-2026-001\n      Locales gastronómicos de Mar del Plata\n      Relevamiento propio de 1.261 bares, cafés y restaurantes con scraping de Google Maps: dónde se concentran, cómo se puntúan y qué barrios lideran.\n      1.261 locales · 124 barrios\n    \n  \n\n\nNo hay resultados"
-  },
-  {
-    "objectID": "index.html#cómo-trabajo",
-    "href": "index.html#cómo-trabajo",
-    "title": "Datos para entender lo que pasa en el territorio",
-    "section": "Cómo trabajo",
-    "text": "Cómo trabajo\n\n\n\nDatos relevados por mí\n\n\nArmo mis propios scrapers cuando el dato no existe: 1.261 locales de Google Maps, 32.482 comentarios de Instagram.\n\n\n\n\nValidados a mano\n\n\nAntes de usar un modelo lo comparo contra casos anotados a mano y reporto intervalos de confianza.\n\n\n\n\nCruzados con el territorio\n\n\nAsigno cada dato a su barrio y lo muestro en mapas que se pueden explorar.\n\n\n\n\nCon sus límites a la vista\n\n\nCada proyecto dice qué cubre, qué no y por qué.\n\n\n\n\n\n\nHerramientas\n\n\nSQL · Python (pandas, plotly) · Power BI · Excel / Google Sheets · Mapas y datos geográficos · Scraping web · Análisis de texto · Encuestas (EPH-INDEC)"
-  },
-  {
-    "objectID": "proyectos.html",
-    "href": "proyectos.html",
-    "title": "Proyectos",
-    "section": "",
-    "text": "Expte.\n      Asunto\n      Medida\n      Fecha\n    \n  \n  \n\n    \n      RM-2026-003\n      \n        Dónde poner la lupa\n        Un modelo de riesgo sobre la EPH para decidir en qué sectores concentrar las inspecciones e incentivos de la nueva ley de formalización laboral, y qué parte de la informalidad queda fuera de su alcance.\n        \n        PythonMachine learningEPH-INDECPolíticas públicas\n        \n      \n      19.560 ocupados · EPH 1T 2026\n      oct 2026\n    \n\n    \n      RM-2026-002\n      \n        Qué se comenta en la cuenta de Instagram del presidente\n        32.482 comentarios de los 69 posts de agosto de 2026: recolección propia, clasificación de sentimiento validada a mano y temas medidos por autores distintos.\n        \n        PythonScrapingTextoValidación\n        \n      \n      32.482 comentarios · 69 posts\n      sep 2026\n    \n\n    \n      RM-2026-001\n      \n        Locales gastronómicos de Mar del Plata\n        Relevamiento propio de 1.261 bares, cafés y restaurantes con scraping de Google Maps: dónde se concentran, cómo se puntúan y qué barrios lideran.\n        \n        MapasPythonScrapingGeoespacial\n        \n      \n      1.261 locales · 124 barrios\n      jul 2026\n    \n\n  \n\nNo hay resultados"
+    "objectID": "sobre-mi.html#contacto",
+    "href": "sobre-mi.html#contacto",
+    "title": "Sobre mí",
+    "section": "Contacto",
+    "text": "Contacto\nEstoy en Mar del Plata y abierto a trabajar en Buenos Aires o en remoto. Escribime a renzomirabella@gmail.com, o encontrame en LinkedIn y GitHub."
   },
   {
     "objectID": "proyectos/informalidad-eph/index.html",
@@ -301,45 +217,283 @@
     "text": "Metodología\n\nDatos. EPH del 1.er trimestre de 2026, base individual: 19.560 ocupados con dato de formalidad, que representan a 13,5 millones de trabajadores de 32 aglomerados. Todas las tasas y métricas se calculan con el factor de expansión (PONDERA); como control, la tasa ponderada da 44,2 %, igual a la publicada por INDEC.\nInformalidad. El target es la variable EMPLEO, que INDEC construye a partir de los aportes y la registración declarados. Excluimos las variables que la delatan (fuga de información) y usamos una lista cerrada de 9 predictores.\nModelos. Regresión logística, árbol de decisión, Random Forest y XGBoost, contra el azar y la regla rama × tamaño. Validación cruzada de 5 particiones agrupadas por vivienda, para que personas de una misma casa no queden de los dos lados.\nEvaluación. Un único uso del 20 % reservado. La ventaja sobre la regla se estima con 500 réplicas bootstrap. Las ablaciones confirman que rama y tamaño son los predictores más fuertes, y que edad y educación ayudan a ordenar personas pero casi no a elegir sectores.\nLimitaciones. Los datos son previos a la ley, así que no se evalúa su impacto. Varios segmentos tienen pocos casos y se marcan como poco confiables. La regla mejorada (con región y tamaño detallado) hay que validarla con la EPH del próximo trimestre, porque el test actual ya se usó.\n\nTodo el proceso, con el código y cada tabla intermedia, está en el notebook completo."
   },
   {
-    "objectID": "sobre-mi.html",
-    "href": "sobre-mi.html",
-    "title": "Sobre mí",
+    "objectID": "proyectos/busqueda-laboral/index.html",
+    "href": "proyectos/busqueda-laboral/index.html",
+    "title": "Buscar trabajo con datos",
     "section": "",
-    "text": "Estudio Sociología en la Universidad Nacional de Mar del Plata y defiendo la tesis en las mesas de marzo. Hice la Diplomatura en Ciencia de Datos y Análisis Avanzado (UTN) y formo parte de un equipo de investigación de la universidad que hace trabajo de campo con referentes barriales.\nMe interesa el análisis de datos aplicado a problemas sociales y urbanos: cómo se distribuye la inversión pública, quién accede a qué servicios, qué muestran las encuestas cuando se las cruza con el territorio."
+    "text": "PreguntaDe todo lo que se publica como «nivel inicial», ¿cuánto es de verdad para alguien que busca su primer trabajo en datos, y qué piden esos puestos?\n\n\nFuentesMis evaluaciones con la extensión (257 avisos, 13/10 al 12/11/2026) · Búsquedas de nivel inicial y prácticas en LinkedIn (663 avisos publicados entre el 31/10 y el 12/11/2026)\n\n\nHerramientasExtensión de Chrome propia · Google Sheets · Python · pandas · expresiones regulares · plotly\n\n\nCódigoCuaderno completo"
   },
   {
-    "objectID": "sobre-mi.html#formación",
-    "href": "sobre-mi.html#formación",
-    "title": "Sobre mí",
-    "section": "Formación",
-    "text": "Formación\n\nLic. en Sociología — Universidad Nacional de Mar del Plata (en curso, tesis en 2027)\nDiplomatura en Ciencia de Datos y Análisis Avanzado — UTN\nCurso de Recursos Humanos"
+    "objectID": "proyectos/busqueda-laboral/index.html#resumen",
+    "href": "proyectos/busqueda-laboral/index.html#resumen",
+    "title": "Buscar trabajo con datos",
+    "section": "Resumen",
+    "text": "Resumen\nMientras buscaba mi primer trabajo como analista de datos armé una extensión de Chrome que lee un aviso y me dice qué pide, qué me falta y qué tan lejos estoy. Cada aviso evaluado queda guardado en una hoja de cálculo, y eso me dejó convertir la búsqueda en datos.\n\nEl nivel inicial es más chico de lo que parece. De 663 avisos que devolvieron mis búsquedas de nivel inicial y prácticas, solo 53 (8 %) quedaron como una chance real.\nEl «junior» que no es junior. Entre los avisos que la propia empresa etiquetó como nivel inicial o prácticas, 32 % pide 2 años de experiencia o más.\nLas credenciales pesan. Entre los avisos que hablan de formación, 159 nombran carreras económicas o de administración; ciencias sociales, apenas 6.\nUna regla automática descarta rápido, pero no decide. Separar lo aplicable de lo que tiene chances reales necesitó que yo definiera el criterio con ejemplos marcados a mano.\n\n\n\n\n\n\n\nEstos datos son una muestra: salen de mis búsquedas (análisis de datos, puestos administrativos y recursos humanos), en LinkedIn y en pocas semanas. No representan «el mercado laboral argentino»: describen el recorte que ve alguien que busca un primer puesto en datos desde Mar del Plata."
   },
   {
-    "objectID": "sobre-mi.html#experiencia",
-    "href": "sobre-mi.html#experiencia",
-    "title": "Sobre mí",
-    "section": "Experiencia",
-    "text": "Experiencia\nCajero administrativo · sep. 2025 – oct. 2026\nManejo de caja, seguimiento de clientes y planillas de Excel automatizadas para control y reportes.\nEquipo de investigación · Universidad Nacional de Mar del Plata\nTrabajo de campo con referentes barriales."
+    "objectID": "proyectos/busqueda-laboral/index.html#la-herramienta",
+    "href": "proyectos/busqueda-laboral/index.html#la-herramienta",
+    "title": "Buscar trabajo con datos",
+    "section": "La herramienta",
+    "text": "La herramienta\nAbro un aviso, selecciono el texto y con clic derecho → «Evaluar este aviso» se abre un panel con:\n\nun veredicto (Postulate, Alcanzable o Lejos) y su motivo;\nlos requisitos separados en excluyentes, deseables y los que solo se mencionan en las tareas;\nel nivel que piden en cada herramienta, comparado con el mío;\nalertas sobre años de experiencia, puestos senior encubiertos, carreras, idiomas y modalidad.\n\nCuando un aviso pide algo que la extensión no sabe de mí, me lo pregunta y lo guarda, así que el perfil se arma con el uso. Los avisos quedan en una página, «Mis avisos», que se sincroniza con Google Sheets.\nUso dos fuentes. Mis evaluaciones (257 avisos) están sesgadas por mi elección: abría lo que me parecía cercano. Las búsquedas en LinkedIn son todo lo que devolvió el buscador con filtro de nivel inicial y prácticas, importado y evaluado en lote con las mismas reglas. Comparar las dos dice algo sobre cómo uno filtra sin darse cuenta."
   },
   {
-    "objectID": "sobre-mi.html#herramientas",
-    "href": "sobre-mi.html#herramientas",
-    "title": "Sobre mí",
-    "section": "Herramientas",
-    "text": "Herramientas\nSQL · Python (pandas, plotly, folium) · Power BI · Excel · Google Sheets · Quarto"
+    "objectID": "proyectos/busqueda-laboral/index.html#el-embudo",
+    "href": "proyectos/busqueda-laboral/index.html#el-embudo",
+    "title": "Buscar trabajo con datos",
+    "section": "El embudo",
+    "text": "El embudo\nClasifiqué cada aviso de las búsquedas en tres niveles. No: está cerrado, es senior, pide 3 años o más (o 2 en un área que no es la mía), pide una carrera dura, es de ventas o está fuera de Buenos Aires o Mar del Plata sin ser remoto. Aplicable: podría postularme, pero piden experiencia específica o carreras puntuales que no tengo. Buena chance: cumplo lo que piden.\n\n\n                            \n                                            \n\n\nUn mismo aviso puede caerse por varias razones a la vez; el gráfico cuenta cada razón por separado, sobre los 394 avisos descartados.\n\n\n                            \n                                            \n\n\nLo que más descarta no es una herramienta que me falte: es que el puesto es senior o pide más años de experiencia, aunque haya aparecido en una búsqueda de nivel inicial."
   },
   {
-    "objectID": "sobre-mi.html#idiomas",
-    "href": "sobre-mi.html#idiomas",
-    "title": "Sobre mí",
-    "section": "Idiomas",
-    "text": "Idiomas\nEspañol nativo · Inglés avanzado"
+    "objectID": "proyectos/busqueda-laboral/index.html#el-junior-que-no-es-junior",
+    "href": "proyectos/busqueda-laboral/index.html#el-junior-que-no-es-junior",
+    "title": "Buscar trabajo con datos",
+    "section": "El «junior» que no es junior",
+    "text": "El «junior» que no es junior\nLinkedIn le pone a cada aviso un nivel, que elige la empresa. Entre los avisos abiertos que la empresa marcó como nivel inicial o prácticas, busqué en el texto cuántos años de experiencia piden.\n\n\n                            \n                                            \n\n\nDe 91 avisos etiquetados como de entrada, 29 piden 2 años o más y 22 piden 3 o más. Buscar por la etiqueta no alcanza: filtrar por lo que dice el texto ahorra tiempo."
   },
   {
-    "objectID": "sobre-mi.html#contacto",
-    "href": "sobre-mi.html#contacto",
-    "title": "Sobre mí",
-    "section": "Contacto",
-    "text": "Contacto\nEstoy en Mar del Plata y abierto a trabajar en Buenos Aires o en remoto. Escribime a renzomirabella@gmail.com, o encontrame en LinkedIn y GitHub."
+    "objectID": "proyectos/busqueda-laboral/index.html#qué-carreras-piden",
+    "href": "proyectos/busqueda-laboral/index.html#qué-carreras-piden",
+    "title": "Buscar trabajo con datos",
+    "section": "Qué carreras piden",
+    "text": "Qué carreras piden\nMuchas tareas de análisis de datos (armar reportes, leer indicadores, diseñar encuestas) son las que se aprenden en ciencias sociales. Para no contar menciones sueltas (por ejemplo «business» en la descripción de la empresa), miré solo las oraciones que hablan de estudios o formación.\n\n\n                            \n                                            \n\n\nEconómicas, marketing e ingenierías dominan aunque el trabajo sea leer datos y armar reportes; las ciencias sociales casi no aparecen, y «cualquier carrera» menos. No cierra la puerta, pero dice qué hay que hacer: mostrar qué sé hacer (proyectos, este portfolio) y no solo qué estudié."
+  },
+  {
+    "objectID": "proyectos/busqueda-laboral/index.html#qué-herramientas-piden",
+    "href": "proyectos/busqueda-laboral/index.html#qué-herramientas-piden",
+    "title": "Buscar trabajo con datos",
+    "section": "Qué herramientas piden",
+    "text": "Qué herramientas piden\nAcá uso mis evaluaciones, porque la extensión desglosó cada aviso en requisitos y marcó si cada uno es excluyente, deseable o solo se menciona. No son «las herramientas más pedidas del mercado»: son las más pedidas en los puestos a los que apunto.\n\n\n                            \n                                            \n\n\nQue algo aparezca mucho no lo vuelve un filtro. Lo que cierra puertas es lo que se pide como excluyente:\n\n\n                            \n                                            \n\n\nEl inglés, Google Sheets, Power Query y Excel son excluyentes en casi 6 de cada 10 avisos que los nombran; SQL y los tableros, en la mitad. Python aparece seguido, pero es excluyente solo en 1 de cada 4.\nCruzar esta lista con lo que uno sabe convierte la búsqueda en un plan: la extensión arma qué destacar en el CV (lo más pedido que ya manejo) y qué reforzar (lo más pedido que me falta, con cuántos avisos me «destrabaría» aprenderlo). Mis niveles no los publico; el punto es el método."
+  },
+  {
+    "objectID": "proyectos/busqueda-laboral/index.html#inglés-modalidad-y-mar-del-plata",
+    "href": "proyectos/busqueda-laboral/index.html#inglés-modalidad-y-mar-del-plata",
+    "title": "Buscar trabajo con datos",
+    "section": "Inglés, modalidad y Mar del Plata",
+    "text": "Inglés, modalidad y Mar del Plata\n\n\n                            \n                                            \n\n\nEl 77 % de los avisos abiertos pide inglés o está escrito en inglés, y entre los remotos sube al 94 %. Desde Mar del Plata eso pesa: las búsquedas filtradas por la ciudad devolvieron casi todo trabajo remoto. Solo 6 avisos abiertos eran de verdad en la ciudad, y sacando ventas y puestos senior quedó 1."
+  },
+  {
+    "objectID": "proyectos/busqueda-laboral/index.html#las-reglas-contra-mi-criterio",
+    "href": "proyectos/busqueda-laboral/index.html#las-reglas-contra-mi-criterio",
+    "title": "Buscar trabajo con datos",
+    "section": "Las reglas contra mi criterio",
+    "text": "Las reglas contra mi criterio\nLa extensión decide con reglas: busca años, niveles de herramientas, carreras y modalidad en el texto. El veredicto no alcanzaba para separar aplicable de buena chance, así que marqué a mano una muestra de avisos anotando por qué («tengo los conocimientos, pero piden experiencia en esa tarea», «piden carreras económicas») y apliqué ese criterio al resto. ¿Cuánto coinciden?\n\n\n                            \n                                            \n\n\nLa extensión le dice Postulate a 167 avisos que yo descarto. Las razones más comunes: es senior o de liderazgo (64), pide más años de experiencia (45), el aviso ya cerró (40), es de ventas (35). Son cosas que las reglas no ven o ven distinto: si el aviso sigue abierto, el nivel que publicó la empresa (que no está en el texto) y, sobre todo, qué experiencia cuenta. La extensión suma mis años de trabajo en general; mi criterio pide experiencia en esa tarea puntual."
+  },
+  {
+    "objectID": "proyectos/busqueda-laboral/index.html#lo-que-me-llevo",
+    "href": "proyectos/busqueda-laboral/index.html#lo-que-me-llevo",
+    "title": "Buscar trabajo con datos",
+    "section": "Lo que me llevo",
+    "text": "Lo que me llevo\n\nBuscar «nivel inicial» no alcanza. Una parte grande de lo que se publica como inicial pide experiencia que alguien que arranca no tiene.\nLas credenciales pesan tanto como las tareas. Por eso un portfolio con proyectos dice más que el título.\nEl inglés abre más que cualquier herramienta, sobre todo en el trabajo remoto, que es casi todo lo que veo desde Mar del Plata.\nLa herramienta ayuda, pero el criterio es mío. Las reglas sirven para descartar rápido; separar lo aplicable de lo que tiene chances necesitó definir el criterio con ejemplos."
+  },
+  {
+    "objectID": "proyectos/busqueda-laboral/index.html#metodología",
+    "href": "proyectos/busqueda-laboral/index.html#metodología",
+    "title": "Buscar trabajo con datos",
+    "section": "Metodología",
+    "text": "Metodología\n\nDatos. Mis evaluaciones (257 avisos, del 13/10 al 12/11/2026), exportadas desde la extensión con sus requisitos desglosados. Las búsquedas de LinkedIn: 663 resultados de búsquedas de nivel inicial y prácticas en Argentina y Mar del Plata, publicados en las dos semanas previas al 12/11/2026; 615 sin repetidos y 540 todavía abiertos.\nClasificación. Filtros duros por reglas y una calibración propia para separar aplicable de buena chance, definida sobre una muestra marcada a mano.\nDetección en el texto. Años de experiencia, carreras e idioma se detectan con expresiones regulares sobre el texto normalizado (sin tildes, en minúsculas). Para las carreras solo se miran las oraciones que hablan de formación.\nLimitaciones. Es una muestra de mis búsquedas, no del mercado. Las expresiones regulares pueden dar falsos positivos y negativos. Todavía no registré de forma consistente a qué avisos me postulé, así que el embudo no llega hasta las respuestas: queda para una segunda parte.\nPrivacidad. No publico los textos de los avisos ni los datos crudos, porque son contenido de las empresas: esta página lee solo tablas agregadas.\n\nEl proceso completo, con el código de cada sección, está en el cuaderno completo."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Datos para entender lo que pasa en el territorio",
+    "section": "",
+    "text": "Expte. N.º\n\n\nRM-2026-001 a RM-2026-004\n\n\n\n\nIniciador\n\n\nRenzo Mirabella\n\n\n\n\nFormación\n\n\nSociología (UNMdP) · Ciencia de Datos (UTN)\n\n\n\n\nLugar\n\n\nMar del Plata · Buenos Aires o remoto\n\n\n\n\n\n\n\nSoy estudiante avanzado de Sociología (UNMdP) con formación en Ciencia de Datos (UTN). Combino trabajo de campo con análisis cuantitativo: limpio, cruzo y visualizo datos para que se puedan leer y discutir.\n\n\nVer proyectos Sobre mí\n\n\n\n\n\n\n\n  \n    \n      Fs. 4\n      RM-2026-004\n      Buscar trabajo con datos\n      Armé una extensión de Chrome que lee avisos de empleo y la usé para convertir mi búsqueda de primer trabajo en datos: qué piden de verdad los puestos de nivel inicial y dónde una regla automática no reemplaza al criterio.\n      663 avisos · 257 evaluados\n    \n  \n\n  \n    \n      Fs. 3\n      RM-2026-003\n      Dónde poner la lupa\n      Un modelo de riesgo sobre la EPH para decidir en qué sectores concentrar las inspecciones e incentivos de la nueva ley de formalización laboral, y qué parte de la informalidad queda fuera de su alcance.\n      19.560 ocupados · EPH 1T 2026\n    \n  \n\n  \n    \n      Fs. 2\n      RM-2026-002\n      Qué se comenta en la cuenta de Instagram del presidente\n      32.482 comentarios de los 69 posts de agosto de 2026: recolección propia, clasificación de sentimiento validada a mano y temas medidos por autores distintos.\n      32.482 comentarios · 69 posts\n    \n  \n\n  \n    \n      Fs. 1\n      RM-2026-001\n      Locales gastronómicos de Mar del Plata\n      Relevamiento propio de 1.261 bares, cafés y restaurantes con scraping de Google Maps: dónde se concentran, cómo se puntúan y qué barrios lideran.\n      1.261 locales · 124 barrios\n    \n  \n\n\nNo hay resultados"
+  },
+  {
+    "objectID": "index.html#cómo-trabajo",
+    "href": "index.html#cómo-trabajo",
+    "title": "Datos para entender lo que pasa en el territorio",
+    "section": "Cómo trabajo",
+    "text": "Cómo trabajo\n\n\n\nDatos relevados por mí\n\n\nArmo mis propios scrapers cuando el dato no existe: 1.261 locales de Google Maps, 32.482 comentarios de Instagram.\n\n\n\n\nValidados a mano\n\n\nAntes de usar un modelo lo comparo contra casos anotados a mano y reporto intervalos de confianza.\n\n\n\n\nCruzados con el territorio\n\n\nAsigno cada dato a su barrio y lo muestro en mapas que se pueden explorar.\n\n\n\n\nCon sus límites a la vista\n\n\nCada proyecto dice qué cubre, qué no y por qué.\n\n\n\n\n\n\nHerramientas\n\n\nSQL · Python (pandas, plotly) · Power BI · Excel / Google Sheets · Mapas y datos geográficos · Scraping web · Análisis de texto · Encuestas (EPH-INDEC)"
+  },
+  {
+    "objectID": "proyectos.html",
+    "href": "proyectos.html",
+    "title": "Proyectos",
+    "section": "",
+    "text": "Expte.\n      Asunto\n      Medida\n      Fecha\n    \n  \n  \n\n    \n      RM-2026-004\n      \n        Buscar trabajo con datos\n        Armé una extensión de Chrome que lee avisos de empleo y la usé para convertir mi búsqueda de primer trabajo en datos: qué piden de verdad los puestos de nivel inicial y dónde una regla automática no reemplaza al criterio.\n        \n        PythonHerramienta propiaTextoMercado laboral\n        \n      \n      663 avisos · 257 evaluados\n      nov 2026\n    \n\n    \n      RM-2026-003\n      \n        Dónde poner la lupa\n        Un modelo de riesgo sobre la EPH para decidir en qué sectores concentrar las inspecciones e incentivos de la nueva ley de formalización laboral, y qué parte de la informalidad queda fuera de su alcance.\n        \n        PythonMachine learningEPH-INDECPolíticas públicas\n        \n      \n      19.560 ocupados · EPH 1T 2026\n      oct 2026\n    \n\n    \n      RM-2026-002\n      \n        Qué se comenta en la cuenta de Instagram del presidente\n        32.482 comentarios de los 69 posts de agosto de 2026: recolección propia, clasificación de sentimiento validada a mano y temas medidos por autores distintos.\n        \n        PythonScrapingTextoValidación\n        \n      \n      32.482 comentarios · 69 posts\n      sep 2026\n    \n\n    \n      RM-2026-001\n      \n        Locales gastronómicos de Mar del Plata\n        Relevamiento propio de 1.261 bares, cafés y restaurantes con scraping de Google Maps: dónde se concentran, cómo se puntúan y qué barrios lideran.\n        \n        MapasPythonScrapingGeoespacial\n        \n      \n      1.261 locales · 124 barrios\n      jul 2026\n    \n\n  \n\nNo hay resultados"
+  },
+  {
+    "objectID": "proyectos/comentarios-instagram/index.html",
+    "href": "proyectos/comentarios-instagram/index.html",
+    "title": "Qué se comenta en la cuenta de Instagram del presidente",
+    "section": "",
+    "text": "Pregunta¿Qué clima de opinión y qué temas aparecen entre quienes comentan en la cuenta presidencial?\n\n\nCorpus69 posts de @javiermilei · agosto 2026 · 32.482 comentarios raíz\n\n\nHerramientasPython · Playwright · pandas · pysentimiento · plotly\n\n\nCódigoVer en GitHub"
+  },
+  {
+    "objectID": "proyectos/comentarios-instagram/index.html#resumen",
+    "href": "proyectos/comentarios-instagram/index.html#resumen",
+    "title": "Qué se comenta en la cuenta de Instagram del presidente",
+    "section": "Resumen",
+    "text": "Resumen\n\n58,1% de los comentarios son negativos según el clasificador. El nivel no cambia a lo largo del mes: el promedio diario se mueve entre 45% y 71%, publique lo que publique la cuenta.\nEl apoyo medido a mano es 32,3% [IC95 27,6–37,0]. El modelo automático lo subestima casi tres veces, así que esa cifra sale de la anotación humana y no del modelo.\nEl tipo de publicación no predice la conversación. Ataque al adversario, anuncio de gestión o acto institucional: los comentarios se parecen.\nLos temas se cuentan por autores distintos, no por apariciones. Así se detectó, por ejemplo, que un «tema» de 202 comentarios lo sostenían 6 cuentas.\n75,4% de los comentarios no recibe ningún like, y el 3% más likeado concentra el 82% de los likes."
+  },
+  {
+    "objectID": "proyectos/comentarios-instagram/index.html#cuánto-del-debate-se-puede-ver",
+    "href": "proyectos/comentarios-instagram/index.html#cuánto-del-debate-se-puede-ver",
+    "title": "Qué se comenta en la cuenta de Instagram del presidente",
+    "section": "Cuánto del debate se puede ver",
+    "text": "Cuánto del debate se puede ver\nInstagram no muestra todos los comentarios: los ordena por relevancia y corta. Por eso el dato más importante de la recolección es la cobertura, la parte de los comentarios declarados que efectivamente se pudo bajar. En todo el mes fue 15,2% (de 213.639 declarados), con una mediana de 15% por post.\n\n\n                            \n                                            \n\n\nCada punto es un post. La curva descendente no es casualidad: con un tope fijo de comentarios por post, cuanto más grande el post, menos se ve de él. Eso obliga a preguntarse si lo que no se ve habla de otras cosas. Lo medí comparando, dentro de los mismos posts, los primeros 400 comentarios contra los siguientes: el mix de temas casi no cambia (0,27 puntos de diferencia mediana), pero el tono sí (+12,2 puntos más de rechazo arriba del ranking). La truncación recorta cuánto vemos, no de qué se habla."
+  },
+  {
+    "objectID": "proyectos/comentarios-instagram/index.html#clima-de-opinión-día-a-día",
+    "href": "proyectos/comentarios-instagram/index.html#clima-de-opinión-día-a-día",
+    "title": "Qué se comenta en la cuenta de Instagram del presidente",
+    "section": "Clima de opinión día a día",
+    "text": "Clima de opinión día a día\n\n\n                            \n                                            \n\n\nCada punto es un post, y su tamaño indica cuántos comentarios se analizaron. Los porcentajes salen de pysentimiento, un modelo entrenado con tweets de otro dialecto. Por eso lo validé contra 378 comentarios anotados a mano antes de usarlo:\n\n\n\n\nModelo\nAnotación humana\n\n\n\n\nNegativo vs. no negativo (F1)\n0,748\n—\n\n\nComentarios positivos\n6,9%\n19,8% [15,8–23,9]\n\n\nPostura a favor\n—\n32,3% [27,6–37,0]\n\n\nPostura en contra\n—\nentre 44,5% y 66,9%\n\n\n\nEl modelo distingue bien lo negativo de lo que no lo es, pero manda a «negativo» la mitad de lo neutro y casi no reconoce el apoyo. Por eso el corte negativo/no negativo se toma del modelo y el reparto del resto, de la anotación humana.\nEl rechazo se informa como rango y no como un número: auditando la anotación detecté un cambio de criterio a mitad de la planilla (la categoría «no se sabe» cae de 23% a 2%). El apoyo es estable a los dos lados del quiebre; el rechazo no. Lo que sí se sostiene en las dos mitades es que el rechazo supera al apoyo."
+  },
+  {
+    "objectID": "proyectos/comentarios-instagram/index.html#de-qué-se-habla",
+    "href": "proyectos/comentarios-instagram/index.html#de-qué-se-habla",
+    "title": "Qué se comenta en la cuenta de Instagram del presidente",
+    "section": "De qué se habla",
+    "text": "De qué se habla\nCada tema se detecta con un léxico propio y auditable, y se cuenta por autores distintos: un tema que sostienen cinco cuentas pegando el mismo texto es una campaña, no un tema del debate. La precisión de cada léxico se midió anotando 50 casos por tema.\n\n\n                            \n                                            \n\n\nBase: los primeros 37 posts del mes (18.312 comentarios), que es el corpus sobre el que se midió la precisión de los léxicos.\nCuando las dos barras se separan mucho, unas pocas cuentas están inflando el tema. El caso más claro es corrupción: una sola cuenta aportaba el 29% de los comentarios. Al sacarla, el volumen cae 29% pero la cantidad de autores no se mueve (451 → 450). Es un tema real, inflado por una cuenta."
+  },
+  {
+    "objectID": "proyectos/comentarios-instagram/index.html#qué-se-likea",
+    "href": "proyectos/comentarios-instagram/index.html#qué-se-likea",
+    "title": "Qué se comenta en la cuenta de Instagram del presidente",
+    "section": "Qué se likea",
+    "text": "Qué se likea\n\n\n                            \n                                            \n\n\nTres de cada cuatro comentarios no reciben ningún like. Lo muy likeado tiene un vocabulario propio: nombres propios y acusaciones concretas, más que epítetos. Y los likes no son votos: un comentario arriba del ranking recibe likes porque está arriba, y está arriba en parte porque los recibió."
+  },
+  {
+    "objectID": "proyectos/comentarios-instagram/index.html#metodología",
+    "href": "proyectos/comentarios-instagram/index.html#metodología",
+    "title": "Qué se comenta en la cuenta de Instagram del presidente",
+    "section": "Metodología",
+    "text": "Metodología\n\nRecolección. Scraper propio con Playwright, con sesión y delays altos. Cola persistida y reanudable, deduplicación por id del comentario y un registro por corrida para auditar la completitud. Antes de cada cambio, una batería de pruebas offline contra un DOM sintético.\nPrivacidad. Los nombres de usuario se reemplazan por un hash con sal antes de analizar. Ningún informe transcribe comentarios.\nValidación del clasificador. 450 casos sorteados y anotados a mano, con libro de códigos. Un control automático detecta si el criterio del anotador cambia a lo largo de la planilla. Así apareció el quiebre que obliga a informar el rechazo como rango.\nTemas. 16 léxicos versionados, cada uno con su patrón, su precisión (IC de Wilson) y la fecha de medición. Los descartados quedan registrados con el motivo.\nVentana congelada. La precisión se midió sobre el corpus al 19 de agosto, y el análisis de temas usa ese corte, para no aplicar una precisión medida en una población a otra distinta.\nLimitaciones. Solo comentarios raíz; las respuestas se recolectaron en 18 posts pero no se analizan. La codificación de los posts por tipo no tiene medida de confiabilidad, así que el resultado nulo se lee como «no se detecta efecto», no como «no hay efecto»."
+  },
+  {
+    "objectID": "proyectos/locales-gastronomicos-mdp/index.html",
+    "href": "proyectos/locales-gastronomicos-mdp/index.html",
+    "title": "Locales gastronómicos de Mar del Plata",
+    "section": "",
+    "text": "Pregunta¿Cómo se distribuye la oferta gastronómica en la ciudad y qué barrios la concentran?\n\n\nFuentesGoogle Maps (relevamiento propio, julio 2026) · Barrios por sociedad de fomento (124 polígonos)\n\n\nHerramientasPython · Playwright · pandas · geopandas · folium · plotly\n\n\nCódigoVer en GitHub\nThis is the init_notebook_mode cell from ITables v2.9.1\n(you should not see this message - is your notebook trusted?)"
+  },
+  {
+    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#resumen",
+    "href": "proyectos/locales-gastronomicos-mdp/index.html#resumen",
+    "title": "Locales gastronómicos de Mar del Plata",
+    "section": "Resumen",
+    "text": "Resumen\nCon un scraper propio sobre Google Maps relevé 1.261 locales gastronómicos dentro del casco urbano de Mar del Plata. Les asigné un barrio a 98,9% de ellos cruzando sus coordenadas con los polígonos de las sociedades de fomento.\n\nLa oferta se concentra en el centro y la costa, con corredores secundarios hacia los barrios.\nRestaurante es la categoría dominante: aparece en más locales que bar y café juntos.\nLa popularidad está muy concentrada: la mitad de los locales tiene menos de 150 reseñas, y un grupo chico supera las 5.000.\nLos ratings son altos en general (promedio 4,38), como es típico en Google Maps. Por eso los rankings exigen un mínimo de reseñas."
+  },
+  {
+    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#dónde-están",
+    "href": "proyectos/locales-gastronomicos-mdp/index.html#dónde-están",
+    "title": "Locales gastronómicos de Mar del Plata",
+    "section": "Dónde están",
+    "text": "Dónde están\nCada punto es un local. Con el selector de arriba a la derecha podés prender y apagar cada categoría, y con un clic sobre un punto ves el nombre, el rating y las reseñas.\n\n\n\n\n\n\nMapa de calor\nLa misma información como densidad: cada local suma lo mismo, así que las zonas más intensas son las de mayor concentración de oferta."
+  },
+  {
+    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#por-barrio",
+    "href": "proyectos/locales-gastronomicos-mdp/index.html#por-barrio",
+    "title": "Locales gastronómicos de Mar del Plata",
+    "section": "Por barrio",
+    "text": "Por barrio\nPara asignar el barrio usé dos pasos. Primero, punto en polígono. Después, para los locales de playa (que quedan fuera de los polígonos porque los barrios terminan en la costanera), el barrio más cercano hasta 500 m, medido en metros reales con la proyección POSGAR 2007. Los que quedan más lejos se consideran periferia."
+  },
+  {
+    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#categorías-reseñas-y-ratings",
+    "href": "proyectos/locales-gastronomicos-mdp/index.html#categorías-reseñas-y-ratings",
+    "title": "Locales gastronómicos de Mar del Plata",
+    "section": "Categorías, reseñas y ratings",
+    "text": "Categorías, reseñas y ratings\n\n\n                            \n                                            \n\n\nUn local puede tener más de una categoría: 71 combinan dos o tres, sobre todo bar + restaurante.\n\n\n                            \n                                            \n\n\n\n\n                            \n                                            \n\n\nLos locales con menos de 10 reseñas ocupan todo el rango, de 1 a 5, y la mitad tiene un 5,0 perfecto. A medida que crecen las reseñas, el rating se estrecha: entre los que superan las mil, el 80% central está entre 4,1 y 4,6. Un 5,0 con tres reseñas no dice mucho; un 4,6 con miles es un veredicto."
+  },
+  {
+    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#los-más-reseñados",
+    "href": "proyectos/locales-gastronomicos-mdp/index.html#los-más-reseñados",
+    "title": "Locales gastronómicos de Mar del Plata",
+    "section": "Los más reseñados",
+    "text": "Los más reseñados"
+  },
+  {
+    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#explorá-los-datos",
+    "href": "proyectos/locales-gastronomicos-mdp/index.html#explorá-los-datos",
+    "title": "Locales gastronómicos de Mar del Plata",
+    "section": "Explorá los datos",
+    "text": "Explorá los datos\nTodos los locales relevados. Podés buscar por nombre o barrio y ordenar por cualquier columna.\n\n\n\n\n  \n    \n      \n    \n        \n        \n        \n        \n        \n        \n        \n        \n    \n    \n   \n    \n      \n  \n        \n    \n    \n  \n        \n    \n    \n  \n        \n    \n      \n  \n        \n            \n                \n                \n            \n\n            \n                \n                \n            \n\n            \n                \n                \n            \n\n            \n                \n                \n            \n\n            \n                \n                \n            \n        \n    \n\n\n        Loading ITables v2.9.1 from the init_notebook_mode cell...\n        (need help?)\n      \n    \n  \n\n    \n      🔒ⓘLocal\n      Barrio\n      Categorías\n      Rating\n      Reseñas\n    \nLos Gallegos ShoppingArea Centrorestaurante4.242712\nRestaurant ChichiloDel Puertorestaurante4.125127\nManoloLeandro N. Alemrestaurante4.320943\nCHICHILODel Puertorestaurante4.216986\nRestaurante La MarinaDel Puertorestaurante4.614269\nGlück Cervecería - zona OlavarríaLos Troncosbar4.513618\nPunto y Banca Bar-RestauranteArea Centrorestaurante4.412797\nLa NieveArea Centrorestaurante4.411718\nTío CurzioLomas De Stella Marisrestaurante4.311385\nMirador WaikikiPunta Mogotesrestaurante4.411243\n(1,251 more rows not shown)"
+  },
+  {
+    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#metodología",
+    "href": "proyectos/locales-gastronomicos-mdp/index.html#metodología",
+    "title": "Locales gastronómicos de Mar del Plata",
+    "section": "Metodología",
+    "text": "Metodología\n\nRecolección. Scraper propio con Playwright sobre Google Maps. Dividí el casco urbano en una grilla de celdas y busqué cada categoría (bar, café, restaurante) en cada celda, deduplicando por el identificador del lugar (place_id).\nLimpieza. Excluí 75 resultados que Google devolvió fuera del área de estudio (Santa Clara del Mar, Chapadmalal). Los locales sin rating o sin reseñas quedan en el dataset y se excluyen solo de los análisis que usan esos campos.\nBarrios. Reparé las geometrías inválidas del archivo de barrios, asigné por punto en polígono (1.147 locales) y recuperé 100 más por cercanía (≤ 500 m). Quedan 14 sin barrio.\nLimitaciones. Google Maps no es un padrón: faltan locales sin ficha y puede haber fichas de locales cerrados. El rating y las reseñas son una foto de julio de 2026."
+  },
+  {
+    "objectID": "proyectos/busqueda-laboral/notebook.html",
+    "href": "proyectos/busqueda-laboral/notebook.html",
+    "title": "Cuaderno completo · Buscar trabajo con datos",
+    "section": "",
+    "text": "← Volver al resumen del proyecto\nEste cuaderno analiza los avisos de empleo que fui juntando mientras buscaba mi primer trabajo como analista de datos. Vengo de la Sociología y de una diplomatura en Ciencia de Datos.\nPara ordenar la búsqueda armé una extensión de Chrome que lee un aviso y me dice qué pide, qué me falta y qué tan lejos estoy. La extensión no es el tema de este análisis: es la herramienta que me dejó convertir la búsqueda en datos. Acá uso esos datos para dos cosas:"
+  },
+  {
+    "objectID": "proyectos/busqueda-laboral/notebook.html#metodología-cómo-evalúa-la-extensión",
+    "href": "proyectos/busqueda-laboral/notebook.html#metodología-cómo-evalúa-la-extensión",
+    "title": "Cuaderno completo · Buscar trabajo con datos",
+    "section": "Metodología: cómo evalúa la extensión",
+    "text": "Metodología: cómo evalúa la extensión\nEl uso es simple: abro un aviso, selecciono todo el texto, hago clic derecho → “Evaluar este aviso” y se abre un panel al costado con:\n\nun veredicto: Postulate, Alcanzable o Lejos, con el motivo;\nlos requisitos separados en excluyentes, deseables y los que solo se mencionan en las tareas;\nel nivel que piden en cada herramienta (básico, intermedio, avanzado) comparado con el mío;\nalertas sobre años de experiencia, puestos senior encubiertos, carreras pedidas, idiomas y modalidad.\n\nLa primera vez que un aviso pide algo que la extensión no sabe de mí, me lo pregunta y lo guarda en mi perfil, así que el perfil se arma solo a medida que la uso. Cada aviso queda guardado en una página, “Mis avisos”, que se sincroniza con una hoja de Google Sheets: de ahí salen los datos de este análisis."
+  },
+  {
+    "objectID": "proyectos/busqueda-laboral/notebook.html#las-fuentes",
+    "href": "proyectos/busqueda-laboral/notebook.html#las-fuentes",
+    "title": "Cuaderno completo · Buscar trabajo con datos",
+    "section": "Las fuentes",
+    "text": "Las fuentes\n\n\n\n\n\n\n\n\nFuente\nQué es\nPeríodo\n\n\n\n\nMis evaluaciones\nAvisos que elegí abrir y evaluar uno por uno con clic derecho, con sus requisitos desglosados\nOctubre y noviembre de 2026\n\n\nBúsquedas en LinkedIn\nTodos los avisos que devolvieron búsquedas de nivel inicial y prácticas, importados a la extensión con el texto completo y evaluados en lote con las mismas reglas\nAvisos publicados en las dos semanas previas al 12 de noviembre de 2026\n\n\n\nMis búsquedas apuntaron principalmente a tres tipos de puesto: análisis de datos, trabajos administrativos y recursos humanos. Todo lo que aparece abajo (herramientas, carreras, requisitos) depende de ese recorte: otras búsquedas darían otro mapa.\nLa diferencia entre las dos fuentes importa: mis evaluaciones están sesgadas por mi elección (abría lo que me parecía cercano), mientras que las búsquedas muestran todo lo que devuelve el buscador. Compararlas dice algo sobre cómo uno filtra sin darse cuenta.\n\n\nVer código\nimport json, re, unicodedata\nfrom pathlib import Path\n\nimport pandas as pd\nimport plotly.express as px\nimport plotly.graph_objects as go\nfrom IPython.display import Markdown, display\n\nDATA = Path(\"data\")\nCOLOR = {\"Buena chance\": \"#1d7a5f\", \"Aplicable\": \"#d39b2a\", \"No\": \"#b4443c\",\n         \"Postulate\": \"#1d7a5f\", \"Alcanzable\": \"#d39b2a\", \"Lejos\": \"#b4443c\"}\npx.defaults.template = \"simple_white\"\npx.defaults.height = 420\n\ndef norm(s):\n    # Minúsculas y sin tildes, para buscar palabras en los textos\n    return unicodedata.normalize(\"NFD\", str(s or \"\")).encode(\"ascii\", \"ignore\").decode().lower()\n\ndef pct(a, b):\n    return f\"{100 * a / b:.0f}%\" if b else \"—\"\n\n\n\n\nVer código\nmis = pd.read_csv(DATA / \"mis_avisos.csv\")\nreq = pd.read_csv(DATA / \"mis_requisitos.csv\")\ntanda = pd.DataFrame(json.loads((DATA / \"tanda_linkedin.json\").read_text(encoding=\"utf-8\")))\nmeta = json.loads((DATA / \"meta.json\").read_text(encoding=\"utf-8\"))\n\ntanda[\"texto_n\"] = tanda[\"texto\"].map(norm)\nabiertos = tanda[tanda[\"estado_linkedin\"] == \"LISTED\"].copy()\n\nresumen = pd.DataFrame({\n    \"fuente\": [\"Mis evaluaciones\", \"Búsquedas en LinkedIn (sin repetidos)\", \"Búsquedas en LinkedIn (siguen abiertos)\"],\n    \"avisos\": [len(mis), len(tanda), len(abiertos)],\n    \"período\": [f\"{mis['fecha'].min()} a {mis['fecha'].max()}\",\n                f\"publicados {tanda['publicado'].replace('', None).min()} a {tanda['publicado'].max()}\", \"\"],\n})\nresumen\n\n\n\n\n\n\n\n\n\nfuente\navisos\nperíodo\n\n\n\n\n0\nMis evaluaciones\n257\n2026-10-13 a 2026-11-12\n\n\n1\nBúsquedas en LinkedIn (sin repetidos)\n615\npublicados 2026-10-31 a 2026-11-12\n\n\n2\nBúsquedas en LinkedIn (siguen abiertos)\n540"
+  },
+  {
+    "objectID": "proyectos/busqueda-laboral/notebook.html#el-embudo",
+    "href": "proyectos/busqueda-laboral/notebook.html#el-embudo",
+    "title": "Cuaderno completo · Buscar trabajo con datos",
+    "section": "1. El embudo",
+    "text": "1. El embudo\nLa primera pregunta es la más simple: de todo lo que aparece cuando busco “nivel inicial”, ¿cuánto es realmente para mí?\nPara responderla clasifiqué cada aviso de las búsquedas en tres niveles. No es que no aplica: está cerrado, es senior, pide 3 años o más (o 2 en un área que no es la mía), pide una carrera dura, es de ventas o está fuera de Buenos Aires o Mar del Plata sin ser remoto. Aplicable es que podría postularme, pero piden experiencia específica que no tengo o carreras puntuales que no son la mía. Buena chance es que cumplo lo que piden.\nEl veredicto de la extensión no alcanzaba para separar aplicable de buena chance, así que definí ese criterio marcando a mano una muestra de avisos y anotando por qué. Por ejemplo: “tengo los conocimientos, pero piden experiencia en esa tarea” o “piden carreras económicas”. Después apliqué ese criterio al resto.\n\n\nVer código\nn_encontrados = meta[\"avisos_encontrados\"]\nn_unicos = len(tanda)\nn_abiertos = len(abiertos)\nn_pasan = int((tanda[\"nivel_calibrado\"] != \"No\").sum())\nn_buena = int((tanda[\"nivel_calibrado\"] == \"Buena chance\").sum())\n\nfig = go.Figure(go.Funnel(\n    y=[\"Avisos que devolvió la búsqueda\", \"Sin repetidos\", \"Todavía abiertos\",\n       \"Pasan los filtros duros\", \"Buena chance\"],\n    x=[n_encontrados, n_unicos, n_abiertos, n_pasan, n_buena],\n    textinfo=\"value+percent initial\",\n    marker={\"color\": [\"#9aa5b1\", \"#9aa5b1\", \"#7b8794\", \"#d39b2a\", \"#1d7a5f\"]},\n))\nfig.update_layout(title=\"De la búsqueda a los avisos con chances reales\", height=380)\nfig.show()\n\ndisplay(Markdown(\n    f\"De **{n_encontrados}** avisos que devolvieron las búsquedas de nivel inicial, \"\n    f\"solo **{n_buena}** ({pct(n_buena, n_encontrados)}) quedaron como buena chance.\"\n))\n\n\n                            \n                                            \n\n\nDe 663 avisos que devolvieron las búsquedas de nivel inicial, solo 53 (8%) quedaron como buena chance.\n\n\n\n¿Por qué se cae un aviso?\nUn mismo aviso puede caerse por varias razones a la vez. El gráfico cuenta cada razón por separado.\n\n\nVer código\ndef motivo_grupo(m):\n    m = norm(m)\n    if \"cerrado\" in m: return \"El aviso ya cerró\"\n    if \"nivel publicado\" in m or \"senior\" in m or \"jefatura\" in m: return \"Es senior o de liderazgo\"\n    if \"anos\" in m: return \"Pide más años de experiencia\"\n    if \"carrera\" in m or \"contador\" in m: return \"Pide otra carrera\"\n    if \"ventas\" in m or \"comision\" in m: return \"Es de ventas\"\n    if \"fuera de ba\" in m or \"otro pais\" in m or \"region\" in m: return \"Ubicación o país\"\n    if \"ingenieria\" in m or \"desarrollo\" in m: return \"Es de ingeniería o desarrollo\"\n    if \"idioma\" in m: return \"Pide otro idioma\"\n    return \"Otros\"\n\ncaidos = (tanda[tanda[\"nivel_calibrado\"] == \"No\"]\n          .explode(\"motivos\")\n          .assign(grupo=lambda d: d[\"motivos\"].map(motivo_grupo))\n          .drop_duplicates([\"id\", \"grupo\"]))\nconteo = caidos[\"grupo\"].value_counts().rename_axis(\"motivo\").reset_index(name=\"avisos\")\n\nfig = px.bar(conteo.sort_values(\"avisos\"), x=\"avisos\", y=\"motivo\", orientation=\"h\",\n             title=\"Motivos por los que un aviso queda afuera (búsquedas en LinkedIn)\",\n             color_discrete_sequence=[\"#b4443c\"], text=\"avisos\")\nfig.update_layout(yaxis_title=\"\", xaxis_title=\"avisos\")\nfig.show()"
+  },
+  {
+    "objectID": "proyectos/busqueda-laboral/notebook.html#el-junior-que-no-es-junior",
+    "href": "proyectos/busqueda-laboral/notebook.html#el-junior-que-no-es-junior",
+    "title": "Cuaderno completo · Buscar trabajo con datos",
+    "section": "2. El “junior” que no es junior",
+    "text": "2. El “junior” que no es junior\nLinkedIn le pone a cada aviso un nivel (prácticas, nivel inicial, intermedio…). Lo publica la empresa. Mi pregunta: entre los avisos que la empresa llamó de nivel inicial o prácticas, ¿cuántos piden años de experiencia?\n\n\nVer código\nYEARS = re.compile(\n    r\"(\\d{1,2})\\s*\\+?\\s*(?:-\\s*\\d+\\s*)?(?:anos|ano|years?)\\b[^.\\n]{0,60}(?:experiencia|experience)\"\n    r\"|(?:experiencia|experience)[^.\\n]{0,40}?(\\d{1,2})\\s*\\+?\\s*(?:anos|ano|years?)\"\n)\n\ndef anios_pedidos(texto):\n    ys = [int(a or b) for a, b in YEARS.findall(texto) if 0 &lt; int(a or b) &lt; 11]\n    return max(ys) if ys else None\n\nabiertos[\"anios\"] = abiertos[\"texto_n\"].map(anios_pedidos)\nentrada = abiertos[abiertos[\"nivel_linkedin\"].isin([\"Entry level\", \"Internship\"])].copy()\n\ndef tramo(a):\n    if pd.isna(a): return \"No dice\"\n    if a &lt;= 1: return \"Hasta 1 año\"\n    if a == 2: return \"2 años\"\n    return \"3 años o más\"\n\nentrada[\"tramo\"] = entrada[\"anios\"].map(tramo)\norden = [\"No dice\", \"Hasta 1 año\", \"2 años\", \"3 años o más\"]\nt = entrada[\"tramo\"].value_counts().reindex(orden).fillna(0).astype(int).reset_index()\nt.columns = [\"experiencia pedida\", \"avisos\"]\n\nfig = px.bar(t, x=\"experiencia pedida\", y=\"avisos\", text=\"avisos\",\n             title=\"Avisos de nivel inicial o prácticas: cuánta experiencia piden\",\n             color=\"experiencia pedida\",\n             color_discrete_map={\"No dice\": \"#9aa5b1\", \"Hasta 1 año\": \"#1d7a5f\",\n                                 \"2 años\": \"#d39b2a\", \"3 años o más\": \"#b4443c\"})\nfig.update_layout(showlegend=False, xaxis_title=\"\")\nfig.show()\n\nn_e = len(entrada)\nn_2 = int((entrada[\"anios\"] &gt;= 2).sum())\nn_3 = int((entrada[\"anios\"] &gt;= 3).sum())\ndisplay(Markdown(\n    f\"De **{n_e}** avisos marcados por la empresa como nivel inicial o prácticas, \"\n    f\"**{n_2} ({pct(n_2, n_e)}) piden 2 años o más** y {n_3} ({pct(n_3, n_e)}) piden 3 o más.\"\n))\n\n\n                            \n                                            \n\n\nDe 91 avisos marcados por la empresa como nivel inicial o prácticas, 29 (32%) piden 2 años o más y 22 (24%) piden 3 o más."
+  },
+  {
+    "objectID": "proyectos/busqueda-laboral/notebook.html#credenciales-qué-carreras-piden",
+    "href": "proyectos/busqueda-laboral/notebook.html#credenciales-qué-carreras-piden",
+    "title": "Cuaderno completo · Buscar trabajo con datos",
+    "section": "3. Credenciales: ¿qué carreras piden?",
+    "text": "3. Credenciales: ¿qué carreras piden?\nComo sociólogo, esto es lo que más me interesaba. Muchas tareas de análisis de datos (armar reportes, leer indicadores, diseñar encuestas) son las mismas que se aprenden en ciencias sociales. ¿Qué carreras aparecen en los requisitos?\nPara no contar menciones sueltas (por ejemplo “business” en la descripción de la empresa), solo miro las oraciones que hablan de estudios o formación.\n\n\nVer código\nEDU = re.compile(r\"(estudiante|graduad|licenciad|recibid|carrera|titulo|degree|bachelor|student|egresad|pursuing|formacion)\")\nGRUPOS = {\n    \"Económicas / administración\": r\"econom|administracion de empresas|administracion|contador|contab|finanz|finance|business|negocios|comercializacion\",\n    \"Ingenierías / sistemas\": r\"ingenier|engineering|sistemas|informatica|computer science|computacion\",\n    \"Marketing / comunicación\": r\"marketing|publicidad|comunicacion|communications?|periodismo|relaciones publicas\",\n    \"Exactas / estadística / ciencia de datos\": r\"matematic|estadistic|statistics|actuar|ciencia de datos|data science|fisica|mathematics\",\n    \"Psicología / RRHH\": r\"psicolog|psychology|recursos humanos|human resources|relaciones (?:del trabajo|laborales)\",\n    \"Salud / biológicas\": r\"medicina|biolog|bioquim|farmac|life sciences|enfermer|nursing\",\n    \"Ciencias sociales / sociología\": r\"sociolog|ciencias sociales|social sciences?|ciencia politica|antropolog\",\n    \"Cualquier carrera\": r\"cualquier carrera|any (?:field|discipline|background)|all degree|todas las carreras\",\n}\n\ndef oraciones_formacion(texto):\n    partes = re.split(r\"(?&lt;=[.;•·!?])\\s+|\\n+|\\s[-–•✅]\\s\", texto)\n    return \" \".join(p for p in partes if EDU.search(p))\n\nabiertos[\"formacion\"] = abiertos[\"texto_n\"].map(oraciones_formacion)\ncon_carrera = abiertos[abiertos[\"formacion\"].str.len() &gt; 0]\nfilas = [{\"carreras\": g, \"avisos\": int(con_carrera[\"formacion\"].str.contains(p).sum())} for g, p in GRUPOS.items()]\ncarreras = pd.DataFrame(filas).sort_values(\"avisos\")\ncarreras[\"color\"] = carreras[\"carreras\"].map(lambda g: \"#1d7a5f\" if g in (\"Ciencias sociales / sociología\", \"Cualquier carrera\") else \"#7b8794\")\n\nfig = px.bar(carreras, x=\"avisos\", y=\"carreras\", orientation=\"h\", text=\"avisos\",\n             title=f\"Carreras que aparecen en los requisitos ({len(con_carrera)} avisos abiertos que hablan de formación)\")\nfig.update_traces(marker_color=carreras[\"color\"])\nfig.update_layout(yaxis_title=\"\", xaxis_title=\"avisos\")\nfig.show()\n\nsoc = int(con_carrera[\"formacion\"].str.contains(GRUPOS[\"Ciencias sociales / sociología\"]).sum())\neco = int(con_carrera[\"formacion\"].str.contains(GRUPOS[\"Económicas / administración\"]).sum())\ndisplay(Markdown(\n    f\"De los avisos que mencionan formación, **{eco}** nombran carreras económicas o de administración \"\n    f\"y apenas **{soc}** nombran ciencias sociales o sociología.\"\n))\n\n\n                            \n                                            \n\n\nDe los avisos que mencionan formación, 159 nombran carreras económicas o de administración y apenas 6 nombran ciencias sociales o sociología."
+  },
+  {
+    "objectID": "proyectos/busqueda-laboral/notebook.html#herramientas-qué-piden",
+    "href": "proyectos/busqueda-laboral/notebook.html#herramientas-qué-piden",
+    "title": "Cuaderno completo · Buscar trabajo con datos",
+    "section": "4. Herramientas: qué piden",
+    "text": "4. Herramientas: qué piden\nAcá uso mis evaluaciones, porque la extensión desglosó cada aviso en requisitos y distingue si cada uno es excluyente, deseable o si solo se menciona en las tareas.\n\nEstas herramientas salen de mis búsquedas (análisis de datos, trabajos administrativos y recursos humanos). No son “las herramientas más pedidas del mercado”: son las más pedidas en los puestos a los que apunto.\n\n\n\nVer código\nTABLEROS = {\"Herramienta de tableros\": \"Tableros (Power BI, Tableau…)\"}\nreq[\"requisito\"] = req[\"requisito\"].replace(TABLEROS)\nherr = req[req[\"fuente\"] == \"reglas\"].copy()\ntop = herr[\"requisito\"].value_counts().head(15).index\ntabla = (herr[herr[\"requisito\"].isin(top)]\n         .groupby([\"requisito\", \"tipo\"]).size().reset_index(name=\"avisos\"))\norden_req = herr[\"requisito\"].value_counts().head(15).index[::-1]\n\nfig = px.bar(tabla, x=\"avisos\", y=\"requisito\", color=\"tipo\", orientation=\"h\",\n             category_orders={\"requisito\": list(orden_req), \"tipo\": [\"excluyente\", \"deseable\", \"se menciona\"]},\n             color_discrete_map={\"excluyente\": \"#3b4a5a\", \"deseable\": \"#8fa3b8\", \"se menciona\": \"#d5dde5\"},\n             title=f\"Lo que más aparece en los {mis.shape[0]} avisos que evalué\")\nfig.update_layout(yaxis_title=\"\", xaxis_title=\"avisos\", legend_title=\"\")\nfig.show()\n\n\n                            \n                                            \n\n\n\n¿Qué tan excluyente es cada herramienta?\nQue una herramienta aparezca mucho no significa que sea un filtro. Este gráfico muestra, para las herramientas más mencionadas, en qué proporción de los avisos que la nombran es excluyente. Las de arriba son las que, si faltan, más puertas cierran.\n\n\nVer código\nexcl = (herr.groupby(\"requisito\")\n        .agg(avisos=(\"aviso_id\", \"nunique\"), excluyente=(\"tipo\", lambda t: (t == \"excluyente\").sum()))\n        .query(\"avisos &gt;= 12\")\n        .assign(pct=lambda d: (100 * d[\"excluyente\"] / d[\"avisos\"]).round(0))\n        .sort_values(\"pct\")\n        .reset_index())\n\nfig = px.bar(excl, x=\"pct\", y=\"requisito\", orientation=\"h\", text=excl[\"pct\"].astype(int).astype(str) + \"%\",\n             hover_data={\"avisos\": True, \"excluyente\": True, \"pct\": False},\n             title=\"Proporción de avisos en los que cada herramienta es excluyente\",\n             color_discrete_sequence=[\"#3b4a5a\"])\nfig.update_layout(yaxis_title=\"\", xaxis_title=\"% de los avisos que la mencionan\", xaxis_range=[0, 100])\nfig.show()\n\n\n                            \n                                            \n\n\n\n\nDel aviso al currículum (y a lo que me falta aprender)\nCon muchos avisos guardados, la extensión arma dos listas a partir de mi perfil:\n\nQué destacar en el CV: lo que más se pide y que ya manejo. Me sirvió para reordenar el currículum y poner arriba lo que el mercado busca, en lugar de lo que a mí me parecía importante.\nQué reforzar: lo que más se pide y no tengo (o tengo por debajo de lo que piden), con cuántos avisos me “destrabaría” aprenderlo. Esto cambió la pregunta de “¿qué curso hago?” a “¿qué conocimiento abre más puertas en los puestos a los que apunto?”.\n\nNo publico mis niveles: el punto es el método. Cruzar lo que piden los avisos (sobre todo lo excluyente) con lo que uno sabe convierte la búsqueda en un plan de estudio concreto."
+  },
+  {
+    "objectID": "proyectos/busqueda-laboral/notebook.html#inglés-modalidad-y-geografía",
+    "href": "proyectos/busqueda-laboral/notebook.html#inglés-modalidad-y-geografía",
+    "title": "Cuaderno completo · Buscar trabajo con datos",
+    "section": "5. Inglés, modalidad y geografía",
+    "text": "5. Inglés, modalidad y geografía\nBusco desde Mar del Plata, así que dos preguntas me importan: cuánto hay en mi ciudad y qué pesa en el trabajo remoto.\n\n\nVer código\nabiertos[\"pide_ingles\"] = abiertos[\"texto_n\"].str.contains(r\"\\b(?:ingles|english)\\b\")\nabiertos[\"en_ingles\"] = abiertos[\"texto\"].map(lambda s: len(re.findall(r\"\\b(?:the|and|with|you|our|will)\\b\", s.lower())) &gt; 15)\nabiertos[\"ingles\"] = abiertos[\"pide_ingles\"] | abiertos[\"en_ingles\"]\n\nmod = (abiertos.groupby(\"modalidad\")\n       .agg(avisos=(\"id\", \"size\"), con_ingles=(\"ingles\", \"sum\"))\n       .reindex([\"Remoto\", \"Híbrido\", \"Presencial\", \"Sin dato\"]).reset_index())\nmod[\"% con inglés\"] = (100 * mod[\"con_ingles\"] / mod[\"avisos\"]).round(0)\n\nfig = px.bar(mod, x=\"modalidad\", y=\"avisos\", text=\"avisos\",\n             title=\"Avisos abiertos por modalidad (y cuántos piden inglés o están escritos en inglés)\",\n             color_discrete_sequence=[\"#9aa5b1\"])\nfig.add_bar(x=mod[\"modalidad\"], y=mod[\"con_ingles\"], name=\"con inglés\", marker_color=\"#3b4a5a\",\n            text=mod[\"% con inglés\"].astype(int).astype(str) + \"%\")\nfig.update_layout(barmode=\"overlay\", xaxis_title=\"\", showlegend=False)\nfig.show()\n\nmdp = abiertos[abiertos[\"ubicacion\"].str.contains(\"Mar del Plata\", na=False)]\notro_pais = mdp[\"motivos\"].map(lambda ms: any(\"otro pais\" in norm(m) for m in ms))\nmdp_real = mdp[(mdp[\"modalidad\"] != \"Remoto\") & ~otro_pais]\nmdp_sin_ventas_ni_senior = mdp_real[~mdp_real[\"motivos\"].map(lambda ms: any(motivo_grupo(m) in (\"Es de ventas\", \"Es senior o de liderazgo\") for m in ms))]\ndisplay(Markdown(\n    f\"**{int(abiertos['ingles'].mean() * 100)}%** de los avisos abiertos piden inglés o están escritos en inglés; \"\n    f\"entre los remotos sube a **{int(mod.loc[mod.modalidad == 'Remoto', '% con inglés'].iloc[0])}%**. \"\n    f\"Las búsquedas filtradas por Mar del Plata devolvieron casi todo trabajo remoto (y algunos avisos de otros países \"\n    f\"mal ubicados): solo **{len(mdp_real)}** avisos abiertos son de verdad en la ciudad, y sacando ventas y puestos senior \"\n    f\"queda{'n' if len(mdp_sin_ventas_ni_senior) != 1 else ''} **{len(mdp_sin_ventas_ni_senior)}**.\"\n))\n\n\n                            \n                                            \n\n\n77% de los avisos abiertos piden inglés o están escritos en inglés; entre los remotos sube a 94%. Las búsquedas filtradas por Mar del Plata devolvieron casi todo trabajo remoto (y algunos avisos de otros países mal ubicados): solo 6 avisos abiertos son de verdad en la ciudad, y sacando ventas y puestos senior queda 1."
+  },
+  {
+    "objectID": "proyectos/busqueda-laboral/notebook.html#lo-que-elegí-evaluar-y-lo-que-hay",
+    "href": "proyectos/busqueda-laboral/notebook.html#lo-que-elegí-evaluar-y-lo-que-hay",
+    "title": "Cuaderno completo · Buscar trabajo con datos",
+    "section": "6. Lo que elegí evaluar y lo que hay",
+    "text": "6. Lo que elegí evaluar y lo que hay\nMis evaluaciones no son aleatorias: abría lo que me parecía cercano. Comparar qué familias de puesto evalué con el veredicto que les dio la extensión muestra dónde estaba poniendo la energía y dónde me iba mejor.\n\n\nVer código\nfam = (mis.groupby([\"familia de puesto\", \"veredicto\"]).size().reset_index(name=\"avisos\"))\norden_fam = mis[\"familia de puesto\"].value_counts().index[::-1]\nfig = px.bar(fam, x=\"avisos\", y=\"familia de puesto\", color=\"veredicto\", orientation=\"h\",\n             category_orders={\"familia de puesto\": list(orden_fam), \"veredicto\": [\"Postulate\", \"Alcanzable\", \"Lejos\"]},\n             color_discrete_map=COLOR, title=f\"Mis {len(mis)} evaluaciones: familia de puesto y veredicto de la extensión\")\nfig.update_layout(yaxis_title=\"\", xaxis_title=\"avisos\", legend_title=\"\")\nfig.show()"
+  },
+  {
+    "objectID": "proyectos/busqueda-laboral/notebook.html#las-reglas-contra-mi-criterio",
+    "href": "proyectos/busqueda-laboral/notebook.html#las-reglas-contra-mi-criterio",
+    "title": "Cuaderno completo · Buscar trabajo con datos",
+    "section": "7. Las reglas contra mi criterio",
+    "text": "7. Las reglas contra mi criterio\nLa extensión decide con reglas: busca años, niveles de herramientas, carreras y modalidad en el texto. Para los avisos de las búsquedas comparo su veredicto con la clasificación hecha con mi criterio (sección 1).\n\n\nVer código\ncruce = pd.crosstab(tanda[\"nivel_calibrado\"], tanda[\"ext_veredicto\"]).reindex(\n    index=[\"Buena chance\", \"Aplicable\", \"No\"], columns=[\"Postulate\", \"Alcanzable\", \"Lejos\"]).fillna(0).astype(int)\nfig = px.imshow(cruce, text_auto=True, color_continuous_scale=[\"#f4f6f8\", \"#3b4a5a\"],\n                labels={\"x\": \"veredicto de la extensión (reglas)\", \"y\": \"clasificación con mi criterio\", \"color\": \"avisos\"},\n                title=\"¿Coinciden las reglas con mi criterio?\")\nfig.update_layout(height=380, coloraxis_showscale=False)\nfig.show()\n\nno_pero_post = tanda[(tanda[\"nivel_calibrado\"] == \"No\") & (tanda[\"ext_veredicto\"] == \"Postulate\")]\nrazones = (no_pero_post.explode(\"motivos\")[\"motivos\"].map(motivo_grupo).value_counts().head(5))\ndisplay(Markdown(\n    f\"La extensión le dice **Postulate** a {len(no_pero_post)} avisos que yo descarto. \"\n    \"Las razones más comunes: \" + \", \".join(f\"{k.lower()} ({v})\" for k, v in razones.items()) + \". \"\n    \"Son cosas que las reglas no ven o ven distinto: si el aviso sigue abierto, si es de ventas, el nivel que publicó la empresa \"\n    \"(que no está en el texto) y, sobre todo, **qué experiencia cuenta**: la extensión suma mis años de trabajo en general, \"\n    \"mientras que mi criterio pide experiencia en esa tarea puntual.\"\n))\n\n\n                            \n                                            \n\n\nLa extensión le dice Postulate a 167 avisos que yo descarto. Las razones más comunes: es senior o de liderazgo (64), pide más años de experiencia (45), el aviso ya cerró (40), es de ventas (35), ubicación o país (28). Son cosas que las reglas no ven o ven distinto: si el aviso sigue abierto, si es de ventas, el nivel que publicó la empresa (que no está en el texto) y, sobre todo, qué experiencia cuenta: la extensión suma mis años de trabajo en general, mientras que mi criterio pide experiencia en esa tarea puntual."
+  },
+  {
+    "objectID": "proyectos/busqueda-laboral/notebook.html#lo-que-me-llevo",
+    "href": "proyectos/busqueda-laboral/notebook.html#lo-que-me-llevo",
+    "title": "Cuaderno completo · Buscar trabajo con datos",
+    "section": "8. Lo que me llevo",
+    "text": "8. Lo que me llevo\nUna parte de las conclusiones sale de los números de arriba, y otra de cómo cambió mi forma de buscar:\n\nBuscar “nivel inicial” no alcanza. Una parte grande de lo que se publica como inicial pide experiencia que alguien que arranca no tiene. Filtrar por texto, y no por la etiqueta, me ahorra tiempo.\nLas credenciales pesan tanto como las tareas. Muchos avisos de análisis listan carreras económicas o de ingeniería aunque el trabajo sea leer datos y armar reportes. Las ciencias sociales casi no aparecen. Eso no me cierra la puerta, pero me dice que tengo que mostrar qué sé hacer (proyectos, portfolio) y no solo qué estudié.\nEl inglés abre más que cualquier herramienta. Sobre todo en el trabajo remoto, que es la mayoría de lo que veo desde Mar del Plata.\nLa extensión sirve para dos cosas además de filtrar. Me dice qué destacar en el currículum y qué conocimientos conviene profundizar, según lo que de verdad piden los puestos a los que apunto.\nUna herramienta ayuda, pero el criterio es mío. Las reglas sirven para descartar rápido. Separar lo aplicable de lo que tiene chances reales necesitó que yo definiera el criterio con ejemplos marcados a mano.\n\n\nLimitaciones\n\nEs una muestra: mis búsquedas (análisis de datos, trabajos administrativos y recursos humanos), en LinkedIn, en unas semanas. Las búsquedas de LinkedIn interpretan las palabras clave y devuelven resultados amplios.\nLa detección de años, carreras e idioma se hace con expresiones regulares sobre el texto, así que puede haber falsos positivos y negativos.\nNo registré de forma consistente a qué avisos me postulé, así que todavía no puedo cerrar el embudo con respuestas. Queda para una segunda parte.\nNo publico los textos de los avisos ni los datos crudos: son contenido de las empresas. Muestro solo agregados."
   }
 ]
