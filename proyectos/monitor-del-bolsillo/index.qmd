@@ -5,13 +5,13 @@ date: 2026-11-18
 categories: [Python, Automatización, API del INDEC, Ingresos y pobreza]
 image: miniatura.png
 expediente: "RM-2026-005"
-medida: "127 meses · 7 series oficiales"
+medida: "127 meses · 7 series oficiales · 6 regiones"
 jupyter: python3
 ---
 
 ::: {.ficha}
 <div><strong>Pregunta</strong>¿Cuántos ingresos hacen falta para que un hogar no sea pobre, y por qué esa cuenta cambió desde 2016?</div>
-<div><strong>Fuentes</strong>API del INDEC (canastas básicas, índice de precios, pobreza y mercado de trabajo) · datos.gob.ar (salario mínimo, jubilación mínima y RIPTE)</div>
+<div><strong>Fuentes</strong>API del INDEC (canastas básicas, índice de precios, precios promedio por región, pobreza y mercado de trabajo) · datos.gob.ar (salario mínimo, jubilación mínima y RIPTE)</div>
 <div><strong>Herramientas</strong>Python · API REST · GitHub Actions · GitHub Pages · HTML, SVG y JavaScript</div>
 <div><strong>Página</strong>[Monitor del bolsillo, en vivo](https://renzomirabella.github.io/indec/) · [Repositorio en GitHub](https://github.com/RenzoMirabella/indec)</div>
 :::
@@ -89,6 +89,27 @@ def trimestre(codigo):
 
 c = correcciones.iloc[0]
 ripte_serie = ind.set_index("periodo")["ripte"]
+
+# Precios promedio por región que publicó la página el 19/11/2026 (datos/precios.csv)
+precios = pd.read_csv("datos/precios.csv")
+REGIONES = {"GBA": "Gran Buenos Aires", "Pampeana": "Pampeana", "Noreste": "Noreste",
+            "Noroeste": "Noroeste", "Cuyo": "Cuyo", "Patagonia": "Patagonia"}
+EN_REGION = {"GBA": "el Gran Buenos Aires", "Pampeana": "la región pampeana", "Noreste": "el Noreste",
+             "Noroeste": "el Noroeste", "Cuyo": "Cuyo", "Patagonia": "la Patagonia"}
+pan = precios[precios["producto"] == "Pan francés"]
+salario_mes = ind.set_index("periodo")["salario_minimo"]
+pan_inicio, pan_fin = pan["periodo"].min(), pan["periodo"].max()
+
+def kilos_de_pan(periodo):
+    """Kilos de pan francés que compra un salario mínimo de ese mes, por región."""
+    precio = pan[pan["periodo"] == periodo].set_index("region")["precio_promedio"]
+    return (salario_mes[periodo] / precio).reindex(list(REGIONES))
+
+kilos_inicio, kilos_fin = kilos_de_pan(pan_inicio), kilos_de_pan(pan_fin)
+mas_barato, mas_caro = kilos_fin.idxmax(), kilos_fin.idxmin()
+huecos = precios[precios["precio_promedio"].isna()]
+assert set(huecos["periodo"]) == {"2020-03"} and set(huecos["region"]) == {"Patagonia"}, \
+    "El texto dice que los únicos huecos son de la Patagonia en marzo de 2020"
 ```
 
 ## Resumen
@@ -107,6 +128,10 @@ publicar la página, sin servidores y sin costo.
   lo que compraba entonces.
 - **No todos los ingresos perdieron igual.** En el mismo período, la jubilación mínima sin bono
   compra el `{python} num(poder_haber)` % y el sueldo promedio registrado, el `{python} num(poder_ripte)` %.
+- **El mismo salario no compra lo mismo en todo el país.** En `{python} mes(pan_fin)`, un salario
+  mínimo alcanzaba para `{python} num(kilos_fin[mas_barato])` kilos de pan francés en
+  `{python} EN_REGION[mas_barato]` y para `{python} num(kilos_fin[mas_caro])` en
+  `{python} EN_REGION[mas_caro]`. Sale de cruzar los ingresos con los precios por región de la API.
 - **La fuente también se equivoca.** La base abierta del RIPTE repetía en agosto de 2026 un valor
   anterior. La página lo detectó, no lo publicó, y el dato se corrigió con el informe oficial.
 
@@ -138,9 +163,9 @@ etapa de prueba, y casi no había proyectos que la usaran.
 
 Todo corre gratis en GitHub, sin servidores propios:
 
-1. **Baja.** Todos los días, una tarea programada pide a la API del INDEC la canasta, el índice
-   de precios, la pobreza y el mercado de trabajo, y baja de datos.gob.ar el salario mínimo, la
-   jubilación mínima y el RIPTE.
+1. **Baja.** Todos los días, y cada vez que subo un cambio, una tarea pide a la API del INDEC la
+   canasta, el índice de precios, los precios promedio por región, la pobreza y el mercado de
+   trabajo, y baja de datos.gob.ar el salario mínimo, la jubilación mínima y el RIPTE.
 2. **Controla.** Antes de usar un dato, lo valida: que no falte ningún mes, que el hogar tipo de
    la API equivalga a 3,09 adultos como dice la metodología del INDEC, que las tasas estén entre
    0 y 100, que el empleo formal y el informal sumen el total, y que el RIPTE no baje de un mes a
@@ -153,6 +178,56 @@ Todo corre gratis en GitHub, sin servidores propios:
 
 La lógica está en Python sin librerías externas y tiene pruebas automáticas que corren antes de
 cada publicación, armadas con casos de los datos reales.
+
+## Más que una descarga
+
+Casi todo lo que publica el INDEC también está en planillas para bajar a mano. La API vale la pena
+por otra cosa: deja **pedir exactamente el pedazo de datos que hace falta**, siempre en el mismo
+formato, y eso hizo posible una parte de la página que con planillas habría sido mucho más
+trabajosa de armar y de mantener.
+
+El mejor ejemplo es la sección de **precios por región**. La tabla del índice de precios de la API
+tiene más de 235.000 filas: cada mes, cada región y cada nivel de detalle, desde el nivel general
+hasta el precio promedio de productos sueltos. La página no la baja entera. Le pide solo el precio
+promedio de 14 productos (pan, leche, huevos, aceite, lavandina…) en las seis regiones del país,
+unas 9.700 filas, y las recorre de a 1.000, que es lo máximo que entrega la API por pedido.
+
+- **El filtro lo hace el INDEC.** La consulta dice qué tipo de dato, qué productos y en qué orden;
+  el resto no viaja. Sumar un producto o una región es cambiar un parámetro, no rearmar una planilla.
+- **Los huecos vienen explicados.** En marzo de 2020, al empezar la pandemia, el INDEC no publicó
+  algunos precios de la Patagonia. La API no deja la celda vacía y nada más: la marca con un signo
+  convencional, «///» (dato que no corresponde presentar). La página acepta ese hueco y lo aclara,
+  pero si falta un dato sin esa marca, no publica.
+- **Se cruza directo con los ingresos.** Los precios llegan por mes y con el mismo formato que la
+  canasta y el índice, así que se combinan sin pasos a mano con el salario mínimo, la jubilación y
+  el RIPTE de cada mes.
+- **Lo que la API no trae, también se dice.** La API da el precio pero no la presentación: no dice
+  si es por kilo, por docena o por botella de 1,5 litros. La tomé de la planilla oficial del INDEC,
+  y la tarea avisa si un precio se duplica o cae a la mitad de un mes a otro, por si la presentación
+  cambió.
+
+```{python}
+#| label: precios-region
+nombres = list(REGIONES.values())
+fig = go.Figure()
+for kilos, periodo, color in ((kilos_inicio, pan_inicio, GRIS_CLARO), (kilos_fin, pan_fin, VIOLETA)):
+    fig.add_bar(
+        y=nombres, x=kilos.values, orientation="h", name=mes(periodo), marker_color=color,
+        text=[num(k) for k in kilos.values], textposition="outside", cliponaxis=False,
+        hovertemplate="%{y}<br><b>%{x:.0f}</b> kilos<extra>" + mes(periodo) + "</extra>",
+    )
+fig.update_layout(barmode="group", bargap=0.25)
+fig.update_yaxes(autorange="reversed")
+fig.update_xaxes(title="kilos de pan francés que compraba un salario mínimo", showticklabels=False)
+estilo(fig, alto=440).show()
+```
+
+En `{python} mes(pan_inicio)`, un salario mínimo compraba entre `{python} num(kilos_inicio.min())` y
+`{python} num(kilos_inicio.max())` kilos de pan, según la región; en `{python} mes(pan_fin)`, entre
+`{python} num(kilos_fin.min())` y `{python} num(kilos_fin.max())`. Como el salario es el mismo en
+todo el país, la diferencia entre regiones viene solo de los precios. En la página se puede elegir
+cualquiera de los 14 productos, cualquier ingreso o **escribir un monto propio**, que se calcula en
+el navegador de quien lo escribe y no se guarda en ningún lado.
 
 ## Lo que muestran los datos
 
@@ -283,8 +358,10 @@ Sobre dónde se concentra esa informalidad trabajé en [Dónde poner la lupa](..
 
 ## Limitaciones
 
-- **Una sola región.** La canasta de la API es solo del Gran Buenos Aires. La pobreza, en cambio,
-  mide 31 aglomerados con la canasta de cada región.
+- **La canasta, de una sola región.** La canasta de la API es solo del Gran Buenos Aires. Los
+  precios por región son promedios de las ciudades más grandes de cada región, no de una marca ni
+  de un comercio, y cubren 14 productos, no una canasta completa. La pobreza mide 31 aglomerados
+  con la canasta de cada región.
 - **Ingresos en bruto.** Lo que se cobra en mano es menos, y no se suman asignaciones ni otras
   ayudas.
 - **El bono, solo desde septiembre de 2026.** En la serie histórica la jubilación va sin bono, así
@@ -312,10 +389,12 @@ de cada día antes de que se pierdan.
 - **Ingresos necesarios.** Canasta del hogar ÷ ingreso del mismo mes.
 - **Poder de compra.** (Ingreso ÷ índice de precios del Gran Buenos Aires del mes) ÷ (lo mismo en
   el mes de comparación). El índice actual empieza en diciembre de 2016.
+- **Qué compra un ingreso por región.** Ingreso del mes ÷ precio promedio del producto en cada
+  región, el mismo mes. Los precios empiezan en junio de 2017, el primer mes con las seis regiones.
 - **Empleo informal cada 100 ocupados.** Tasa de empleo informal ÷ tasa de empleo, las dos sobre
   la población total. El INDEC la publica desde el cuarto trimestre de 2023.
 - **Datos de esta ficha.** Los archivos que publica la página para descargar, tal como estaban el
-  18 de noviembre de 2026.
+  18 de noviembre de 2026; los precios por región, el 19 de noviembre.
 
 El código completo, con las validaciones y las pruebas, está en el
 [repositorio en GitHub](https://github.com/RenzoMirabella/indec).
