@@ -93,9 +93,33 @@ def busqueda():
     plt.close(fig)
 
 
+def monitor():
+    """Una fila de cuadros por canasta: cada cuadro es un salario mínimo y el último se llena en proporción."""
+    carpeta = RAIZ / "proyectos" / "monitor-del-bolsillo"
+    ultimo = pd.read_csv(carpeta / "datos" / "indicadores.csv").iloc[-1]
+    filas = [(ultimo["salarios_minimos_para_cbt"], "#7457d0"), (ultimo["salarios_minimos_para_cba"], "#4f9cc9")]
+    unidades = int(filas[0][0]) + 1
+    fig, ax = lienzo()
+    ancho, separacion, alto = 1.0, 0.08, 0.8
+    for fila, (valor, color) in enumerate(filas):
+        y = 1.15 - fila * 1.1
+        for i in range(unidades):
+            x = i * (ancho + separacion)
+            ax.add_patch(plt.Rectangle((x, y), ancho, alto, color="#dfe1dc", linewidth=0))
+            relleno = max(0.0, min(1.0, valor - i))
+            if relleno:
+                ax.add_patch(plt.Rectangle((x, y), ancho * relleno, alto, color=color, linewidth=0))
+    ax.set_xlim(-0.25, unidades * (ancho + separacion) + 0.17)
+    ax.set_ylim(-0.25, 2.2)
+    fig.savefig(carpeta / "miniatura.png", facecolor=PAPEL, metadata=origen(
+        f"datos/indicadores.csv (salarios mínimos para la canasta total y la de alimentos, {ultimo['periodo']})"))
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     locales()
     comentarios()
     informalidad()
     busqueda()
+    monitor()
     print("miniaturas regeneradas")
