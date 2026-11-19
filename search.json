@@ -154,67 +154,130 @@
     "text": "Contacto\nEstoy en Mar del Plata y abierto a trabajar en Buenos Aires o en remoto. Escribime a renzomirabella@gmail.com, o encontrame en LinkedIn y GitHub."
   },
   {
-    "objectID": "proyectos/informalidad-eph/index.html",
-    "href": "proyectos/informalidad-eph/index.html",
-    "title": "Dónde poner la lupa",
+    "objectID": "proyectos/locales-gastronomicos-mdp/index.html",
+    "href": "proyectos/locales-gastronomicos-mdp/index.html",
+    "title": "Locales gastronómicos de Mar del Plata",
     "section": "",
-    "text": "Pregunta¿En qué segmentos de rama, tamaño y región conviene concentrar la implementación de la Ley 27.802, y dónde hacen falta otras medidas?\n\n\nFuentesINDEC, Encuesta Permanente de Hogares, 1.er trimestre 2026 (base individual) · Ley 27.802, decretos 315/2026 y 409/2026, RG ARCA 5862/2026\n\n\nHerramientasPython · pandas · scikit-learn · XGBoost · matplotlib\n\n\nCódigoNotebook completo · Repositorio en GitHub"
+    "text": "Pregunta¿Cómo se distribuye la oferta gastronómica en la ciudad y qué barrios la concentran?\n\n\nFuentesGoogle Maps (relevamiento propio, julio 2026) · Barrios por sociedad de fomento (124 polígonos)\n\n\nHerramientasPython · Playwright · pandas · geopandas · folium · plotly\n\n\nCódigoVer en GitHub\nThis is the init_notebook_mode cell from ITables v2.9.1\n(you should not see this message - is your notebook trusted?)"
   },
   {
-    "objectID": "proyectos/informalidad-eph/index.html#resumen",
-    "href": "proyectos/informalidad-eph/index.html#resumen",
-    "title": "Dónde poner la lupa",
+    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#resumen",
+    "href": "proyectos/locales-gastronomicos-mdp/index.html#resumen",
+    "title": "Locales gastronómicos de Mar del Plata",
     "section": "Resumen",
-    "text": "Resumen\nTrabajo final integrador del Diplomado en Ciencia de Datos y Análisis Avanzado (UTN BA).\nEn el primer trimestre de 2026 la informalidad alcanzó al 44,2 % de los ocupados: casi 6 de los 13,5 millones de trabajadores de los aglomerados urbanos. La Ley 27.802 creó dos herramientas para revertirla, el PER (regularización con condonación de deudas, que vence el 28/11/2026) y el RIFL (rebaja de contribuciones para nuevas contrataciones). Las dos actúan a través de un empleador privado, y el Estado no puede inspeccionar a todos.\nCon los microdatos de la EPH construimos un modelo que estima el riesgo de informalidad y lo resume en segmentos de rama de actividad, tamaño del establecimiento y región: nunca personas ni empresas, porque la encuesta es anónima y los informales son justamente quienes no figuran en los registros.\n\nFocalizar funciona. Sin focalizar, 43 de cada 100 trabajadores son informales; en el 20 % de mayor riesgo que elige la regla, 75, y con el modelo, 78.\nUna regla simple alcanza. A nivel segmentos, el Random Forest supera a una regla por rama y tamaño por solo 2,4 puntos, y la diferencia no es significativa.\nLo que más cambia el resultado es la pregunta, no el algoritmo. El 55 % de los informales está fuera del alcance de la ley. Priorizar solo entre asalariados privados alcanza, con el mismo esfuerzo, 3,2 veces más informales formalizables."
+    "text": "Resumen\nCon un scraper propio sobre Google Maps relevé 1.261 locales gastronómicos dentro del casco urbano de Mar del Plata. Les asigné un barrio a 98,9% de ellos cruzando sus coordenadas con los polígonos de las sociedades de fomento.\n\nLa oferta se concentra en el centro y la costa, con corredores secundarios hacia los barrios.\nRestaurante es la categoría dominante: aparece en más locales que bar y café juntos.\nLa popularidad está muy concentrada: la mitad de los locales tiene menos de 150 reseñas, y un grupo chico supera las 5.000.\nLos ratings son altos en general (promedio 4,38), como es típico en Google Maps. Por eso los rankings exigen un mínimo de reseñas."
   },
   {
-    "objectID": "proyectos/informalidad-eph/index.html#dónde-está-la-informalidad",
-    "href": "proyectos/informalidad-eph/index.html#dónde-está-la-informalidad",
-    "title": "Dónde poner la lupa",
-    "section": "Dónde está la informalidad",
-    "text": "Dónde está la informalidad\nLa ley llega a quien tiene un empleador privado al que inspeccionar o incentivar. Los cuentapropistas, las casas particulares (fuera del RIFL) y el sector público quedan afuera, y en los microestablecimientos la inspección sola puede terminar en cierres o despidos.\n\n\n                            \n                                            \n\n\nSolo el 45,4 % de los informales es asalariado de un empleador privado, y casi la mitad de ellos trabaja en establecimientos de hasta 5 personas. Cuentapropistas y casas particulares suman el 47 %: necesitan medidas propias."
+    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#dónde-están",
+    "href": "proyectos/locales-gastronomicos-mdp/index.html#dónde-están",
+    "title": "Locales gastronómicos de Mar del Plata",
+    "section": "Dónde están",
+    "text": "Dónde están\nCada punto es un local. Con el selector de arriba a la derecha podés prender y apagar cada categoría, y con un clic sobre un punto ves el nombre, el rating y las reseñas.\n\n\n\n\n\n\nMapa de calor\nLa misma información como densidad: cada local suma lo mismo, así que las zonas más intensas son las de mayor concentración de oferta."
   },
   {
-    "objectID": "proyectos/informalidad-eph/index.html#los-segmentos",
-    "href": "proyectos/informalidad-eph/index.html#los-segmentos",
-    "title": "Dónde poner la lupa",
-    "section": "Los segmentos",
-    "text": "Los segmentos\nCada punto es un segmento de rama × tamaño entre los asalariados privados. Arriba a la derecha están los que combinan una tasa alta con muchos informales: ahí rinde la lupa.\n\n\n                            \n                                            \n\n\nLos seis segmentos de mayor tasa son de hasta 5 personas y reúnen el 40 % de los informales alcanzables. Comercio de hasta 5 es el más grande: más de 400 mil informales con una tasa del 71 %. Construcción y gastronomía de 6 a 40 personas quedan en un punto intermedio: tasas cercanas al 60 % y establecimientos con más capacidad de formalizar."
+    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#por-barrio",
+    "href": "proyectos/locales-gastronomicos-mdp/index.html#por-barrio",
+    "title": "Locales gastronómicos de Mar del Plata",
+    "section": "Por barrio",
+    "text": "Por barrio\nPara asignar el barrio usé dos pasos. Primero, punto en polígono. Después, para los locales de playa (que quedan fuera de los polígonos porque los barrios terminan en la costanera), el barrio más cercano hasta 500 m, medido en metros reales con la proyección POSGAR 2007. Los que quedan más lejos se consideran periferia."
   },
   {
-    "objectID": "proyectos/informalidad-eph/index.html#el-modelo-contra-una-regla-simple",
-    "href": "proyectos/informalidad-eph/index.html#el-modelo-contra-una-regla-simple",
-    "title": "Dónde poner la lupa",
-    "section": "El modelo contra una regla simple",
-    "text": "El modelo contra una regla simple\nComparamos cuatro algoritmos contra una regla por rama y tamaño, que es lo que la autoridad podría hacer sin un modelo. Elegimos con validación cruzada agrupada por vivienda y evaluamos una sola vez sobre un 20 % reservado. La métrica es la precisión en el 20 % de mayor riesgo: de cada 100 trabajadores bajo la lupa, cuántos son informales.\n\n\n                            \n                                            \n\n\nOrdenando personas, el modelo cumple las metas de la pre-entrega: 85,7 informales cada 100 y 10,7 puntos de ventaja sobre la regla. Pero el Estado no puede actuar sobre personas, sino sobre sectores. Ordenando segmentos, la precisión baja a 77,8 y la ventaja a 2,4 puntos, con un intervalo bootstrap del 95 % que va de −1,5 a 6,0. Por eso recomendamos la regla como herramienta operativa y el modelo como diagnóstico: mostró que a la regla le faltan la región y los tramos finos de tamaño."
+    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#categorías-reseñas-y-ratings",
+    "href": "proyectos/locales-gastronomicos-mdp/index.html#categorías-reseñas-y-ratings",
+    "title": "Locales gastronómicos de Mar del Plata",
+    "section": "Categorías, reseñas y ratings",
+    "text": "Categorías, reseñas y ratings\n\n\n                            \n                                            \n\n\nUn local puede tener más de una categoría: 71 combinan dos o tres, sobre todo bar + restaurante.\n\n\n                            \n                                            \n\n\n\n\n                            \n                                            \n\n\nLos locales con menos de 10 reseñas ocupan todo el rango, de 1 a 5, y la mitad tiene un 5,0 perfecto. A medida que crecen las reseñas, el rating se estrecha: entre los que superan las mil, el 80% central está entre 4,1 y 4,6. Un 5,0 con tres reseñas no dice mucho; un 4,6 con miles es un veredicto."
   },
   {
-    "objectID": "proyectos/informalidad-eph/index.html#cambiar-la-pregunta",
-    "href": "proyectos/informalidad-eph/index.html#cambiar-la-pregunta",
-    "title": "Dónde poner la lupa",
-    "section": "Cambiar la pregunta",
-    "text": "Cambiar la pregunta\nLas metas originales contaban a todos los informales. Pero priorizar sobre todos los ocupados llena la lupa de cuentapropistas y casas particulares, a los que la ley no llega. El indicador que importa es otro: cuántos informales con empleador privado quedan bajo la lupa. En todos los escenarios la lupa cubre lo mismo, 2,7 millones de trabajadores.\n\n\n                            \n                                            \n\n\nCon el mismo esfuerzo, priorizar entre los asalariados privados alcanza a 1,78 millones de informales formalizables en lugar de 0,55: 3,2 veces más. Hay que cubrir 1,5 trabajadores para encontrar uno, contra 4,9 al priorizar sobre todos. Entre todos los ocupados, el Random Forest rinde incluso peor que el azar con este indicador: su lupa se llena de cuentapropistas."
+    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#los-más-reseñados",
+    "href": "proyectos/locales-gastronomicos-mdp/index.html#los-más-reseñados",
+    "title": "Locales gastronómicos de Mar del Plata",
+    "section": "Los más reseñados",
+    "text": "Los más reseñados"
   },
   {
-    "objectID": "proyectos/informalidad-eph/index.html#equidad",
-    "href": "proyectos/informalidad-eph/index.html#equidad",
-    "title": "Dónde poner la lupa",
-    "section": "Equidad",
-    "text": "Equidad\nLa meta era que ningún grupo de sexo o región quedara más de 10 puntos por debajo del promedio de cobertura (recall). Se cumple: el más alejado es Cuyo, 6,3 puntos abajo.\n\n\n                            \n                                            \n\n\nLa cobertura pareja no lo es todo: la regla subestima la informalidad real en NOA, NEA y Cuyo (en Cuyo estima 40,8 % contra 51 % real). Definir qué criterio de equidad se exige queda como próximo paso."
+    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#explorá-los-datos",
+    "href": "proyectos/locales-gastronomicos-mdp/index.html#explorá-los-datos",
+    "title": "Locales gastronómicos de Mar del Plata",
+    "section": "Explorá los datos",
+    "text": "Explorá los datos\nTodos los locales relevados. Podés buscar por nombre o barrio y ordenar por cualquier columna.\n\n\n\n\n  \n    \n      \n    \n        \n        \n        \n        \n        \n        \n        \n        \n    \n    \n   \n    \n      \n  \n        \n    \n    \n  \n        \n    \n    \n  \n        \n    \n      \n  \n        \n            \n                \n                \n            \n\n            \n                \n                \n            \n\n            \n                \n                \n            \n\n            \n                \n                \n            \n\n            \n                \n                \n            \n        \n    \n\n\n        Loading ITables v2.9.1 from the init_notebook_mode cell...\n        (need help?)\n      \n    \n  \n\n    \n      🔒ⓘLocal\n      Barrio\n      Categorías\n      Rating\n      Reseñas\n    \nLos Gallegos ShoppingArea Centrorestaurante4.242712\nRestaurant ChichiloDel Puertorestaurante4.125127\nManoloLeandro N. Alemrestaurante4.320943\nCHICHILODel Puertorestaurante4.216986\nRestaurante La MarinaDel Puertorestaurante4.614269\nGlück Cervecería - zona OlavarríaLos Troncosbar4.513618\nPunto y Banca Bar-RestauranteArea Centrorestaurante4.412797\nLa NieveArea Centrorestaurante4.411718\nTío CurzioLomas De Stella Marisrestaurante4.311385\nMirador WaikikiPunta Mogotesrestaurante4.411243\n(1,251 more rows not shown)"
   },
   {
-    "objectID": "proyectos/informalidad-eph/index.html#recomendaciones",
-    "href": "proyectos/informalidad-eph/index.html#recomendaciones",
-    "title": "Dónde poner la lupa",
-    "section": "Recomendaciones",
-    "text": "Recomendaciones\n\nPriorizar segmentos con la regla rama × tamaño, solo entre asalariados de empleadores privados.\nAntes del 28/11/2026, concentrar inspecciones y difusión del PER en los establecimientos de 6 a 40 personas de construcción y gastronomía.\nEn los microestablecimientos, combinar la inspección con acompañamiento para obtener el Certificado MiPyME, que da acceso a las mejores condiciones del PER.\nDiseñar medidas propias para cuentapropistas y casas particulares: el 47 % de los informales.\nMedir la gestión con un indicador nuevo: informales con empleador privado cada 100 trabajadores bajo la lupa."
-  },
-  {
-    "objectID": "proyectos/informalidad-eph/index.html#metodología",
-    "href": "proyectos/informalidad-eph/index.html#metodología",
-    "title": "Dónde poner la lupa",
+    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#metodología",
+    "href": "proyectos/locales-gastronomicos-mdp/index.html#metodología",
+    "title": "Locales gastronómicos de Mar del Plata",
     "section": "Metodología",
-    "text": "Metodología\n\nDatos. EPH del 1.er trimestre de 2026, base individual: 19.560 ocupados con dato de formalidad, que representan a 13,5 millones de trabajadores de 32 aglomerados. Todas las tasas y métricas se calculan con el factor de expansión (PONDERA); como control, la tasa ponderada da 44,2 %, igual a la publicada por INDEC.\nInformalidad. El target es la variable EMPLEO, que INDEC construye a partir de los aportes y la registración declarados. Excluimos las variables que la delatan (fuga de información) y usamos una lista cerrada de 9 predictores.\nModelos. Regresión logística, árbol de decisión, Random Forest y XGBoost, contra el azar y la regla rama × tamaño. Validación cruzada de 5 particiones agrupadas por vivienda, para que personas de una misma casa no queden de los dos lados.\nEvaluación. Un único uso del 20 % reservado. La ventaja sobre la regla se estima con 500 réplicas bootstrap. Las ablaciones confirman que rama y tamaño son los predictores más fuertes, y que edad y educación ayudan a ordenar personas pero casi no a elegir sectores.\nLimitaciones. Los datos son previos a la ley, así que no se evalúa su impacto. Varios segmentos tienen pocos casos y se marcan como poco confiables. La regla mejorada (con región y tamaño detallado) hay que validarla con la EPH del próximo trimestre, porque el test actual ya se usó.\n\nTodo el proceso, con el código y cada tabla intermedia, está en el notebook completo."
+    "text": "Metodología\n\nRecolección. Scraper propio con Playwright sobre Google Maps. Dividí el casco urbano en una grilla de celdas y busqué cada categoría (bar, café, restaurante) en cada celda, deduplicando por el identificador del lugar (place_id).\nLimpieza. Excluí 75 resultados que Google devolvió fuera del área de estudio (Santa Clara del Mar, Chapadmalal). Los locales sin rating o sin reseñas quedan en el dataset y se excluyen solo de los análisis que usan esos campos.\nBarrios. Reparé las geometrías inválidas del archivo de barrios, asigné por punto en polígono (1.147 locales) y recuperé 100 más por cercanía (≤ 500 m). Quedan 14 sin barrio.\nLimitaciones. Google Maps no es un padrón: faltan locales sin ficha y puede haber fichas de locales cerrados. El rating y las reseñas son una foto de julio de 2026."
+  },
+  {
+    "objectID": "proyectos/comentarios-instagram/index.html",
+    "href": "proyectos/comentarios-instagram/index.html",
+    "title": "Qué se comenta en la cuenta de Instagram del presidente",
+    "section": "",
+    "text": "Pregunta¿Qué clima de opinión y qué temas aparecen entre quienes comentan en la cuenta presidencial?\n\n\nCorpus69 posts de @javiermilei · agosto 2026 · 32.482 comentarios raíz\n\n\nHerramientasPython · Playwright · pandas · pysentimiento · plotly\n\n\nCódigoVer en GitHub"
+  },
+  {
+    "objectID": "proyectos/comentarios-instagram/index.html#resumen",
+    "href": "proyectos/comentarios-instagram/index.html#resumen",
+    "title": "Qué se comenta en la cuenta de Instagram del presidente",
+    "section": "Resumen",
+    "text": "Resumen\n\n58,1% de los comentarios son negativos según el clasificador. El nivel no cambia a lo largo del mes: el promedio diario se mueve entre 45% y 71%, publique lo que publique la cuenta.\nEl apoyo medido a mano es 32,3% [IC95 27,6–37,0]. El modelo automático lo subestima casi tres veces, así que esa cifra sale de la anotación humana y no del modelo.\nEl tipo de publicación no predice la conversación. Ataque al adversario, anuncio de gestión o acto institucional: los comentarios se parecen.\nLos temas se cuentan por autores distintos, no por apariciones. Así se detectó, por ejemplo, que un «tema» de 202 comentarios lo sostenían 6 cuentas.\n75,4% de los comentarios no recibe ningún like, y el 3% más likeado concentra el 82% de los likes."
+  },
+  {
+    "objectID": "proyectos/comentarios-instagram/index.html#cuánto-del-debate-se-puede-ver",
+    "href": "proyectos/comentarios-instagram/index.html#cuánto-del-debate-se-puede-ver",
+    "title": "Qué se comenta en la cuenta de Instagram del presidente",
+    "section": "Cuánto del debate se puede ver",
+    "text": "Cuánto del debate se puede ver\nInstagram no muestra todos los comentarios: los ordena por relevancia y corta. Por eso el dato más importante de la recolección es la cobertura, la parte de los comentarios declarados que efectivamente se pudo bajar. En todo el mes fue 15,2% (de 213.639 declarados), con una mediana de 15% por post.\n\n\n                            \n                                            \n\n\nCada punto es un post. La curva descendente no es casualidad: con un tope fijo de comentarios por post, cuanto más grande el post, menos se ve de él. Eso obliga a preguntarse si lo que no se ve habla de otras cosas. Lo medí comparando, dentro de los mismos posts, los primeros 400 comentarios contra los siguientes: el mix de temas casi no cambia (0,27 puntos de diferencia mediana), pero el tono sí (+12,2 puntos más de rechazo arriba del ranking). La truncación recorta cuánto vemos, no de qué se habla."
+  },
+  {
+    "objectID": "proyectos/comentarios-instagram/index.html#clima-de-opinión-día-a-día",
+    "href": "proyectos/comentarios-instagram/index.html#clima-de-opinión-día-a-día",
+    "title": "Qué se comenta en la cuenta de Instagram del presidente",
+    "section": "Clima de opinión día a día",
+    "text": "Clima de opinión día a día\n\n\n                            \n                                            \n\n\nCada punto es un post, y su tamaño indica cuántos comentarios se analizaron. Los porcentajes salen de pysentimiento, un modelo entrenado con tweets de otro dialecto. Por eso lo validé contra 378 comentarios anotados a mano antes de usarlo:\n\n\n\n\nModelo\nAnotación humana\n\n\n\n\nNegativo vs. no negativo (F1)\n0,748\n—\n\n\nComentarios positivos\n6,9%\n19,8% [15,8–23,9]\n\n\nPostura a favor\n—\n32,3% [27,6–37,0]\n\n\nPostura en contra\n—\nentre 44,5% y 66,9%\n\n\n\nEl modelo distingue bien lo negativo de lo que no lo es, pero manda a «negativo» la mitad de lo neutro y casi no reconoce el apoyo. Por eso el corte negativo/no negativo se toma del modelo y el reparto del resto, de la anotación humana.\nEl rechazo se informa como rango y no como un número: auditando la anotación detecté un cambio de criterio a mitad de la planilla (la categoría «no se sabe» cae de 23% a 2%). El apoyo es estable a los dos lados del quiebre; el rechazo no. Lo que sí se sostiene en las dos mitades es que el rechazo supera al apoyo."
+  },
+  {
+    "objectID": "proyectos/comentarios-instagram/index.html#de-qué-se-habla",
+    "href": "proyectos/comentarios-instagram/index.html#de-qué-se-habla",
+    "title": "Qué se comenta en la cuenta de Instagram del presidente",
+    "section": "De qué se habla",
+    "text": "De qué se habla\nCada tema se detecta con un léxico propio y auditable, y se cuenta por autores distintos: un tema que sostienen cinco cuentas pegando el mismo texto es una campaña, no un tema del debate. La precisión de cada léxico se midió anotando 50 casos por tema.\n\n\n                            \n                                            \n\n\nBase: los primeros 37 posts del mes (18.312 comentarios), que es el corpus sobre el que se midió la precisión de los léxicos.\nCuando las dos barras se separan mucho, unas pocas cuentas están inflando el tema. El caso más claro es corrupción: una sola cuenta aportaba el 29% de los comentarios. Al sacarla, el volumen cae 29% pero la cantidad de autores no se mueve (451 → 450). Es un tema real, inflado por una cuenta."
+  },
+  {
+    "objectID": "proyectos/comentarios-instagram/index.html#qué-se-likea",
+    "href": "proyectos/comentarios-instagram/index.html#qué-se-likea",
+    "title": "Qué se comenta en la cuenta de Instagram del presidente",
+    "section": "Qué se likea",
+    "text": "Qué se likea\n\n\n                            \n                                            \n\n\nTres de cada cuatro comentarios no reciben ningún like. Lo muy likeado tiene un vocabulario propio: nombres propios y acusaciones concretas, más que epítetos. Y los likes no son votos: un comentario arriba del ranking recibe likes porque está arriba, y está arriba en parte porque los recibió."
+  },
+  {
+    "objectID": "proyectos/comentarios-instagram/index.html#metodología",
+    "href": "proyectos/comentarios-instagram/index.html#metodología",
+    "title": "Qué se comenta en la cuenta de Instagram del presidente",
+    "section": "Metodología",
+    "text": "Metodología\n\nRecolección. Scraper propio con Playwright, con sesión y delays altos. Cola persistida y reanudable, deduplicación por id del comentario y un registro por corrida para auditar la completitud. Antes de cada cambio, una batería de pruebas offline contra un DOM sintético.\nPrivacidad. Los nombres de usuario se reemplazan por un hash con sal antes de analizar. Ningún informe transcribe comentarios.\nValidación del clasificador. 450 casos sorteados y anotados a mano, con libro de códigos. Un control automático detecta si el criterio del anotador cambia a lo largo de la planilla. Así apareció el quiebre que obliga a informar el rechazo como rango.\nTemas. 16 léxicos versionados, cada uno con su patrón, su precisión (IC de Wilson) y la fecha de medición. Los descartados quedan registrados con el motivo.\nVentana congelada. La precisión se midió sobre el corpus al 19 de agosto, y el análisis de temas usa ese corte, para no aplicar una precisión medida en una población a otra distinta.\nLimitaciones. Solo comentarios raíz; las respuestas se recolectaron en 18 posts pero no se analizan. La codificación de los posts por tipo no tiene medida de confiabilidad, así que el resultado nulo se lee como «no se detecta efecto», no como «no hay efecto»."
+  },
+  {
+    "objectID": "proyectos.html",
+    "href": "proyectos.html",
+    "title": "Proyectos",
+    "section": "",
+    "text": "Expte.\n      Asunto\n      Medida\n      Fecha\n    \n  \n  \n\n    \n      RM-2026-005\n      \n        Cuántos salarios cuesta no ser pobre\n        Armé una página pública que se actualiza sola todos los días con datos del INDEC: cuántos salarios mínimos, jubilaciones o sueldos hacen falta para pagar la canasta básica, y por qué esa cuenta cambió desde 2016.\n        \n        PythonAutomatizaciónAPI del INDECIngresos y pobreza\n        \n      \n      127 meses · 7 series oficiales\n      nov 2026\n    \n\n    \n      RM-2026-004\n      \n        Buscar trabajo con datos\n        Armé una extensión de Chrome que lee avisos de empleo y la usé para convertir mi búsqueda de primer trabajo en datos: qué piden de verdad los puestos de nivel inicial y dónde una regla automática no reemplaza al criterio.\n        \n        PythonHerramienta propiaTextoMercado laboral\n        \n      \n      663 avisos · 257 evaluados\n      nov 2026\n    \n\n    \n      RM-2026-003\n      \n        Dónde poner la lupa\n        Un modelo de riesgo sobre la EPH para decidir en qué sectores concentrar las inspecciones e incentivos de la nueva ley de formalización laboral, y qué parte de la informalidad queda fuera de su alcance.\n        \n        PythonMachine learningEPH-INDECPolíticas públicas\n        \n      \n      19.560 ocupados · EPH 1T 2026\n      oct 2026\n    \n\n    \n      RM-2026-002\n      \n        Qué se comenta en la cuenta de Instagram del presidente\n        32.482 comentarios de los 69 posts de agosto de 2026: recolección propia, clasificación de sentimiento validada a mano y temas medidos por autores distintos.\n        \n        PythonScrapingTextoValidación\n        \n      \n      32.482 comentarios · 69 posts\n      sep 2026\n    \n\n    \n      RM-2026-001\n      \n        Locales gastronómicos de Mar del Plata\n        Relevamiento propio de 1.261 bares, cafés y restaurantes con scraping de Google Maps: dónde se concentran, cómo se puntúan y qué barrios lideran.\n        \n        MapasPythonScrapingGeoespacial\n        \n      \n      1.261 locales · 124 barrios\n      jul 2026\n    \n\n  \n\nNo hay resultados"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Datos para entender lo que pasa en el territorio",
+    "section": "",
+    "text": "Expte. N.º\n\n\nRM-2026-001 a RM-2026-004\n\n\n\n\nIniciador\n\n\nRenzo Mirabella\n\n\n\n\nFormación\n\n\nSociología (UNMdP) · Ciencia de Datos (UTN)\n\n\n\n\nLugar\n\n\nMar del Plata · Buenos Aires o remoto\n\n\n\n\n\n\n\nSoy estudiante avanzado de Sociología (UNMdP) con formación en Ciencia de Datos (UTN). Combino trabajo de campo con análisis cuantitativo: limpio, cruzo y visualizo datos para que se puedan leer y discutir.\n\n\nVer proyectos Sobre mí\n\n\n\n\n\n\n\n  \n    \n      Fs. 4\n      RM-2026-005\n      Cuántos salarios cuesta no ser pobre\n      Armé una página pública que se actualiza sola todos los días con datos del INDEC: cuántos salarios mínimos, jubilaciones o sueldos hacen falta para pagar la canasta básica, y por qué esa cuenta cambió desde 2016.\n      127 meses · 7 series oficiales\n    \n  \n\n  \n    \n      Fs. 3\n      RM-2026-004\n      Buscar trabajo con datos\n      Armé una extensión de Chrome que lee avisos de empleo y la usé para convertir mi búsqueda de primer trabajo en datos: qué piden de verdad los puestos de nivel inicial y dónde una regla automática no reemplaza al criterio.\n      663 avisos · 257 evaluados\n    \n  \n\n  \n    \n      Fs. 2\n      RM-2026-003\n      Dónde poner la lupa\n      Un modelo de riesgo sobre la EPH para decidir en qué sectores concentrar las inspecciones e incentivos de la nueva ley de formalización laboral, y qué parte de la informalidad queda fuera de su alcance.\n      19.560 ocupados · EPH 1T 2026\n    \n  \n\n  \n    \n      Fs. 1\n      RM-2026-002\n      Qué se comenta en la cuenta de Instagram del presidente\n      32.482 comentarios de los 69 posts de agosto de 2026: recolección propia, clasificación de sentimiento validada a mano y temas medidos por autores distintos.\n      32.482 comentarios · 69 posts\n    \n  \n\n\nNo hay resultados"
+  },
+  {
+    "objectID": "index.html#cómo-trabajo",
+    "href": "index.html#cómo-trabajo",
+    "title": "Datos para entender lo que pasa en el territorio",
+    "section": "Cómo trabajo",
+    "text": "Cómo trabajo\n\n\n\nDatos relevados por mí\n\n\nArmo mis propios scrapers cuando el dato no existe: 1.261 locales de Google Maps, 32.482 comentarios de Instagram.\n\n\n\n\nValidados a mano\n\n\nAntes de usar un modelo lo comparo contra casos anotados a mano y reporto intervalos de confianza.\n\n\n\n\nCruzados con el territorio\n\n\nAsigno cada dato a su barrio y lo muestro en mapas que se pueden explorar.\n\n\n\n\nCon sus límites a la vista\n\n\nCada proyecto dice qué cubre, qué no y por qué.\n\n\n\n\n\n\nHerramientas\n\n\nSQL · Python (pandas, plotly) · Power BI · Excel / Google Sheets · Mapas y datos geográficos · Scraping web · Análisis de texto · Encuestas (EPH-INDEC)"
   },
   {
     "objectID": "proyectos/busqueda-laboral/index.html",
@@ -294,130 +357,144 @@
     "text": "Metodología\n\nDatos. Mis evaluaciones (257 avisos, del 13/10 al 12/11/2026), exportadas desde la extensión con sus requisitos desglosados. Las búsquedas de LinkedIn: 663 resultados de búsquedas de nivel inicial y prácticas en Argentina y Mar del Plata, publicados en las dos semanas previas al 12/11/2026; 615 sin repetidos y 540 todavía abiertos.\nClasificación. Filtros duros por reglas y una calibración propia para separar aplicable de buena chance, definida sobre una muestra marcada a mano.\nDetección en el texto. Años de experiencia, carreras e idioma se detectan con expresiones regulares sobre el texto normalizado (sin tildes, en minúsculas). Para las carreras solo se miran las oraciones que hablan de formación.\nLimitaciones. Es una muestra de mis búsquedas, no del mercado. Las expresiones regulares pueden dar falsos positivos y negativos. Todavía no registré de forma consistente a qué avisos me postulé, así que el embudo no llega hasta las respuestas: queda para una segunda parte.\nPrivacidad. No publico los textos de los avisos ni los datos crudos, porque son contenido de las empresas: esta página lee solo tablas agregadas.\n\nEl proceso completo, con el código de cada sección, está en el cuaderno completo."
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Datos para entender lo que pasa en el territorio",
+    "objectID": "proyectos/informalidad-eph/index.html",
+    "href": "proyectos/informalidad-eph/index.html",
+    "title": "Dónde poner la lupa",
     "section": "",
-    "text": "Expte. N.º\n\n\nRM-2026-001 a RM-2026-004\n\n\n\n\nIniciador\n\n\nRenzo Mirabella\n\n\n\n\nFormación\n\n\nSociología (UNMdP) · Ciencia de Datos (UTN)\n\n\n\n\nLugar\n\n\nMar del Plata · Buenos Aires o remoto\n\n\n\n\n\n\n\nSoy estudiante avanzado de Sociología (UNMdP) con formación en Ciencia de Datos (UTN). Combino trabajo de campo con análisis cuantitativo: limpio, cruzo y visualizo datos para que se puedan leer y discutir.\n\n\nVer proyectos Sobre mí\n\n\n\n\n\n\n\n  \n    \n      Fs. 4\n      RM-2026-004\n      Buscar trabajo con datos\n      Armé una extensión de Chrome que lee avisos de empleo y la usé para convertir mi búsqueda de primer trabajo en datos: qué piden de verdad los puestos de nivel inicial y dónde una regla automática no reemplaza al criterio.\n      663 avisos · 257 evaluados\n    \n  \n\n  \n    \n      Fs. 3\n      RM-2026-003\n      Dónde poner la lupa\n      Un modelo de riesgo sobre la EPH para decidir en qué sectores concentrar las inspecciones e incentivos de la nueva ley de formalización laboral, y qué parte de la informalidad queda fuera de su alcance.\n      19.560 ocupados · EPH 1T 2026\n    \n  \n\n  \n    \n      Fs. 2\n      RM-2026-002\n      Qué se comenta en la cuenta de Instagram del presidente\n      32.482 comentarios de los 69 posts de agosto de 2026: recolección propia, clasificación de sentimiento validada a mano y temas medidos por autores distintos.\n      32.482 comentarios · 69 posts\n    \n  \n\n  \n    \n      Fs. 1\n      RM-2026-001\n      Locales gastronómicos de Mar del Plata\n      Relevamiento propio de 1.261 bares, cafés y restaurantes con scraping de Google Maps: dónde se concentran, cómo se puntúan y qué barrios lideran.\n      1.261 locales · 124 barrios\n    \n  \n\n\nNo hay resultados"
+    "text": "Pregunta¿En qué segmentos de rama, tamaño y región conviene concentrar la implementación de la Ley 27.802, y dónde hacen falta otras medidas?\n\n\nFuentesINDEC, Encuesta Permanente de Hogares, 1.er trimestre 2026 (base individual) · Ley 27.802, decretos 315/2026 y 409/2026, RG ARCA 5862/2026\n\n\nHerramientasPython · pandas · scikit-learn · XGBoost · matplotlib\n\n\nCódigoNotebook completo · Repositorio en GitHub"
   },
   {
-    "objectID": "index.html#cómo-trabajo",
-    "href": "index.html#cómo-trabajo",
-    "title": "Datos para entender lo que pasa en el territorio",
-    "section": "Cómo trabajo",
-    "text": "Cómo trabajo\n\n\n\nDatos relevados por mí\n\n\nArmo mis propios scrapers cuando el dato no existe: 1.261 locales de Google Maps, 32.482 comentarios de Instagram.\n\n\n\n\nValidados a mano\n\n\nAntes de usar un modelo lo comparo contra casos anotados a mano y reporto intervalos de confianza.\n\n\n\n\nCruzados con el territorio\n\n\nAsigno cada dato a su barrio y lo muestro en mapas que se pueden explorar.\n\n\n\n\nCon sus límites a la vista\n\n\nCada proyecto dice qué cubre, qué no y por qué.\n\n\n\n\n\n\nHerramientas\n\n\nSQL · Python (pandas, plotly) · Power BI · Excel / Google Sheets · Mapas y datos geográficos · Scraping web · Análisis de texto · Encuestas (EPH-INDEC)"
-  },
-  {
-    "objectID": "proyectos.html",
-    "href": "proyectos.html",
-    "title": "Proyectos",
-    "section": "",
-    "text": "Expte.\n      Asunto\n      Medida\n      Fecha\n    \n  \n  \n\n    \n      RM-2026-004\n      \n        Buscar trabajo con datos\n        Armé una extensión de Chrome que lee avisos de empleo y la usé para convertir mi búsqueda de primer trabajo en datos: qué piden de verdad los puestos de nivel inicial y dónde una regla automática no reemplaza al criterio.\n        \n        PythonHerramienta propiaTextoMercado laboral\n        \n      \n      663 avisos · 257 evaluados\n      nov 2026\n    \n\n    \n      RM-2026-003\n      \n        Dónde poner la lupa\n        Un modelo de riesgo sobre la EPH para decidir en qué sectores concentrar las inspecciones e incentivos de la nueva ley de formalización laboral, y qué parte de la informalidad queda fuera de su alcance.\n        \n        PythonMachine learningEPH-INDECPolíticas públicas\n        \n      \n      19.560 ocupados · EPH 1T 2026\n      oct 2026\n    \n\n    \n      RM-2026-002\n      \n        Qué se comenta en la cuenta de Instagram del presidente\n        32.482 comentarios de los 69 posts de agosto de 2026: recolección propia, clasificación de sentimiento validada a mano y temas medidos por autores distintos.\n        \n        PythonScrapingTextoValidación\n        \n      \n      32.482 comentarios · 69 posts\n      sep 2026\n    \n\n    \n      RM-2026-001\n      \n        Locales gastronómicos de Mar del Plata\n        Relevamiento propio de 1.261 bares, cafés y restaurantes con scraping de Google Maps: dónde se concentran, cómo se puntúan y qué barrios lideran.\n        \n        MapasPythonScrapingGeoespacial\n        \n      \n      1.261 locales · 124 barrios\n      jul 2026\n    \n\n  \n\nNo hay resultados"
-  },
-  {
-    "objectID": "proyectos/comentarios-instagram/index.html",
-    "href": "proyectos/comentarios-instagram/index.html",
-    "title": "Qué se comenta en la cuenta de Instagram del presidente",
-    "section": "",
-    "text": "Pregunta¿Qué clima de opinión y qué temas aparecen entre quienes comentan en la cuenta presidencial?\n\n\nCorpus69 posts de @javiermilei · agosto 2026 · 32.482 comentarios raíz\n\n\nHerramientasPython · Playwright · pandas · pysentimiento · plotly\n\n\nCódigoVer en GitHub"
-  },
-  {
-    "objectID": "proyectos/comentarios-instagram/index.html#resumen",
-    "href": "proyectos/comentarios-instagram/index.html#resumen",
-    "title": "Qué se comenta en la cuenta de Instagram del presidente",
+    "objectID": "proyectos/informalidad-eph/index.html#resumen",
+    "href": "proyectos/informalidad-eph/index.html#resumen",
+    "title": "Dónde poner la lupa",
     "section": "Resumen",
-    "text": "Resumen\n\n58,1% de los comentarios son negativos según el clasificador. El nivel no cambia a lo largo del mes: el promedio diario se mueve entre 45% y 71%, publique lo que publique la cuenta.\nEl apoyo medido a mano es 32,3% [IC95 27,6–37,0]. El modelo automático lo subestima casi tres veces, así que esa cifra sale de la anotación humana y no del modelo.\nEl tipo de publicación no predice la conversación. Ataque al adversario, anuncio de gestión o acto institucional: los comentarios se parecen.\nLos temas se cuentan por autores distintos, no por apariciones. Así se detectó, por ejemplo, que un «tema» de 202 comentarios lo sostenían 6 cuentas.\n75,4% de los comentarios no recibe ningún like, y el 3% más likeado concentra el 82% de los likes."
+    "text": "Resumen\nTrabajo final integrador del Diplomado en Ciencia de Datos y Análisis Avanzado (UTN BA).\nEn el primer trimestre de 2026 la informalidad alcanzó al 44,2 % de los ocupados: casi 6 de los 13,5 millones de trabajadores de los aglomerados urbanos. La Ley 27.802 creó dos herramientas para revertirla, el PER (regularización con condonación de deudas, que vence el 28/11/2026) y el RIFL (rebaja de contribuciones para nuevas contrataciones). Las dos actúan a través de un empleador privado, y el Estado no puede inspeccionar a todos.\nCon los microdatos de la EPH construimos un modelo que estima el riesgo de informalidad y lo resume en segmentos de rama de actividad, tamaño del establecimiento y región: nunca personas ni empresas, porque la encuesta es anónima y los informales son justamente quienes no figuran en los registros.\n\nFocalizar funciona. Sin focalizar, 43 de cada 100 trabajadores son informales; en el 20 % de mayor riesgo que elige la regla, 75, y con el modelo, 78.\nUna regla simple alcanza. A nivel segmentos, el Random Forest supera a una regla por rama y tamaño por solo 2,4 puntos, y la diferencia no es significativa.\nLo que más cambia el resultado es la pregunta, no el algoritmo. El 55 % de los informales está fuera del alcance de la ley. Priorizar solo entre asalariados privados alcanza, con el mismo esfuerzo, 3,2 veces más informales formalizables."
   },
   {
-    "objectID": "proyectos/comentarios-instagram/index.html#cuánto-del-debate-se-puede-ver",
-    "href": "proyectos/comentarios-instagram/index.html#cuánto-del-debate-se-puede-ver",
-    "title": "Qué se comenta en la cuenta de Instagram del presidente",
-    "section": "Cuánto del debate se puede ver",
-    "text": "Cuánto del debate se puede ver\nInstagram no muestra todos los comentarios: los ordena por relevancia y corta. Por eso el dato más importante de la recolección es la cobertura, la parte de los comentarios declarados que efectivamente se pudo bajar. En todo el mes fue 15,2% (de 213.639 declarados), con una mediana de 15% por post.\n\n\n                            \n                                            \n\n\nCada punto es un post. La curva descendente no es casualidad: con un tope fijo de comentarios por post, cuanto más grande el post, menos se ve de él. Eso obliga a preguntarse si lo que no se ve habla de otras cosas. Lo medí comparando, dentro de los mismos posts, los primeros 400 comentarios contra los siguientes: el mix de temas casi no cambia (0,27 puntos de diferencia mediana), pero el tono sí (+12,2 puntos más de rechazo arriba del ranking). La truncación recorta cuánto vemos, no de qué se habla."
+    "objectID": "proyectos/informalidad-eph/index.html#dónde-está-la-informalidad",
+    "href": "proyectos/informalidad-eph/index.html#dónde-está-la-informalidad",
+    "title": "Dónde poner la lupa",
+    "section": "Dónde está la informalidad",
+    "text": "Dónde está la informalidad\nLa ley llega a quien tiene un empleador privado al que inspeccionar o incentivar. Los cuentapropistas, las casas particulares (fuera del RIFL) y el sector público quedan afuera, y en los microestablecimientos la inspección sola puede terminar en cierres o despidos.\n\n\n                            \n                                            \n\n\nSolo el 45,4 % de los informales es asalariado de un empleador privado, y casi la mitad de ellos trabaja en establecimientos de hasta 5 personas. Cuentapropistas y casas particulares suman el 47 %: necesitan medidas propias."
   },
   {
-    "objectID": "proyectos/comentarios-instagram/index.html#clima-de-opinión-día-a-día",
-    "href": "proyectos/comentarios-instagram/index.html#clima-de-opinión-día-a-día",
-    "title": "Qué se comenta en la cuenta de Instagram del presidente",
-    "section": "Clima de opinión día a día",
-    "text": "Clima de opinión día a día\n\n\n                            \n                                            \n\n\nCada punto es un post, y su tamaño indica cuántos comentarios se analizaron. Los porcentajes salen de pysentimiento, un modelo entrenado con tweets de otro dialecto. Por eso lo validé contra 378 comentarios anotados a mano antes de usarlo:\n\n\n\n\nModelo\nAnotación humana\n\n\n\n\nNegativo vs. no negativo (F1)\n0,748\n—\n\n\nComentarios positivos\n6,9%\n19,8% [15,8–23,9]\n\n\nPostura a favor\n—\n32,3% [27,6–37,0]\n\n\nPostura en contra\n—\nentre 44,5% y 66,9%\n\n\n\nEl modelo distingue bien lo negativo de lo que no lo es, pero manda a «negativo» la mitad de lo neutro y casi no reconoce el apoyo. Por eso el corte negativo/no negativo se toma del modelo y el reparto del resto, de la anotación humana.\nEl rechazo se informa como rango y no como un número: auditando la anotación detecté un cambio de criterio a mitad de la planilla (la categoría «no se sabe» cae de 23% a 2%). El apoyo es estable a los dos lados del quiebre; el rechazo no. Lo que sí se sostiene en las dos mitades es que el rechazo supera al apoyo."
+    "objectID": "proyectos/informalidad-eph/index.html#los-segmentos",
+    "href": "proyectos/informalidad-eph/index.html#los-segmentos",
+    "title": "Dónde poner la lupa",
+    "section": "Los segmentos",
+    "text": "Los segmentos\nCada punto es un segmento de rama × tamaño entre los asalariados privados. Arriba a la derecha están los que combinan una tasa alta con muchos informales: ahí rinde la lupa.\n\n\n                            \n                                            \n\n\nLos seis segmentos de mayor tasa son de hasta 5 personas y reúnen el 40 % de los informales alcanzables. Comercio de hasta 5 es el más grande: más de 400 mil informales con una tasa del 71 %. Construcción y gastronomía de 6 a 40 personas quedan en un punto intermedio: tasas cercanas al 60 % y establecimientos con más capacidad de formalizar."
   },
   {
-    "objectID": "proyectos/comentarios-instagram/index.html#de-qué-se-habla",
-    "href": "proyectos/comentarios-instagram/index.html#de-qué-se-habla",
-    "title": "Qué se comenta en la cuenta de Instagram del presidente",
-    "section": "De qué se habla",
-    "text": "De qué se habla\nCada tema se detecta con un léxico propio y auditable, y se cuenta por autores distintos: un tema que sostienen cinco cuentas pegando el mismo texto es una campaña, no un tema del debate. La precisión de cada léxico se midió anotando 50 casos por tema.\n\n\n                            \n                                            \n\n\nBase: los primeros 37 posts del mes (18.312 comentarios), que es el corpus sobre el que se midió la precisión de los léxicos.\nCuando las dos barras se separan mucho, unas pocas cuentas están inflando el tema. El caso más claro es corrupción: una sola cuenta aportaba el 29% de los comentarios. Al sacarla, el volumen cae 29% pero la cantidad de autores no se mueve (451 → 450). Es un tema real, inflado por una cuenta."
+    "objectID": "proyectos/informalidad-eph/index.html#el-modelo-contra-una-regla-simple",
+    "href": "proyectos/informalidad-eph/index.html#el-modelo-contra-una-regla-simple",
+    "title": "Dónde poner la lupa",
+    "section": "El modelo contra una regla simple",
+    "text": "El modelo contra una regla simple\nComparamos cuatro algoritmos contra una regla por rama y tamaño, que es lo que la autoridad podría hacer sin un modelo. Elegimos con validación cruzada agrupada por vivienda y evaluamos una sola vez sobre un 20 % reservado. La métrica es la precisión en el 20 % de mayor riesgo: de cada 100 trabajadores bajo la lupa, cuántos son informales.\n\n\n                            \n                                            \n\n\nOrdenando personas, el modelo cumple las metas de la pre-entrega: 85,7 informales cada 100 y 10,7 puntos de ventaja sobre la regla. Pero el Estado no puede actuar sobre personas, sino sobre sectores. Ordenando segmentos, la precisión baja a 77,8 y la ventaja a 2,4 puntos, con un intervalo bootstrap del 95 % que va de −1,5 a 6,0. Por eso recomendamos la regla como herramienta operativa y el modelo como diagnóstico: mostró que a la regla le faltan la región y los tramos finos de tamaño."
   },
   {
-    "objectID": "proyectos/comentarios-instagram/index.html#qué-se-likea",
-    "href": "proyectos/comentarios-instagram/index.html#qué-se-likea",
-    "title": "Qué se comenta en la cuenta de Instagram del presidente",
-    "section": "Qué se likea",
-    "text": "Qué se likea\n\n\n                            \n                                            \n\n\nTres de cada cuatro comentarios no reciben ningún like. Lo muy likeado tiene un vocabulario propio: nombres propios y acusaciones concretas, más que epítetos. Y los likes no son votos: un comentario arriba del ranking recibe likes porque está arriba, y está arriba en parte porque los recibió."
+    "objectID": "proyectos/informalidad-eph/index.html#cambiar-la-pregunta",
+    "href": "proyectos/informalidad-eph/index.html#cambiar-la-pregunta",
+    "title": "Dónde poner la lupa",
+    "section": "Cambiar la pregunta",
+    "text": "Cambiar la pregunta\nLas metas originales contaban a todos los informales. Pero priorizar sobre todos los ocupados llena la lupa de cuentapropistas y casas particulares, a los que la ley no llega. El indicador que importa es otro: cuántos informales con empleador privado quedan bajo la lupa. En todos los escenarios la lupa cubre lo mismo, 2,7 millones de trabajadores.\n\n\n                            \n                                            \n\n\nCon el mismo esfuerzo, priorizar entre los asalariados privados alcanza a 1,78 millones de informales formalizables en lugar de 0,55: 3,2 veces más. Hay que cubrir 1,5 trabajadores para encontrar uno, contra 4,9 al priorizar sobre todos. Entre todos los ocupados, el Random Forest rinde incluso peor que el azar con este indicador: su lupa se llena de cuentapropistas."
   },
   {
-    "objectID": "proyectos/comentarios-instagram/index.html#metodología",
-    "href": "proyectos/comentarios-instagram/index.html#metodología",
-    "title": "Qué se comenta en la cuenta de Instagram del presidente",
+    "objectID": "proyectos/informalidad-eph/index.html#equidad",
+    "href": "proyectos/informalidad-eph/index.html#equidad",
+    "title": "Dónde poner la lupa",
+    "section": "Equidad",
+    "text": "Equidad\nLa meta era que ningún grupo de sexo o región quedara más de 10 puntos por debajo del promedio de cobertura (recall). Se cumple: el más alejado es Cuyo, 6,3 puntos abajo.\n\n\n                            \n                                            \n\n\nLa cobertura pareja no lo es todo: la regla subestima la informalidad real en NOA, NEA y Cuyo (en Cuyo estima 40,8 % contra 51 % real). Definir qué criterio de equidad se exige queda como próximo paso."
+  },
+  {
+    "objectID": "proyectos/informalidad-eph/index.html#recomendaciones",
+    "href": "proyectos/informalidad-eph/index.html#recomendaciones",
+    "title": "Dónde poner la lupa",
+    "section": "Recomendaciones",
+    "text": "Recomendaciones\n\nPriorizar segmentos con la regla rama × tamaño, solo entre asalariados de empleadores privados.\nAntes del 28/11/2026, concentrar inspecciones y difusión del PER en los establecimientos de 6 a 40 personas de construcción y gastronomía.\nEn los microestablecimientos, combinar la inspección con acompañamiento para obtener el Certificado MiPyME, que da acceso a las mejores condiciones del PER.\nDiseñar medidas propias para cuentapropistas y casas particulares: el 47 % de los informales.\nMedir la gestión con un indicador nuevo: informales con empleador privado cada 100 trabajadores bajo la lupa."
+  },
+  {
+    "objectID": "proyectos/informalidad-eph/index.html#metodología",
+    "href": "proyectos/informalidad-eph/index.html#metodología",
+    "title": "Dónde poner la lupa",
     "section": "Metodología",
-    "text": "Metodología\n\nRecolección. Scraper propio con Playwright, con sesión y delays altos. Cola persistida y reanudable, deduplicación por id del comentario y un registro por corrida para auditar la completitud. Antes de cada cambio, una batería de pruebas offline contra un DOM sintético.\nPrivacidad. Los nombres de usuario se reemplazan por un hash con sal antes de analizar. Ningún informe transcribe comentarios.\nValidación del clasificador. 450 casos sorteados y anotados a mano, con libro de códigos. Un control automático detecta si el criterio del anotador cambia a lo largo de la planilla. Así apareció el quiebre que obliga a informar el rechazo como rango.\nTemas. 16 léxicos versionados, cada uno con su patrón, su precisión (IC de Wilson) y la fecha de medición. Los descartados quedan registrados con el motivo.\nVentana congelada. La precisión se midió sobre el corpus al 19 de agosto, y el análisis de temas usa ese corte, para no aplicar una precisión medida en una población a otra distinta.\nLimitaciones. Solo comentarios raíz; las respuestas se recolectaron en 18 posts pero no se analizan. La codificación de los posts por tipo no tiene medida de confiabilidad, así que el resultado nulo se lee como «no se detecta efecto», no como «no hay efecto»."
+    "text": "Metodología\n\nDatos. EPH del 1.er trimestre de 2026, base individual: 19.560 ocupados con dato de formalidad, que representan a 13,5 millones de trabajadores de 32 aglomerados. Todas las tasas y métricas se calculan con el factor de expansión (PONDERA); como control, la tasa ponderada da 44,2 %, igual a la publicada por INDEC.\nInformalidad. El target es la variable EMPLEO, que INDEC construye a partir de los aportes y la registración declarados. Excluimos las variables que la delatan (fuga de información) y usamos una lista cerrada de 9 predictores.\nModelos. Regresión logística, árbol de decisión, Random Forest y XGBoost, contra el azar y la regla rama × tamaño. Validación cruzada de 5 particiones agrupadas por vivienda, para que personas de una misma casa no queden de los dos lados.\nEvaluación. Un único uso del 20 % reservado. La ventaja sobre la regla se estima con 500 réplicas bootstrap. Las ablaciones confirman que rama y tamaño son los predictores más fuertes, y que edad y educación ayudan a ordenar personas pero casi no a elegir sectores.\nLimitaciones. Los datos son previos a la ley, así que no se evalúa su impacto. Varios segmentos tienen pocos casos y se marcan como poco confiables. La regla mejorada (con región y tamaño detallado) hay que validarla con la EPH del próximo trimestre, porque el test actual ya se usó.\n\nTodo el proceso, con el código y cada tabla intermedia, está en el notebook completo."
   },
   {
-    "objectID": "proyectos/locales-gastronomicos-mdp/index.html",
-    "href": "proyectos/locales-gastronomicos-mdp/index.html",
-    "title": "Locales gastronómicos de Mar del Plata",
+    "objectID": "proyectos/monitor-del-bolsillo/index.html",
+    "href": "proyectos/monitor-del-bolsillo/index.html",
+    "title": "Cuántos salarios cuesta no ser pobre",
     "section": "",
-    "text": "Pregunta¿Cómo se distribuye la oferta gastronómica en la ciudad y qué barrios la concentran?\n\n\nFuentesGoogle Maps (relevamiento propio, julio 2026) · Barrios por sociedad de fomento (124 polígonos)\n\n\nHerramientasPython · Playwright · pandas · geopandas · folium · plotly\n\n\nCódigoVer en GitHub\nThis is the init_notebook_mode cell from ITables v2.9.1\n(you should not see this message - is your notebook trusted?)"
+    "text": "Pregunta¿Cuántos ingresos hacen falta para que un hogar no sea pobre, y por qué esa cuenta cambió desde 2016?\n\n\nFuentesAPI del INDEC (canastas básicas, índice de precios, pobreza y mercado de trabajo) · datos.gob.ar (salario mínimo, jubilación mínima y RIPTE)\n\n\nHerramientasPython · API REST · GitHub Actions · GitHub Pages · HTML, SVG y JavaScript\n\n\nPáginaMonitor del bolsillo, en vivo · Repositorio en GitHub"
   },
   {
-    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#resumen",
-    "href": "proyectos/locales-gastronomicos-mdp/index.html#resumen",
-    "title": "Locales gastronómicos de Mar del Plata",
+    "objectID": "proyectos/monitor-del-bolsillo/index.html#resumen",
+    "href": "proyectos/monitor-del-bolsillo/index.html#resumen",
+    "title": "Cuántos salarios cuesta no ser pobre",
     "section": "Resumen",
-    "text": "Resumen\nCon un scraper propio sobre Google Maps relevé 1.261 locales gastronómicos dentro del casco urbano de Mar del Plata. Les asigné un barrio a 98,9% de ellos cruzando sus coordenadas con los polígonos de las sociedades de fomento.\n\nLa oferta se concentra en el centro y la costa, con corredores secundarios hacia los barrios.\nRestaurante es la categoría dominante: aparece en más locales que bar y café juntos.\nLa popularidad está muy concentrada: la mitad de los locales tiene menos de 150 reseñas, y un grupo chico supera las 5.000.\nLos ratings son altos en general (promedio 4,38), como es típico en Google Maps. Por eso los rankings exigen un mínimo de reseñas."
+    "text": "Resumen\nArmé el Monitor del bolsillo, una página pública que traduce la canasta básica del INDEC a ingresos: en vez de decir cuántos pesos cuesta, dice cuántos salarios mínimos hacen falta para pagarla. Una tarea automática baja los datos todos los días, los controla y vuelve a publicar la página, sin servidores y sin costo.\n\n4,32 salarios mínimos. Es lo que necesitó una familia de 4 del Gran Buenos Aires en octubre de 2026 para no ser pobre. En abril de 2016 eran 1,87.\nLa canasta no subió más que el resto. Desde diciembre de 2016, la canasta total se multiplicó por 128 y los precios en general, por 128. El cambio viene de lo que compra el salario mínimo: hoy, el 41 % de lo que compraba entonces.\nNo todos los ingresos perdieron igual. En el mismo período, la jubilación mínima sin bono compra el 60 % y el sueldo promedio registrado, el 78 %.\nLa fuente también se equivoca. La base abierta del RIPTE repetía en agosto de 2026 un valor anterior. La página lo detectó, no lo publicó, y el dato se corrigió con el informe oficial.\n\n\nVer la página en vivo Ver el código\n\n\n\n\n\n\n\nLa página es estrictamente no partidista: muestra datos y sus límites, con el mismo tratamiento para cualquier período. Los números de esta ficha son los que publicaba el 18 de noviembre de 2026; la página en vivo se sigue actualizando."
   },
   {
-    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#dónde-están",
-    "href": "proyectos/locales-gastronomicos-mdp/index.html#dónde-están",
-    "title": "Locales gastronómicos de Mar del Plata",
-    "section": "Dónde están",
-    "text": "Dónde están\nCada punto es un local. Con el selector de arriba a la derecha podés prender y apagar cada categoría, y con un clic sobre un punto ves el nombre, el rating y las reseñas.\n\n\n\n\n\n\nMapa de calor\nLa misma información como densidad: cada local suma lo mismo, así que las zonas más intensas son las de mayor concentración de oferta."
+    "objectID": "proyectos/monitor-del-bolsillo/index.html#por-qué-la-canasta-en-salarios",
+    "href": "proyectos/monitor-del-bolsillo/index.html#por-qué-la-canasta-en-salarios",
+    "title": "Cuántos salarios cuesta no ser pobre",
+    "section": "Por qué la canasta en salarios",
+    "text": "Por qué la canasta en salarios\nCon inflación, la canasta en pesos dice poco: «$1.690.000» no se entiende sin saber cuánto entra en el hogar. Expresarla en ingresos responde algo que cualquiera entiende: cuántos sueldos hacen falta.\nPensé la página para periodistas que necesitan un dato confiable, con su fecha y su fuente, para citarlo sin reinterpretarlo. Por eso cada número va con su período, su fuente y sus límites en el mismo lugar, y hay una frase lista para copiar con el mes que se elija.\nTambién fue una oportunidad: el INDEC habilitó hace poco una API con sus series, todavía en etapa de prueba, y casi no había proyectos que la usaran."
   },
   {
-    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#por-barrio",
-    "href": "proyectos/locales-gastronomicos-mdp/index.html#por-barrio",
-    "title": "Locales gastronómicos de Mar del Plata",
-    "section": "Por barrio",
-    "text": "Por barrio\nPara asignar el barrio usé dos pasos. Primero, punto en polígono. Después, para los locales de playa (que quedan fuera de los polígonos porque los barrios terminan en la costanera), el barrio más cercano hasta 500 m, medido en metros reales con la proyección POSGAR 2007. Los que quedan más lejos se consideran periferia."
+    "objectID": "proyectos/monitor-del-bolsillo/index.html#cómo-funciona",
+    "href": "proyectos/monitor-del-bolsillo/index.html#cómo-funciona",
+    "title": "Cuántos salarios cuesta no ser pobre",
+    "section": "Cómo funciona",
+    "text": "Cómo funciona\nTodo corre gratis en GitHub, sin servidores propios:\n\nBaja. Todos los días, una tarea programada pide a la API del INDEC la canasta, el índice de precios, la pobreza y el mercado de trabajo, y baja de datos.gob.ar el salario mínimo, la jubilación mínima y el RIPTE.\nControla. Antes de usar un dato, lo valida: que no falte ningún mes, que el hogar tipo de la API equivalga a 3,09 adultos como dice la metodología del INDEC, que las tasas estén entre 0 y 100, que el empleo formal y el informal sumen el total, y que el RIPTE no baje de un mes a otro.\nCalcula y publica. Divide la canasta de cada hogar por cada ingreso del mismo mes, arma la página y la publica en GitHub Pages, junto con los datos para descargar.\nSi algo falla, no publica. La tarea se detiene, GitHub me avisa y queda en línea la versión anterior. En una página que se va a citar, un número mal publicado hace más daño que un día sin actualizar.\n\nLa lógica está en Python sin librerías externas y tiene pruebas automáticas que corren antes de cada publicación, armadas con casos de los datos reales."
   },
   {
-    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#categorías-reseñas-y-ratings",
-    "href": "proyectos/locales-gastronomicos-mdp/index.html#categorías-reseñas-y-ratings",
-    "title": "Locales gastronómicos de Mar del Plata",
-    "section": "Categorías, reseñas y ratings",
-    "text": "Categorías, reseñas y ratings\n\n\n                            \n                                            \n\n\nUn local puede tener más de una categoría: 71 combinan dos o tres, sobre todo bar + restaurante.\n\n\n                            \n                                            \n\n\n\n\n                            \n                                            \n\n\nLos locales con menos de 10 reseñas ocupan todo el rango, de 1 a 5, y la mitad tiene un 5,0 perfecto. A medida que crecen las reseñas, el rating se estrecha: entre los que superan las mil, el 80% central está entre 4,1 y 4,6. Un 5,0 con tres reseñas no dice mucho; un 4,6 con miles es un veredicto."
+    "objectID": "proyectos/monitor-del-bolsillo/index.html#lo-que-muestran-los-datos",
+    "href": "proyectos/monitor-del-bolsillo/index.html#lo-que-muestran-los-datos",
+    "title": "Cuántos salarios cuesta no ser pobre",
+    "section": "Lo que muestran los datos",
+    "text": "Lo que muestran los datos\n\n\n                            \n                                            \n\n\nLa cuenta tocó su mínimo en enero de 2017, con 1,65 salarios, y desde entonces más que se duplicó. ¿Es porque la canasta se encareció más que el resto de las cosas, o porque el salario compra menos? La cuenta se puede separar en las dos partes: salarios necesarios = (canasta ÷ precios) ÷ (salario ÷ precios). Dividiendo cada ingreso por el índice de precios del mismo mes se ve cuánto compra:\n\n\n                            \n                                            \n\n\nLa canasta total subió casi exactamente lo mismo que el índice de precios, así que el aumento en los salarios necesarios se explica por lo que perdió el salario mínimo: hoy compra el 41 % de lo que compraba en diciembre de 2016. Los otros dos ingresos perdieron menos.\nEn la página, quien lee elige el mes contra el que compara, y una frase se reescribe sola con esa elección. Así la página no impone un punto de partida: comparar contra un cambio de gobierno o contra otro es una decisión de quien la usa, no mía."
   },
   {
-    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#los-más-reseñados",
-    "href": "proyectos/locales-gastronomicos-mdp/index.html#los-más-reseñados",
-    "title": "Locales gastronómicos de Mar del Plata",
-    "section": "Los más reseñados",
-    "text": "Los más reseñados"
+    "objectID": "proyectos/monitor-del-bolsillo/index.html#cuando-la-fuente-se-equivoca",
+    "href": "proyectos/monitor-del-bolsillo/index.html#cuando-la-fuente-se-equivoca",
+    "title": "Cuántos salarios cuesta no ser pobre",
+    "section": "Cuando la fuente se equivoca",
+    "text": "Cuando la fuente se equivoca\nEn agosto de 2026, la base abierta del RIPTE trajo $1.915.879: menos que julio ($1.946.028) y exactamente el valor de junio. Desde 2016 el RIPTE no había bajado nunca, así que la página tiene una regla: si baja, no se publica; se muestra el mes anterior y la tarea avisa para revisarlo a mano.\nRevisé el informe oficial de agosto, que trae $1.982.518, y lo cargué como corrección en un archivo aparte, con el enlace al informe y el motivo. La página lo aclara junto al dato. Prefiero que cada cambio a una fuente oficial quede escrito y se pueda revisar, en lugar de editarlo en silencio.\nCon el bono de los jubilados pasa algo parecido: se renueva cada mes por decreto y no está en ninguna base abierta. Lo cargo a mano, con su fuente, y la página dice que por ahora sale de notas de prensa y no del Boletín Oficial."
   },
   {
-    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#explorá-los-datos",
-    "href": "proyectos/locales-gastronomicos-mdp/index.html#explorá-los-datos",
-    "title": "Locales gastronómicos de Mar del Plata",
-    "section": "Explorá los datos",
-    "text": "Explorá los datos\nTodos los locales relevados. Podés buscar por nombre o barrio y ordenar por cualquier columna.\n\n\n\n\n  \n    \n      \n    \n        \n        \n        \n        \n        \n        \n        \n        \n    \n    \n   \n    \n      \n  \n        \n    \n    \n  \n        \n    \n    \n  \n        \n    \n      \n  \n        \n            \n                \n                \n            \n\n            \n                \n                \n            \n\n            \n                \n                \n            \n\n            \n                \n                \n            \n\n            \n                \n                \n            \n        \n    \n\n\n        Loading ITables v2.9.1 from the init_notebook_mode cell...\n        (need help?)\n      \n    \n  \n\n    \n      🔒ⓘLocal\n      Barrio\n      Categorías\n      Rating\n      Reseñas\n    \nLos Gallegos ShoppingArea Centrorestaurante4.242712\nRestaurant ChichiloDel Puertorestaurante4.125127\nManoloLeandro N. Alemrestaurante4.320943\nCHICHILODel Puertorestaurante4.216986\nRestaurante La MarinaDel Puertorestaurante4.614269\nGlück Cervecería - zona OlavarríaLos Troncosbar4.513618\nPunto y Banca Bar-RestauranteArea Centrorestaurante4.412797\nLa NieveArea Centrorestaurante4.411718\nTío CurzioLomas De Stella Marisrestaurante4.311385\nMirador WaikikiPunta Mogotesrestaurante4.411243\n(1,251 more rows not shown)"
+    "objectID": "proyectos/monitor-del-bolsillo/index.html#pobreza-y-empleo",
+    "href": "proyectos/monitor-del-bolsillo/index.html#pobreza-y-empleo",
+    "title": "Cuántos salarios cuesta no ser pobre",
+    "section": "Pobreza y empleo",
+    "text": "Pobreza y empleo\nLa canasta es la línea; la pobreza cuenta cuántas personas quedan debajo. La página suma las tasas de la Encuesta Permanente de Hogares, también desde la API:\n\n\n                            \n                                            \n\n\nEn el primer semestre de 2026 (un dato todavía provisorio), el 32,3 % de las personas vivía en hogares pobres; el pico de la serie fue el primer semestre de 2024, con 52,9 %. La página muestra también las aclaraciones del propio INDEC, como los semestres en que faltó algún aglomerado.\nY un dato que ninguno de los ingresos de la página representa: en el segundo trimestre de 2026, 45 de cada 100 personas ocupadas tenían un empleo informal. El RIPTE mide solo el empleo registrado. Sobre dónde se concentra esa informalidad trabajé en Dónde poner la lupa."
   },
   {
-    "objectID": "proyectos/locales-gastronomicos-mdp/index.html#metodología",
-    "href": "proyectos/locales-gastronomicos-mdp/index.html#metodología",
-    "title": "Locales gastronómicos de Mar del Plata",
+    "objectID": "proyectos/monitor-del-bolsillo/index.html#decisiones-de-diseño",
+    "href": "proyectos/monitor-del-bolsillo/index.html#decisiones-de-diseño",
+    "title": "Cuántos salarios cuesta no ser pobre",
+    "section": "Decisiones de diseño",
+    "text": "Decisiones de diseño\n\nFormas antes que números. El titular es una fila de cuadros donde cada cuadro es un salario mínimo; el último se llena en proporción. El número está, pero la forma lo explica antes.\nLos límites, al lado del dato. Que los salarios son brutos, que la canasta es solo del Gran Buenos Aires o que la jubilación va sin bono se dice debajo de cada gráfico, no en una página aparte.\nSin colores de partido. Toda la página usa una sola familia de verdes, lejos de los colores asociados a espacios políticos.\nPara leer en el celular y sin mouse. Cada gráfico tiene una tabla con todos los meses, se recorre con las flechas del teclado y se adapta a pantallas chicas."
+  },
+  {
+    "objectID": "proyectos/monitor-del-bolsillo/index.html#limitaciones",
+    "href": "proyectos/monitor-del-bolsillo/index.html#limitaciones",
+    "title": "Cuántos salarios cuesta no ser pobre",
+    "section": "Limitaciones",
+    "text": "Limitaciones\n\nUna sola región. La canasta de la API es solo del Gran Buenos Aires. La pobreza, en cambio, mide 31 aglomerados con la canasta de cada región.\nIngresos en bruto. Lo que se cobra en mano es menos, y no se suman asignaciones ni otras ayudas.\nEl bono, solo desde septiembre de 2026. En la serie histórica la jubilación va sin bono, así que su poder de compra real fue mayor en los meses con bono.\nEl RIPTE no mide a todos. Es el promedio de los trabajadores registrados y estables, y su propia fuente aclara que no mide la evolución de los salarios.\nUna canasta oficial, no ideal. La composición de la canasta del INDEC se basa en hábitos de consumo de hace años. La uso tal cual porque es la oficial, y lo digo en la metodología.\nUna API en prueba. Las columnas pueden cambiar y el acceso vence cada 12 meses. Por eso cada corrida valida la estructura antes de publicar."
+  },
+  {
+    "objectID": "proyectos/monitor-del-bolsillo/index.html#lo-que-sigue",
+    "href": "proyectos/monitor-del-bolsillo/index.html#lo-que-sigue",
+    "title": "Cuántos salarios cuesta no ser pobre",
+    "section": "Lo que sigue",
+    "text": "Lo que sigue\nLa página todavía usa solo datos oficiales, que salen una vez por mes. La segunda etapa es una canasta estimada con precios de supermercados (la base SEPA), que se actualizaría todos los días y permitiría comparar Mar del Plata con Buenos Aires. La fuente solo deja disponible la última semana, así que desde el 28 de octubre de 2026 otra tarea automática guarda los precios de cada día antes de que se pierdan."
+  },
+  {
+    "objectID": "proyectos/monitor-del-bolsillo/index.html#metodología",
+    "href": "proyectos/monitor-del-bolsillo/index.html#metodología",
+    "title": "Cuántos salarios cuesta no ser pobre",
     "section": "Metodología",
-    "text": "Metodología\n\nRecolección. Scraper propio con Playwright sobre Google Maps. Dividí el casco urbano en una grilla de celdas y busqué cada categoría (bar, café, restaurante) en cada celda, deduplicando por el identificador del lugar (place_id).\nLimpieza. Excluí 75 resultados que Google devolvió fuera del área de estudio (Santa Clara del Mar, Chapadmalal). Los locales sin rating o sin reseñas quedan en el dataset y se excluyen solo de los análisis que usan esos campos.\nBarrios. Reparé las geometrías inválidas del archivo de barrios, asigné por punto en polígono (1.147 locales) y recuperé 100 más por cercanía (≤ 500 m). Quedan 14 sin barrio.\nLimitaciones. Google Maps no es un padrón: faltan locales sin ficha y puede haber fichas de locales cerrados. El rating y las reseñas son una foto de julio de 2026."
+    "text": "Metodología\n\nCanasta de un hogar. Canasta por adulto equivalente × adultos equivalentes del hogar. La familia de 4 del INDEC (varón de 35, mujer de 31, hijo de 6 e hija de 8) equivale a 3,09; para jubilados de 61 a 75 años se usan 0,83 (varón) y 0,67 (mujer), según la Metodología 22 del INDEC.\nIngresos necesarios. Canasta del hogar ÷ ingreso del mismo mes.\nPoder de compra. (Ingreso ÷ índice de precios del Gran Buenos Aires del mes) ÷ (lo mismo en el mes de comparación). El índice actual empieza en diciembre de 2016.\nEmpleo informal cada 100 ocupados. Tasa de empleo informal ÷ tasa de empleo, las dos sobre la población total. El INDEC la publica desde el cuarto trimestre de 2023.\nDatos de esta ficha. Los archivos que publica la página para descargar, tal como estaban el 18 de noviembre de 2026.\n\nEl código completo, con las validaciones y las pruebas, está en el repositorio en GitHub."
   },
   {
     "objectID": "proyectos/busqueda-laboral/notebook.html",

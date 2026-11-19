@@ -1,7 +1,8 @@
 [
   {
-    "listing": "/index.html",
+    "listing": "/proyectos.html",
     "items": [
+      "/proyectos/monitor-del-bolsillo/index.html",
       "/proyectos/busqueda-laboral/index.html",
       "/proyectos/informalidad-eph/index.html",
       "/proyectos/comentarios-instagram/index.html",
@@ -9,8 +10,9 @@
     ]
   },
   {
-    "listing": "/proyectos.html",
+    "listing": "/index.html",
     "items": [
+      "/proyectos/monitor-del-bolsillo/index.html",
       "/proyectos/busqueda-laboral/index.html",
       "/proyectos/informalidad-eph/index.html",
       "/proyectos/comentarios-instagram/index.html",
