@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke-linejoin="round">
+  <!-- Ícono genérico (Power Query no tiene logo de uso libre): una tabla que se transforma -->
+  <rect x="6" y="10" width="30" height="34" rx="2" fill="#fff" stroke="#217346" stroke-width="3.5"/>
+  <path d="M6 21h30M6 32h30M19 10v34" stroke="#217346" stroke-width="3"/>
+  <path d="M40 27h12m-5-6 6 6-6 6" stroke="#f2c811" stroke-width="4" stroke-linecap="round"/>
+  <rect x="38" y="38" width="20" height="16" rx="2" fill="#217346"/>
+  <path d="M38 46h20M48 38v16" stroke="#fff" stroke-width="2.5"/>
+</svg>

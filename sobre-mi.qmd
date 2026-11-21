@@ -1,45 +1,138 @@
 ---
 title: "Sobre mí"
 toc: false
+# Los logos van en HTML crudo dentro de las notas al margen; esto asegura que se copien a _site.
+# Cada nota va DESPUÉS de su párrafo: Quarto la ubica en la misma fila que el bloque anterior.
+resources:
+  - img/*.png
+  - img/herramientas/*
 ---
 
-Estudio Sociología en la Universidad Nacional de Mar del Plata y defiendo la tesis en
-las mesas de marzo. Hice la Diplomatura en Ciencia de Datos y Análisis Avanzado (UTN)
-y formo parte de un equipo de investigación de la universidad que hace trabajo de
-campo con referentes barriales.
+::: {.lead}
+Soy estudiante avanzado de Sociología, vivo en Mar del Plata y me dedico al análisis
+de datos. Lo que me interesa no es el dato suelto, sino lo que deja ver cuando se lo
+pone a conversar con el territorio, es decir, cómo se distribuye la inversión pública,
+quién accede a qué servicios y qué muestran las encuestas cuando se las cruza con el
+lugar donde vive la gente.
+:::
 
-Me interesa el análisis de datos aplicado a problemas sociales y urbanos: cómo se
-distribuye la inversión pública, quién accede a qué servicios, qué muestran las
-encuestas cuando se las cruza con el territorio.
+## Cómo llegué a los datos
 
-## Formación
+La sociología me enseñó primero a hacer preguntas y recién después a buscar con qué
+responderlas. En la Universidad Nacional de Mar del Plata, donde estoy terminando la
+licenciatura y defiendo la tesis en las mesas de marzo, aprendí a mirar la ciudad como
+algo que se produce entre muchos, con sus desigualdades y sus disputas, y a desconfiar
+de las respuestas que llegan demasiado rápido. En la misma universidad formo parte de
+un equipo de investigación que hace trabajo de campo con referentes barriales, una
+experiencia que me dejó algo que ninguna base trae incorporado, la certeza de que detrás
+de cada fila hay alguien que contó su historia y que esa historia merece leerse con
+cuidado.
 
-- **Lic. en Sociología** — Universidad Nacional de Mar del Plata (en curso, tesis en 2027)
-- **Diplomatura en Ciencia de Datos y Análisis Avanzado** — UTN
-- **Curso de Recursos Humanos**
+::: {.column-margin .membrete}
+<img src="img/unmdp.png" alt="Universidad Nacional de Mar del Plata" width="353" height="77">
+<p class="membrete-pie"><span>Licenciatura en Sociología</span>UNMdP · tesis en marzo de 2027</p>
+:::
 
-## Experiencia
+Muchas de las preguntas que me interesan necesitan más casos de los que puede abarcar
+una entrevista, y es por eso que hice la Diplomatura en Ciencia de Datos y Análisis
+Avanzado en la Facultad Regional Buenos Aires de la UTN. Ahí sumé las herramientas que
+hoy uso todos los días y, sobre todo, la costumbre de pensar un análisis de punta a
+punta, desde la limpieza de una base desprolija hasta el gráfico que la vuelve legible
+para alguien que no la armó.
 
-**Cajero administrativo** · sep. 2025 – oct. 2026\
-Manejo de caja, seguimiento de clientes y planillas de Excel automatizadas para
-control y reportes.
+::: {.column-margin .membrete}
+<img src="img/utn-ba.png" alt="Universidad Tecnológica Nacional, Facultad Regional Buenos Aires" width="412" height="352">
+<p class="membrete-pie"><span>Diplomatura en Ciencia de Datos y Análisis Avanzado</span>UTN, Facultad Regional Buenos Aires</p>
+:::
 
-**Equipo de investigación** · Universidad Nacional de Mar del Plata\
-Trabajo de campo con referentes barriales.
+A eso se suma un curso de Recursos Humanos en la Universidad de Buenos Aires, que me
+acercó a la trastienda de las organizaciones, a cómo se busca y se selecciona a quienes
+trabajan en ellas. Es una mirada que volví a encontrar, ahora del otro lado del
+mostrador, cuando convertí mi propia búsqueda de empleo en
+[un proyecto de datos](proyectos/busqueda-laboral/index.qmd) para entender qué piden
+de verdad los puestos de nivel inicial.
+
+::: {.column-margin .membrete}
+<img src="img/uba.png" alt="Universidad de Buenos Aires" width="391" height="121">
+<p class="membrete-pie"><span>Curso de Recursos Humanos</span>Universidad de Buenos Aires</p>
+:::
+
+## Lo que aprendí trabajando
+
+Entre septiembre de 2025 y octubre de 2026 trabajé como cajero administrativo, un puesto
+que a primera vista tiene poco que ver con el análisis de datos y que, sin embargo, fue
+donde más lo puse en práctica. Además del manejo de la caja y del seguimiento de
+clientes, armé planillas de Excel automatizadas para el control y los reportes del día
+a día, y en ese ir y venir entendí que un análisis vale poco si quien lo tiene que usar
+no confía en él. Muchas veces el aporte más útil no es el modelo más sofisticado, sino
+la planilla que alguien abre todas las mañanas sin tener que preguntar cómo funciona.
+
+## Qué busco ahora
+
+Hoy busco trabajo como analista de datos, en Buenos Aires o en remoto desde Mar del
+Plata, y me entusiasman en particular los equipos del sector público, las organizaciones
+sociales y las consultoras que trabajan sobre problemas sociales y urbanos, que es
+justamente donde se cruzan las dos cosas que sé hacer. Trabajo sobre todo con SQL,
+Python y Power BI, y al pie de esta página dejo el inventario completo de las
+herramientas que uso. Leo y escribo en inglés con un nivel avanzado, lo que me permite
+moverme con soltura entre documentación técnica y bibliografía en ese idioma.
+
+::: {.column-margin}
+<div class="ficha ficha-margen">
+<div><strong>Idiomas</strong>Español nativo · Inglés avanzado</div>
+</div>
+:::
+
+Si algo de lo que hay en este expediente te sirve o te despierta una pregunta,
+escribime a [renzomirabella@gmail.com](mailto:renzomirabella@gmail.com) o encontrame en
+[LinkedIn](https://www.linkedin.com/in/renzomirabella/) y en
+[GitHub](https://github.com/RenzoMirabella).
 
 ## Herramientas
 
-SQL · Python (pandas, plotly, folium) · Power BI · Excel · Google Sheets · Quarto
-
-## Idiomas
-
-Español nativo · Inglés avanzado
-
-## Contacto
-
-Estoy en Mar del Plata y abierto a trabajar en Buenos Aires o en remoto.
-Escribime a [renzomirabella@gmail.com](mailto:renzomirabella@gmail.com), o encontrame en
-[LinkedIn](https://www.linkedin.com/in/renzomirabella/) y [GitHub](https://github.com/RenzoMirabella).
+<!-- Inventario: cada rubro es una fila de tarjetas. Para sumar una herramienta,
+     poné el logo en img/herramientas/ y copiá un <li>. SQL y Power Query usan
+     íconos genéricos dibujados a mano (no tienen logo de uso libre). -->
+```{=html}
+<div class="inventario">
+  <div class="inventario-rubro">
+    <p class="inventario-titulo">Datos y programación</p>
+    <ul>
+      <li><img src="img/herramientas/sql.svg" alt="" loading="lazy"><span>SQL</span></li>
+      <li><img src="img/herramientas/python.svg" alt="" loading="lazy"><span>Python</span></li>
+      <li><img src="img/herramientas/r.svg" alt="" loading="lazy"><span>R</span></li>
+      <li><img src="img/herramientas/scikit-learn.svg" alt="" loading="lazy"><span>scikit-learn</span></li>
+      <li><img src="img/herramientas/javascript.svg" alt="" loading="lazy"><span>JavaScript</span></li>
+    </ul>
+  </div>
+  <div class="inventario-rubro">
+    <p class="inventario-titulo">Planillas y tableros</p>
+    <ul>
+      <li><img src="img/herramientas/excel.svg" alt="" loading="lazy"><span>Excel</span></li>
+      <li><img src="img/herramientas/power-query.svg" alt="" loading="lazy"><span>Power Query</span></li>
+      <li><img src="img/herramientas/google-sheets.svg" alt="" loading="lazy"><span>Google Sheets</span></li>
+      <li><img src="img/herramientas/power-bi.svg" alt="" loading="lazy"><span>Power BI</span></li>
+      <li><img src="img/herramientas/tableau.png" alt="" loading="lazy"><span>Tableau</span></li>
+    </ul>
+  </div>
+  <div class="inventario-rubro">
+    <p class="inventario-titulo">Medición digital</p>
+    <ul>
+      <li><img src="img/herramientas/google-analytics.svg" alt="" loading="lazy"><span>Google Analytics</span></li>
+      <li><img src="img/herramientas/google-ads.svg" alt="" loading="lazy"><span>Google Ads</span></li>
+    </ul>
+  </div>
+  <div class="inventario-rubro">
+    <p class="inventario-titulo">Automatización y publicación</p>
+    <ul>
+      <li><img src="img/herramientas/n8n.svg" alt="" loading="lazy"><span>n8n</span></li>
+      <li><img src="img/herramientas/playwright.svg" alt="" loading="lazy"><span>Playwright</span></li>
+      <li><img src="img/herramientas/github.svg" alt="" loading="lazy"><span>GitHub</span></li>
+      <li><img src="img/herramientas/quarto.svg" alt="" loading="lazy"><span>Quarto</span></li>
+    </ul>
+  </div>
+</div>
+```
 
 <!-- Si querés sumar un CV descargable, poné el PDF en la carpeta del sitio
      (por ejemplo cv.pdf) y agregá esta línea:
